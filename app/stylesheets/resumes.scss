@@ -1,0 +1,31 @@
+@import "_helpers";
+
+body#edit-resume form#resume-form { margin-top: 10px; border-top: 2px solid #666666; padding-top: 10px;
+  #name-section, #job-section, #about-me-section, #job-reqs-section, #contact-section, #security-section { margin: 16px 0; }
+  textarea { width: 500px; }
+  textarea#resume_about_me { height: 200px; }
+  textarea#resume_job_reqs { height: 100px; }
+  textarea#resume_contact_info { height: 50px; }
+  input#resume_min_salary { text-align: center; width: 60px; } 
+}
+
+body#resumes {
+  #resumes-search-form { margin: 10px 0; border: 1px solid silver; padding: 10px; @include rounded(10px);
+    input { width: 200px; }
+    select, input.button { width: 205px; } 
+  }
+  #resume-list {margin: 0 auto;
+    .sal { padding-left: 20px; text-align: right; }
+    .pos {text-align: left; } 
+  } 
+}
+
+body#view-resume #resume {
+  #name { font-size: 200%; font-weight: bold; }
+  #job-title { font-size: 200%; color: green; }
+  #salary { font-size: 150%; margin-left: 20px; }
+  #salary-value { font-weight: bold; }
+  #about-me, #job-reqs, #contact-info { margin: 10px 0; }
+  pre { white-space: pre-wrap; font: 100% Verdana, sans-serif; margin: 3px 0; }
+  h4 { margin: 12px 0 3px 0; font-size: larger; }
+}

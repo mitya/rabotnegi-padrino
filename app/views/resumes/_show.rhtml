@@ -1,0 +1,27 @@
+<div id="resume">
+	<div id='name'><%= @resume.name %></div>
+	<div id="job-salary-row">
+		<span id='job-title'><%= @resume.job_title %></span>
+		<span id='salary'>
+			от <span id='salary-value'><%= @resume.min_salary %></span> рублей
+		</span>
+	</div>
+
+	<div id="about-me">
+		<pre><%= @resume.about_me %></pre>
+	</div>
+	
+	<% if @resume.contact_info.present? %>
+    <div id='contact-info'>
+  		<h4>Контактная информация</h4>
+  		<pre><%= @resume.contact_info %></pre>
+    </div>
+  <% end %>
+	
+	<% if @resume.job_reqs.present? %>
+    <div id='job-reqs'>
+  		<h4>Дополнительные требования к работе</h4>
+  		<pre><%= @resume.job_reqs %></pre>    
+    </div>
+  <% end %>
+</div>

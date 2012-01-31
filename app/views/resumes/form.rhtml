@@ -1,0 +1,31 @@
+<% page "edit-resume", @resume.new_record? ? 'Публикация резюме' : 'Редактирование резюме', :path => %w(workers workers my-resume) %>
+
+<h1>
+  Публикация резюме
+</h1>
+
+<%= form_for @resume, :url => my_resume_path, :html => {:id => "resume-form"} do |f| %>
+  <%= errors_for(@resume) %>
+  <%= wrapper do %>
+    <%= section do %>
+  		<%= f.tr :fname, 'Имя', f.text_field(:fname), :required => true %>
+  		<%= f.tr :lname, 'Фамилия', f.text_field(:lname), :required => true %>
+  	<% end %>
+
+  	<%= section :id => 'job-info' do %>
+  		<%= f.tr :city, 'Город', f.select(:city, DomainHelper::CityOptions) %>
+  		<%= f.tr :industry, 'Отрастль', f.grouped_select(:industry, DomainHelper::IndustryOptions) %>
+  		<%= f.tr :job_title, 'Должность', f.text_field(:job_title), :required => true %>
+  		<%= f.tr :min_salary, 'Зарплата', f.text_field(:min_salary), :before => 'от', :after => 'рублей' %>
+  	<% end %>
+
+  	<%= section :id => 'text-areas' do %>
+  		<%= f.tr :about_me, 'О себе', f.text_area(:about_me, :title => 'Профессиональные знания и умения. опыт работы, образование…') %>
+  		<%= f.tr :job_reqs, 'О работе', f.text_area(:job_reqs, :title => 'Дополнительные требования к работе') %>
+  		<%= f.tr :contact_info, 'Контактная&nbsp;<br> информация', f.text_area(:contact_info, :title => 'Телефон, Email…') %>
+  		<%= f.tr :password, 'Пароль', f.password_field(:password, :autocomplete => :off), :comment => 'Пароль нужен если вы предпологаете редактировать резюме в будущем.' %>
+  	<% end %>
+	
+  	<%= tr2 submit_section(@resume.new_record? ? 'Опубликовать' : 'Сохранить') %>
+  <% end %>
+<% end %>

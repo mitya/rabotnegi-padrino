@@ -1,0 +1,19 @@
+<% page "employer-vacancies", "Мои вакансии", :path => %w(employers pro-employers vacancies) %>
+
+<h1>Ваши вакансии</h1>
+<table id='vacancies-table'>
+	<% @vacancies.each do |vacancy| %>
+		<tr>
+			<th><%= link_to vacancy.title, employer_vacancy_path(vacancy), :class => 'ui' %></th>
+			<td><%= vacancy.salary %></td>
+			<td><%= truncate(vacancy.description, :length => 50) %></td>
+			<td class='controls'>
+				<span>
+					<%= link_to "редактировать", edit_employer_vacancy_path(vacancy), :class => 'ui' %>
+					<%= link_to "удалить", employer_vacancy_path(vacancy), :class => 'ui', :confirm => "Удаляем «#{vacancy.title}», да?", :method => :delete %>
+				</span>
+        </td>
+      </tr>
+	<% end %>
+</table>
+<%= link_to "Добавить вакансию", new_employer_vacancy_path, :class => 'ui' %>

@@ -1,0 +1,9 @@
+= link_to "bbb", "http://www.google.com/search/this"
+br
+= link_to "bbb", vacancies_url
+br
+= link_to "bbb", vacancies_path(city: 'msk', industry: 'it', user: "joe", age: 25)
+br
+= link_to "bbb", url(:vacancies, city: 'msk', industry: 'it', user: "joe", age: 25)
+br
+= link_to "bbb", url(Vacancy.first)

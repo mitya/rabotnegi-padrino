@@ -1,0 +1,10 @@
+tr.entry-details{id=web_id(@vacancy, :details)}
+  td{colspan=3}
+    .entry-box{style='display:none'}
+      .entry-actions
+        ul
+          li= link_to "Открыть вакансию на отдельной странице", url(:vacancies, :show, id: @vacancy), target: "_blank"
+          li= link_to b("Контактная информация"), "http://www.rabota.ru/vacancy#{@vacancy.external_id}.html", target: '_blank', rel: "nofollow" if @vacancy.external_id
+      .entry-content
+        == @vacancy.description
+      .clear

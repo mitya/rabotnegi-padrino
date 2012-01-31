@@ -1,0 +1,6 @@
+@import "_helpers";
+
+body#workers-login #workers-login-form {
+  #name, #password { width: 140px; }
+  #log_in { width: 145px; } 
+}

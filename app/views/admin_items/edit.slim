@@ -1,0 +1,12 @@
+- page "admin-edit-item", "Редактирование — #{@model}"
+
+= edit_view [:admin, @model] do |v|
+  = v.errors
+
+  - @klass.edit_fields.each do |field|
+    = v.item field
+
+  = v.buttons do
+    = v.commit
+    | или 
+    = link_to "Отменить", :back, :class => "action"

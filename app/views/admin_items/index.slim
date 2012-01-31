@@ -1,0 +1,9 @@
+- page "admin-data-list", t("active_record.models.#{@collection.klass.model_name.plural}", default: @collection.klass.model_name.human.pluralize), klass: "admin-#{@collection.key.dasherize}"
+
+= search_form url(:admin_items, :index, collection: params[:collection]) if @collection.searchable?
+
+= partial 'admin_items/list', locals: {models: @models, collection: @collection}
+
+p
+  b Хранимые аттрибуты — 
+  = @collection.stored_fields.map{ |f| ":#{f}" }.join(", ")

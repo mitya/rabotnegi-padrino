@@ -1,0 +1,17 @@
+table.vacancies-list.rounded{cellspacing=0}
+  thead
+    tr
+      th.pos{class=sorting_state_class_for(:title)}= link_to "Должность", current_url(sort: encode_order(:title)), rel: 'nofollow'
+      th.emp{class=sorting_state_class_for(:employer_name)}= link_to "Компания", current_url(sort: encode_order(:employer_name)), rel: 'nofollow'
+      th.sal{class=sorting_state_class_for(:salary_min)}= link_to "Зарплата", current_url(sort: encode_order(:salary_min)), rel: 'nofollow'
+
+  tbody
+    - collection.each do |vacancy|
+      tr.entry-header{id=web_id(vacancy) class=xcycle('', ' alt')}
+        td.pos
+          span{class="star #{current_user!.favorite_vacancies.include?(vacancy.id) ? 'star-enabled' : 'star-disabled'}"}
+          = link_to vacancy.title, url(:vacancies, :show, id: vacancy)
+        td.emp== vacancy.employer_name
+        td.sal= vacancy.salary
+
+= pagination collection

@@ -1,0 +1,141 @@
+task :invoke_rake do
+  run_rake ENV["T"]
+end
+
+task :runner do
+  arguments = ENV["SCRIPT"] if ENV["SCRIPT"]
+  arguments = ENV["CODE"].inspect if ENV["CODE"]
+  run "cd #{current_path} && bundle exec rails runner -e #{rails_env} #{arguments}"
+end
+
+task :push do
+  system "git push"
+  deploy.default
+end
+
+namespace :deploy do
+  task :restart do
+    run "touch #{current_path}/tmp/restart.txt"
+  end
+
+  task :update_custom_symlinks do
+    run <<-BASH
+      rm -rf #{latest_release}/data &&
+      ln -s #{shared_path}/data #{latest_release}/data
+    BASH
+  end  
+end
+
+namespace :crontab do
+  def rake(task)
+    "#{user} cd $RAILS_ROOT && bundle exec rake #{task} >> $RAILS_ROOT/log/cron.out 2>> $RAILS_ROOT/log/cron.err"
+  end
+
+  def runner(task)
+    "#{user} cd $RAILS_ROOT && script/rails runner -e $RAILS_ENV #{task} >> $RAILS_ROOT/log/cron.out 2>> $RAILS_ROOT/log/cron.err"
+  end    
+
+  task :install do
+    config = <<-end.strip_heredoc
+      PATH=$PATH:/usr/local/bin/:/usr/bin:/bin
+      MAILTO=#{admin_email}
+      RUBYOPT="-Ku"
+      RAILS_PROC='cron'
+      RAILS_ROOT="#{current_path}"
+      RAILS_ENV=#{rails_env}
+    end
+    
+    config += "\n" + $cron_jobs.join("\n") + "\n"
+    
+    put_as_root cron_config_path, config
+  end  
+end
+
+namespace "deploy:assets" do
+  task :purge do
+    run "find #{current_path}/public/assets/ -mtime +30 -delete"
+  end  
+end
+
+namespace :log do
+  task(:default) { print_log app_log_path }
+  task(:env) { print_log "#{current_path}/log/#{rails_env}.log" }
+  task(:web) { print_log "#{current_path}/log/web.log" }
+  task(:error) { print_log "#{current_path}/log/web.err" }
+  task(:dump) { print_log "#{current_path}/log/#{ENV['T']}.log" }
+  
+  task :follow, :roles => :app do
+    trap('INT') { exit }
+    run("tail -f #{app_log_path}") { |channel, stream, data| puts data; break if stream == :err }
+  end
+  
+  task :pull do
+    get app_log_path, "log/#{rails_env}.log"
+  end
+end
+
+namespace :backup do
+  task :default do
+    run_rake "data:dump DB=rabotnegi_prod DIR=#{backups_path} BUCKET=#{backups_bucket}"
+  end
+
+  task :list do
+    print_output "ls -l #{backups_path}/*-????????_??????.tbz"
+    print_output "df -h"
+  end
+  
+  task :download do
+    last_backup_name = capture("ls -x #{backups_path}/#{database}-????????_??????.tbz").split.sort.last
+    get last_backup_name, File.join("tmp", File.basename(last_backup_name))
+  end
+
+  task :cleanup do
+    backups = capture("ls -x #{backups_path}/#{database}-????????_??????.tbz").split.sort
+    olds = (backups - backups.last(3)).join(" ")
+    run "rm -rf #{olds}"
+  end    
+end
+
+namespace :db do
+  desc "Dumps and downloads a current copy of the server database"
+  task :dump do
+    timestamp = Time.now.strftime("%y%m%d_%H%M")
+    dump_name = "#{database}_#{timestamp}"
+    run "mongodump -d #{database} -o #{tmp_path}/#{dump_name}"
+    run "cd #{tmp_path}/#{dump_name}/#{database} && tar cj * > #{tmp_path}/#{dump_name}.tbz"
+    get "#{tmp_path}/#{dump_name}.tbz", "tmp/#{dump_name}.tbz"
+  end
+  
+  desc "Uploads a db dump from DUMPDIR to the server"
+  task :restore do
+    dumpdir = ENV['DUMPDIR']
+    workdir = Dir.pwd
+    system "cd #{dumpdir} && tar cj * > #{workdir}/tmp/localdump.tbz"
+    upload "tmp/localdump.tbz", "#{current_path}/tmp/localdump.tbz"
+    run "rm -rf #{current_path}/tmp/localdump"
+    run "mkdir -p #{current_path}/tmp/localdump"
+    run "cd #{current_path}/tmp/localdump && tar xjf #{current_path}/tmp/localdump.tbz"
+    run "cd #{current_path}/tmp && mongorestore -d #{database} --drop localdump -c #{collections_to_restore}"
+  end
+end
+
+namespace :redis_web do
+  task(:start) { run "cd /app/redis_web && bundle exec thin -p 7010 -d start"  }
+  task(:stop) { run "cd /app/redis_web && bundle exec thin -p 7010 stop"  }
+end
+
+namespace :resque_web do
+  task(:start) { run "cd #{current_path} && bundle exec resque-web -p 8282 -N #{project}:jobs -e #{rails_env}"  }
+  task(:stop) { run "cd #{current_path} && bundle exec resque-web -p 8282 -K"  }  
+end
+
+namespace :resque do
+  task(:start) { run "RAILS_ENV=#{rails_env} #{current_path}/script/resque 1 start" }
+  task(:stop) { run "RAILS_ENV=#{rails_env} #{current_path}/script/resque 1 stop" }
+  task(:restart) { sudo "monit restart resque.1" }
+end
+
+namespace :monit do
+  task(:status) { sudo "monit status" }
+  task(:stop_all) { sudo "monit stop all" }  
+end

@@ -1,0 +1,22 @@
+body#edit-resume form#resume-form { margin-top: 10px; border-top: 2px solid #666666; padding-top: 10px; }
+body#edit-resume form#resume-form #name-section, body#edit-resume form#resume-form #job-section, body#edit-resume form#resume-form #about-me-section, body#edit-resume form#resume-form #job-reqs-section, body#edit-resume form#resume-form #contact-section, body#edit-resume form#resume-form #security-section { margin: 16px 0; }
+body#edit-resume form#resume-form textarea { width: 500px; }
+body#edit-resume form#resume-form textarea#resume_about_me { height: 200px; }
+body#edit-resume form#resume-form textarea#resume_job_reqs { height: 100px; }
+body#edit-resume form#resume-form textarea#resume_contact_info { height: 50px; }
+body#edit-resume form#resume-form input#resume_min_salary { text-align: center; width: 60px; }
+
+body#resumes #resumes-search-form { margin: 10px 0; border: 1px solid silver; padding: 10px; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+body#resumes #resumes-search-form input { width: 200px; }
+body#resumes #resumes-search-form select, body#resumes #resumes-search-form input.button { width: 205px; }
+body#resumes #resume-list { margin: 0 auto; }
+body#resumes #resume-list .sal { padding-left: 20px; text-align: right; }
+body#resumes #resume-list .pos { text-align: left; }
+
+body#view-resume #resume #name { font-size: 200%; font-weight: bold; }
+body#view-resume #resume #job-title { font-size: 200%; color: green; }
+body#view-resume #resume #salary { font-size: 150%; margin-left: 20px; }
+body#view-resume #resume #salary-value { font-weight: bold; }
+body#view-resume #resume #about-me, body#view-resume #resume #job-reqs, body#view-resume #resume #contact-info { margin: 10px 0; }
+body#view-resume #resume pre { white-space: pre-wrap; font: 100% Verdana, sans-serif; margin: 3px 0; }
+body#view-resume #resume h4 { margin: 12px 0 3px 0; font-size: larger; }

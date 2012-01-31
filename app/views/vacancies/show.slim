@@ -1,0 +1,15 @@
+- page "vacancy", "#{@vacancy.title} — #{@vacancy.city_name}", :path => %w(workers workers vacancy-search)
+
+.vacancy(id="vacancy_#{@vacancy.id}")
+  h2= @vacancy.title 
+  h3= @vacancy.salary
+  p.metainfo= "#{@vacancy.city_name}, опубликовано #{date_full @vacancy.created_at}"
+  p.metainfo= "Сгенерировано #{Time.now}"
+
+  .description
+    == @vacancy.description
+    p.contacts
+      = link_to b("Контактная информация"), "http://www.rabota.ru/vacancy#{@vacancy.external_id}.html", rel: "nofollow", target: '_blank'
+
+  ul.links
+    li= link_to "Все вакансии раздела «#{@vacancy.city_name} — #{@vacancy.industry_name}»", back_to_all_vacancies_url_for(@vacancy)

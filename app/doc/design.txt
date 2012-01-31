@@ -1,0 +1,15 @@
+search_vacancies
+  user = get_user
+  user.update city, industry, query  
+
+get_user
+  if cookies[:uid]
+    User.find encryptor.decrypt(cookies[:uid])
+  else
+    User.create!
+
+user.update
+  
+  
+db:pull TARGET
+db:push TARGET

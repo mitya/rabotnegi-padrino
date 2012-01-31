@@ -1,0 +1,7 @@
+---
+:orm: mongoid
+:test: minitest
+:mock: mocha
+:script: jquery
+:renderer: slim
+:stylesheet: sass

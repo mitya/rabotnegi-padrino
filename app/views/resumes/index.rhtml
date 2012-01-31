@@ -1,0 +1,24 @@
+<% page "resumes", resumes_page_title, :path => %w(employers casual-employers resume-search) %>
+
+<%= render "search" %>
+
+<% if @resumes %>
+  <% if @resumes.any? %>
+
+    <table id='resume-list'>
+    	<tr>
+    		<th class='pos'>Должность
+    		<th class='sal'>Зарплата
+    	<% for resume in @resumes %>
+    		<tr>
+    			<td class='pos'><%= link_to resume.job_title, resume %>
+    			<td class='sal'>от <%= resume.min_salary %> р.
+    	<% end %>
+    </table>
+
+  <% else %>
+
+  	<div class='message warning'>Резюме в выбранном городе/отрасли пока нет.</div>
+
+  <% end %>
+<% end %>

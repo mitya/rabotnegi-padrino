@@ -1,0 +1,34 @@
+! doctype html
+
+head
+  meta{http-equiv="Content-Type" content="text/html;charset=UTF-8"}
+  = stylesheet_link_tag %w(gen/test)
+
+body
+  h1 CSS Tests
+
+  section#msb-headers
+    #header-1.row
+      span.title= link_to "MySmartBio", "/"
+      ul#operator-nav.nav
+        li= link_to "Accounts", "/"
+        li= link_to "Payments", "/"
+        li= link_to "Credit Cards", "/"
+      ul#meta-nav.nav
+        li Joe Smith
+        li= link_to "Log Out", "/"
+      .clear
+
+    #header-2.row
+      ul#admin-nav.nav
+        li= link_to "Statistics", "/"
+        li= link_to "Service Reps", "/"
+        li= link_to "Bulk Emails", "/"
+
+  section#msb-colors
+    .color-box.color1 Lorem Ipsum Sit Amet
+    .color-box.color2 Lorem Ipsum Sit Amet
+    .color-box.color3 Lorem Ipsum Sit Amet
+    .color-box.color4 Lorem Ipsum Sit Amet
+    .color-box.color5 Lorem Ipsum Sit Amet
+    .color-box.color6 Lorem Ipsum Sit Amet

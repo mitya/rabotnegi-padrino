@@ -1,0 +1,12 @@
+process
+  state: started | loaded | done | failed
+  loading_items:
+    loading_item(city, industry, state)
+    ...
+  
+  
+ item.queued?
+ item.done?
+ 
+ rabota.loader.20111226.spb-it.started
+ rabota.loader.20111226.spb-it.done

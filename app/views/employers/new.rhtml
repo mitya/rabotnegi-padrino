@@ -1,0 +1,21 @@
+<% page "employer-signup", "Регистрация работодателя", :path => %w(employers casual-employers) %>
+
+<h1>
+  Регистрация работодателя
+</h1>
+
+<p class="intro">
+  Пожалуйста, заполните форму. Все поля в ней обязательные.
+</p>
+
+<%= form_for @employer, :url => employer_path do |f| %>
+  <%= errors_for(@employer) %>
+  <%= wrapper do %>
+  	<%= f.tr :name, 'Название компании', f.text_field(:name), :comment => "Например: «Газпром» или «Рога и Копыта». <br/>Не нужно указывать форму собственности (ООО, ЗАО, и т.д.)." %>
+  	<%= f.tr :login, 'Логин', f.text_field(:login), :comment => "" %>
+  	<%= f.tr :password, 'Пароль', f.password_field(:password), :comment => "Придумайте пароль, он может быть любой длины и содежать любые буквы, цифры и знаки." %>
+  	<%= f.tr :password_confirmation, 'Подтверждение пароля', f.password_field(:password_confirmation), :comment => "Введите этот же пароль ещё раз." %>
+  	<%= trb label_tag(nil, 'Защита от роботов:'), show_simple_captcha, :comment => "Введите 4 латинские буквы которые паказаны на картинке.", :class => "captcha" %>
+  	<%= tr2 submit_tag('Зарегистрироваться') %>
+  <% end %>
+<% end %>

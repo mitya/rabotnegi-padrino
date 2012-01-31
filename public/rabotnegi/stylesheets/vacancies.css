@@ -1,0 +1,50 @@
+body.public table.vacancies-list { width: 100%; margin: 10px 0; border: 1px solid #cccccc; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+body.public table.vacancies-list span.pos { font-weight: bold; }
+body.public table.vacancies-list span.star { display: block; width: 16px; height: 16px; float: left; padding-right: 5px; background-repeat: no-repeat; cursor: pointer; }
+body.public table.vacancies-list span.star-disabled { background-image: image-url("star-disabled-16.gif"); }
+body.public table.vacancies-list span.star-enabled { background-image: image-url("star-enabled-16.png"); }
+body.public table.vacancies-list td { padding: 5px; border-top: 1px solid #cccccc; }
+body.public table.vacancies-list th { padding: 5px; }
+body.public table.vacancies-list td.pos, body.public table.vacancies-list th.pos { text-align: left; width: 52%; }
+body.public table.vacancies-list td.emp, body.public table.vacancies-list th.emp { text-align: left; width: 30%; }
+body.public table.vacancies-list td.sal, body.public table.vacancies-list th.sal { text-align: right; white-space: nowrap; width: 18%; }
+body.public table.vacancies-list thead tr th { background: #cccccc; background: #cccccc -webkit-gradient(linear, left top, left bottom, from(#cccccc), to(#dddddd)); background: #cccccc -moz-linear-gradient(top, #cccccc, #dddddd); }
+body.public table.vacancies-list thead th.sorted a { color: black; }
+body.public table.vacancies-list thead a { text-decoration: none; color: black; }
+body.public table.vacancies-list thead a:visited { color: black; }
+body.public table.vacancies-list thead a:hover { color: #ee0000; }
+body.public table.vacancies-list tfoot tr td { background: #dddddd; background: #dddddd -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#cccccc)); background: #dddddd -moz-linear-gradient(top, #dddddd, #cccccc); }
+body.public table.vacancies-list tbody tr.entry-header td { background: #f3f3f3; }
+body.public table.vacancies-list tbody tr.entry-header a { color: black; text-decoration: none; font-weight: bold; }
+body.public table.vacancies-list tbody tr.entry-header span.spinner { background: green; color: white; padding: 5px; }
+body.public table.vacancies-list tbody tr.entry-header.x-open td { background-color: #f3f3ff; }
+body.public table.vacancies-list tbody tr.entry-header { cursor: pointer; }
+body.public table.vacancies-list tbody tr.entry-header:hover td { background: #ffa; }
+body.public table.vacancies-list tbody tr.x-loading td.pos { background: #ffffaa image-url("spinner.gif") right center no-repeat; }
+body.public table.vacancies-list tbody tr.entry-details td { padding: 0; border: none; color: #666666; background: white; background: white -webkit-gradient(linear, left top, left 5, from(#f3f3ff), to(white)); background: white -moz-linear-gradient(top, #f3f3ff, white, white, white, white); }
+body.public table.vacancies-list tbody tr.entry-details h4:first-child { margin-top: 0; }
+body.public table.vacancies-list tbody tr.entry-details .entry-box { padding: 10px; border: 3px solid #f3f3ff; }
+body.public table.vacancies-list tbody tr.entry-details .entry-content { max-width: 650px; }
+body.public table.vacancies-list tbody tr.entry-details .entry-content ul { margin: 0.5em 0; padding: 0 0 0 20px; }
+body.public table.vacancies-list tbody tr.entry-details .entry-actions { float: right; margin: 10px; border-left: #ccc solid 1px; padding-left: 10px; }
+body.public table.vacancies-list tbody tr.entry-details .entry-actions ul { padding: 0; }
+body.public table.vacancies-list tbody tr.entry-details .entry-actions li { margin: 3px 0; list-style-type: none; }
+
+body#vacancies #content { margin: 0; }
+body#vacancies .search-result-message { margin: 5px 0; text-align: center; }
+body#vacancies #vacancies-filter.inline #city { width: 130px; }
+body#vacancies #vacancies-filter.inline #q { width: 140px; }
+body#vacancies #vacancies-filter.inline .button { width: 150px; }
+body#vacancies #vacancies-filter.tableish #q { width: 200px; }
+
+body#vacancy .vacancy h3 { margin: 0.5em 0; }
+body#vacancy .vacancy .description { margin: 1em 0; }
+body#vacancy .vacancy p.contacts { margin: 1em 0 0.5em; }
+body#vacancy .vacancy p.metainfo { font-size: 12px; color: gray; }
+body#vacancy .vacancy ul.links { margin: 3em 0 .5em; padding-left: 0; border-top: 1px solid #aaa; padding-top: 1.5em; }
+body#vacancy .vacancy ul.links a:visited { color: #0000cd; }
+body#vacancy .vacancy ul.links li { margin: 0.25em 0; list-style-type: none; }
+
+body#edit-vacancy #vacancy-edit-form input { width: 220px; }
+body#edit-vacancy #vacancy-edit-form select { width: 224px; }
+body#edit-vacancy #vacancy-edit-form textarea { width: 400px; height: 170px; }

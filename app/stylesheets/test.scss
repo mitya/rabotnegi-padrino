@@ -1,0 +1,31 @@
+@import "_helpers";
+
+h1 { text-align: center; }
+section { margin: 20px 0; }
+
+#msb-headers { font-family: Verdana; font-size: 12px;
+  ul.nav { padding: 0; margin: 0;
+    li { display: inline; list-item-style: none; }
+    a { padding: 5px; }
+    a:visited { color: $link_color; }
+  }
+  a { text-decoration: none; }
+  #header-1 { padding: 5px; @include background-gradient(#e8f0fd, #d8e0fd); border-bottom: 1px solid #cccccc; font-family: Verdana;
+    span.title { float: right; margin: 0; margin-left: 10px; }
+    ul#operator-nav { float: left; line-height: 18px; margin-left: -3px; }
+    ul#meta-nav { float: right; line-height: 18px; } 
+  }
+  #header-2 { padding: 5px; border-bottom: 1px solid #cccccc; @include background-gradient(#fff1b4, #fae896); font-family: Verdana;
+    ul#admin-nav { margin-left: -3px; } 
+  }
+}
+
+#msb-colors {
+  .color-box { width: 300px; margin: 5px auto; padding: 5px; }
+  .color-red { @include background-gradient(#ffe9e8, #ffdddd); }
+  .color-green { @include background-gradient(#eeffee, #e0ffe0); }
+  .color-violin { @include background-gradient(#eeeeff, #e0e0ff); }
+  .color-yellow { @include background-gradient(#ffffe0, #ffffdd); }
+  .color-gray { @include background-gradient(#f0f0f0, #eeeeee); }
+  .color-blue { @include background-gradient(#3d87d2, #165da4); }
+}

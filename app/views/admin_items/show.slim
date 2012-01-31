@@ -1,0 +1,12 @@
+- page "admin-item", @model.to_s
+
+= details_view do |d|
+  - @collection.view_fields.each do |field|
+    = d.item field.title, inspect_field(@model, field), klass: field.css, format: false
+
+  - @collection.view_subcollections.each do |list|
+    = d.item list.title, render('list', models: @model.send(list.accessor), collection: list.collection)
+
+  = d.actions do
+    = link_to "Изменить", url(:admin_items, :edit, collection: params[:collection], id: @model)
+    = link_to "Назад к списку", request.referer || url(:admin_items, :index, collection: params[:collection])

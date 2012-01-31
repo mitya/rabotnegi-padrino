@@ -1,0 +1,11 @@
+<% page "view-resume", "Моё резюме", :path => %w(workers workers my-resume) %>
+
+<p>
+  <%= link_to 'Редактировать', edit_my_resume_path, :class => 'ui' %> |
+  <%= link_to 'Удалить', my_resume_path, :method => :delete, :class => 'ui' %> |
+  <%= link_to 'Выход', worker_logout_path, :class => 'ui' %>  
+</p>
+
+<hr>
+
+<%= render "show" %>
