@@ -1,0 +1,25 @@
+<% page "employers-login", "Работодателям", :path => %w(employers casual-employers) %>
+
+<table id='emp-idx'>
+  <tr>
+  	<td id='casuals'>
+  	  <%= link_to "Опубликовать вакансию", new_employer_vacancy_path, :class => 'ui' %><br/>
+  	  <%= link_to "Найти резюме", resumes_path, :class => "ui" %>
+  	</td>
+  	<td id='professionals'>
+  		<h2>Публикуете много вакансий?</h2>
+  		<h3 id='register-h'><%= link_to "Зарегистрируйтесь", new_employer_path, :class => 'ui' %></h3>
+
+  		<p id='or-p'>или</p>
+
+  		<h3 id='login-h'>Войдите в систему</h3>
+  		<%= form_tag employer_login_path, :method => :post, :id => 'employer-login' do %>
+    	  <%= wrapper do %>
+    			<%= tr :login, 'Логин', text_field_tag(:login, params[:login]) %>
+    			<%= tr :password, 'Пароль', password_field_tag(:password, params[:password]) %>
+    			<%= tr2 submit_tag('Войти', :class => 'button') %>
+    		<% end %>
+  		<% end %>
+  	</td>
+  </tr>
+</table>

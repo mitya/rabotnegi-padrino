@@ -1,0 +1,21 @@
+- page "admin-dashboard", "Статистика"
+
+table.properties
+  tr
+    th Вакансий
+    td.num= f Vacancy.count
+  tr
+    th Резюме
+    td.num= f Resume.count
+  tr
+    th Работодателей
+    td.num= f Employer.count
+  tr
+    th Загрузок
+    td.num= f Rabotaru::Job.count
+  tr
+    th Событий в логе
+    td.num= limited_number EventLog::Item.count, 20_000
+  tr
+    th Пользователей
+    td.num= User.count

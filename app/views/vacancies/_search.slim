@@ -1,0 +1,14 @@
+form#vacancies-filter.search{action=url(:vacancies, :base) method="get" class=(@vacancies ? "inline" : "front tableish" )}
+  fieldset
+    .field
+      = label_tag :city, caption: 'Город:'
+      = select_tag :city, options: CityOptions, selected: params[:city], include_blank: false
+    .field
+      = label_tag :industry, caption: 'Отрасль:'
+      = select_tag :industry, grouped_options: IndustryOptions, selected: params[:industry], include_blank: "любая"
+    .field
+      = label_tag :q, caption: 'Ключевые слова:'
+      = text_field_tag :q, value: params[:q], id: "q"
+    .field
+      label &nbsp;
+      input.button{type="submit" value="Найти"}

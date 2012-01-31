@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'daemons'
+require 'optparse'
+
+rails_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+ENV['RAILS_PROC'] = 'worker'
+
+id = ARGV.shift
+raise("Numeric ID should be given as the first argument") unless id.to_i > 0
+
+Daemons.run_proc("resque.#{id}", dir: File.join(rails_root, "tmp/pids"), dir_mode: :normal, log_output: true, log_dir: File.join(rails_root, "log")) do
+  Dir.chdir(rails_root)
+  require File.join(rails_root, "config/environment")
+  worker = Resque::Worker.new("*")
+  worker.verbose = true
+  worker.work(5)
+end
+
+__END__
+
+#!/bin/bash
+export JAVA_HOME=/usr/local/java/
+CLASSPATH=ajarfile.jar:.
+
+case $1 in
+   start)
+      echo $$ > /var/run/xyz.pid;
+      exec 2>&1 java -cp ${CLASSPATH} org.something.with.main 1>/tmp/xyz.out 
+      ;;
+    stop)  
+      kill `cat /var/run/xyz.pid` ;;
+    *)  
+      echo "usage: xyz {start|stop}" ;;
+esac
+exit 0

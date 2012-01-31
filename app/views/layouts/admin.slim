@@ -1,0 +1,27 @@
+doctype html
+
+head
+  meta{http-equiv="Content-Type" content="text/html;charset=UTF-8"}
+  title= "#{@page_title} - Админ Работнегов"
+  = stylesheet_link_tag "/#{settings.app_name.underscore}/stylesheets/admin"
+  = javascript_include_tag %w(vendor/jquery-1.7.1.min vendor/jquery-ujs common application).map { |f| "/#{settings.app_name.underscore}/javascripts/#{f}" }
+
+body.admin{id=@page_id class=@page_class}
+  #header
+    ul.nav
+      li= link_to "Статистика", url(:admin_index)
+      li= link_to "Вакансии", url(:admin_items, :index, collection: 'vacancies')
+      li= link_to "Работодатели", url(:admin_items, :index, collection: 'employers')
+      li= link_to "Пользователи", url(:admin_items, :index, 'users')
+      li= link_to "Исключения", url(:admin_items, :index, collection: 'errs')
+      li= link_to "События", url(:admin_items, :index, collection: 'event_log_items')
+      li= link_to "Загрузки", url(:admin_items, :index, collection: 'rabotaru_jobs')
+      li.right== link_to "Работнеги.ру", url("/")
+
+  #content
+    = content_tag :div, flash[:notice], :id => 'flash-notice' if flash[:notice]
+    = content_tag :div, flash[:error], :id => 'flash-error' if flash[:error]
+    = content_tag :h1, @page_title if @page_title
+    = yield :layout
+
+  #footer © 2011 Работнеги.ру

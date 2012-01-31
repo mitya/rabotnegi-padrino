@@ -1,0 +1,62 @@
+def run_rake(command)
+  sudo_modifier = nil # sudo(:as => options[:sudo]) if options[:sudo]
+  run "cd #{current_path} && #{sudo_modifier} bundle exec rake RAILS_ENV=#{rails_env} #{command}"
+end
+
+def append_text(text, file)
+  # text = text.gsub("'", "'\\\\''").gsub("\n", '\n')
+  # run "echo -e '#{text}' | tee -a #{file}"
+  # run "tee -a #{file}", :data => text
+  # run "cat >> #{file}", :data => text
+  ("\n" + text + "\n").each_line { |line| run %(echo "#{line}" >> #{file}) }
+end
+
+def print_log(path)
+  lines = ENV['N'] || 200
+  query = ENV['Q']
+
+  if query
+    command = "cat #{path} | grep #{query} | tail -n #{lines}"
+  else
+    command = "tail -n #{lines} #{path}"
+  end
+
+  puts capture(command, via: :sudo)
+end
+
+def print_output(command)
+  output = capture(command)
+  puts
+  puts output
+  puts
+end
+
+def put_as_user(path, config)
+  sudo "touch #{path}"
+  sudo "chown #{user}:#{user} #{path}"
+  put config, path  
+end
+
+def put_as_root(path, config)
+  put_as_user path, config
+  sudo "chown root:root #{path}"
+end
+
+$cron_jobs = []
+
+def cron(command_type, time, command)
+  command_generators = {
+    rake: ->(task) do
+      "#{user} cd $RAILS_ROOT && bundle exec rake #{task} >> $RAILS_ROOT/log/cron.out 2>> $RAILS_ROOT/log/cron.err"
+    end,
+    runner: ->(task) do
+      "#{user} cd $RAILS_ROOT && script/rails runner -e $RAILS_ENV #{task} >> $RAILS_ROOT/log/cron.out 2>> $RAILS_ROOT/log/cron.err"
+    end    
+  }
+    
+  time.squish!
+  time_parts = time.split(' ')
+  time_parts << ['*'] * (5 - time_parts.size)
+
+  $cron_jobs << time_parts.join(' ') + " " + command_generators[command_type].(command)
+end

@@ -1,0 +1,149 @@
+@import "_helpers";
+@import "common";
+
+$label-color: #888888;
+
+body {
+  margin: 0; min-width: 600px;
+  font: 13px "Lucida Grande", Verdana, sans-serif;  
+  behavior: javascript-url("csshover2.htc"); 
+}
+
+table th { text-align: left; }
+
+h1 { margin: 0.25em 0 0.5em; font-weight: normal; }
+
+a[data-method]:visited { color: $link_color; }
+
+#header { margin: 10px 20px 15px; }
+#content { margin: 0 20px; }
+#footer { margin: 40px 20px 30px; text-align: left; color: #ccc; font-size: 12px; }
+
+#logo { font-weight: bold; font-size: x-large;
+  a { text-decoration: none; }
+  #logo-pro { color: red; }
+  #logo-rabotu {font-variant: small-caps; color: black; } 
+}
+
+.grid { width: 100%; border: #999999 2px solid;
+  thead th { padding: 4px; background: #e0ebf7; }
+  tbody td { padding: 4px; border: #aaaaaa 1px solid; }
+  tfoot td { padding: 8px 4px; background: #e0ebf7; }
+  tbody tr.alt { background: #eeeeee; } 
+}
+
+body#admin-vacancies #vacancies .grid {
+  td.actions { width: 120px; }
+  td.title { width: 50%; }
+  tr.edit td input { width: 90%; padding: 3px; font-size: 14px; } 
+}
+
+ul.nav { line-height: 18px; padding: 0; margin: 10px 0 10px -3px;
+  li { display: inline; list-item-style: none; }
+  li.right { float: right; }
+  a { padding: 5px; }
+  a:visited { color: $link_color; }
+  a:hover { color: $hovered_link_color; }  
+} 
+
+.listing { width: 100%; margin: 10px 0; border: 1px solid #cccccc; @include rounded-table(10px);
+  td, th { border-bottom: 1px solid #cccccc; padding: 5px; text-align: left; }
+  thead th { @include background-gradient(#ccc, #ddd); font-weight: bold; border-bottom: 1px solid #cccccc; }
+  thead th h2 { margin: 0 !important; text-align: left; }
+  td.id, th.id, td.num, th.num { text-align: right; }
+  tbody td.actions { text-align: right; }
+  tbody tr.no-data td { text-align: center; font-weight: bold; color: #888888; }
+  th a.active { color: green; }
+  th a:hover { @include background-gradient(#00aa00, #008800); color: white; }    
+}
+
+ul.resource { padding: 0;
+  li.item { list-style: none; margin-left: 160px; position: relative; min-height: 1.5em; margin-bottom: 0.25em; }
+  b.heading { position: absolute; display: block; left: -160px; width: 150px; padding-right: 10px; text-align: right; font-weight: bold; color: $label-color; }
+
+  li.item.wide { margin-top: 10px; padding: 10px 0; border-top: 1px solid #aaa;  }
+  li.item.wide ul.array { padding-left: 20px; }
+  li.item.wide b.heading { top: 10px; }
+  li.item.wide + li.item.wide { margin-top: 0; }
+  
+  li.item.full { margin-left: 0; margin-top: 10px; padding: 10px 0; border-top: 1px solid #aaa; }
+  li.item.full b.heading { position: static; }
+  
+  li.item pre { font-size: smaller; }
+  li.item.bold { font-weight: bold; }
+  
+  li.item table.listing { width: auto; }
+
+  li.actions { margin: 20px 10px 10px 10px; padding-top: 10px; padding-left: 150px; border-top: 1px solid #ccc; list-style-type: none; }
+  li.actions a:visited { color: $link_color; }
+  li.actions a { padding-right: 10px; }
+  li.actions a:visited { color: $visited_link_color; }
+}
+ 
+form.resource {
+  .editor-label { position: absolute; left: -160px; width: 150px; padding-right: 10px; padding-top: 3px; text-align: right; }
+  .editor-label label { font-weight: bold; color: $label-color; } 
+
+  .form-errors { margin-left: 160px; }
+  
+  .editor { margin-bottom: 10px; margin-left: 160px; position: relative;
+    input { padding: 3px; }
+    input[type=text] { width: 300px; }
+    textarea { width: 500px; height: 200px; }
+  }
+  fieldset.buttons { margin-top: 15px; padding-left: 160px; 
+    input[type=submit] { padding: 3px 20px 4px; border: 1px solid #999999; cursor: pointer; font-family: arial, sans-serif; font-size: 12px; font-weight: bold; }
+    input[type=submit] { @include rounded(4px); @include background-gradient(#f0f0f0, #eeeeee); }
+    input[type=submit]:hover { color: white; border-color: #0000ee; @include background-gradient(#3d87d2, #165da4); } 
+  }
+}
+
+table.hash {
+  th { color: $label-color; }
+  th, td { padding: 2px 5px; }
+  th { padding-left: 0; }
+}
+
+table.properties {
+  td, th { padding: 5px; }
+  th { text-align: right; color: $label-color; }
+  td.num { text-align: right; }
+}
+
+input.search { width: 70%; }
+
+.no-data-message { text-align: center; margin: 40px; font-size: 24px; color: #999;}
+
+span.extreme-number {
+  padding: 4px; color: white; font-size: 90%; @include rounded(5px); @include background-gradient(#f00, #f33);
+}
+
+span.color {
+  padding: 4px; @include rounded(4px); color: white; font-size: 90%;
+}
+
+body.admin-rabotaru-jobs {
+  .listing tr.processed { @include background-gradient(#efe, #e0ffe0); }
+  .listing tr.loaded { @include background-gradient(#ff0, #f0f000); }
+  .listing tr.failed { @include background-gradient(#ffe9e8, #ffdddd); }
+}
+
+body.admin-log-items {
+  .listing tr.start { @include background-gradient(#ffffe0, #ffffdd); }
+  .listing tr.warning { @include background-gradient(#ffe9e8, #ffdddd); }
+}
+
+/* ▾ */
+
+.menu { position: relative;
+  .menu-trigger { display: inline; color: $link-color; border-bottom: 1px dotted; margin: 0 5px; padding-top: 5px; }
+  .menu-trigger:hover { color: $hovered-link-color; cursor: pointer; }
+  .menu-box { display: none; position: absolute; z-index: 1000; }
+  .menu-box { background: white; border: 1px #aaa dotted; padding: 5px 10px 10px; left: -10px; @include rounded(10px); }
+  .menu-box a { display: block; float: left; clear: both; }  
+}
+
+.menu.active {
+  .menu-box { display: block; }
+  .menu-trigger { border-bottom: none; }  
+}

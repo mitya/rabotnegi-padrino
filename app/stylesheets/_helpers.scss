@@ -1,0 +1,36 @@
+$link_color: #0000cd;
+$hovered_link_color: #ee0000;
+$visited_link_color: purple;
+
+@mixin rounded($radius: 5px) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius; 
+}
+
+@mixin rounded-top($radius: 5px) {
+  -moz-border-radius-topleft: $radius;
+  -moz-border-radius-topright: $radius;
+  -webkit-border-top-left-radius: $radius;
+  -webkit-border-top-right-radius: $radius; 
+}
+
+@mixin background-gradient($from: #dddddd, $to: #cccccc) {
+  background: $from;
+  background: $from -webkit-gradient(linear, left top, left bottom, from($from), to($to));
+  background: $from -moz-linear-gradient(top, $from, $to); 
+}
+
+@mixin background-gradient-top($from: #dddddd, $to: #cccccc, $height: 10) {
+  background: $to;
+  background: $to -webkit-gradient(linear, left top, left $height, from($from), to($to));
+  background: $to -moz-linear-gradient(top, $from, $to, $to, $to, $to); 
+}
+
+@mixin rounded-table($radius: 5px) { border-collapse: separate; border-spacing: 0; @include rounded($radius);
+  tr:first-child th:first-child { -moz-border-radius-topleft: $radius; -webkit-border-top-left-radius: $radius; }
+  tr:first-child th:last-child { -moz-border-radius-topright: $radius; -webkit-border-top-right-radius: $radius; }
+  tr:last-child td:first-child { -moz-border-radius-bottomleft: $radius; -webkit-border-bottom-left-radius: $radius; }
+  tr:last-child td:last-child { -moz-border-radius-bottomright: $radius; -webkit-border-bottom-right-radius: $radius; }
+  html.ie & { border-collapse: collapse !important; }
+}

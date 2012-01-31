@@ -1,0 +1,31 @@
+== SQL
+create index salary_min on vacancies(salary_min);
+create index city_salary_min on vacancies(city, salary_min);
+create index city_industry_salary_min on vacancies(city, industry, salary_min);
+
+drop index salary_min on vacancies;
+drop index city_salary_min on vacancies;
+drop index city_industry_salary_min on vacancies;
+
+== Ruby
+Vacancy.all(:select => "id, title, external_id, salary_min, salary_max, employer_name", :conditions => {:city => "msk"}, :order => "salary_min", :limit => 50)
+
+== Shell
+ab -n 100 -c 20 http://rabotnegi.ru/vacancies/msk
+ab -n 100 -c 20 http://rabotnegi.ru/vacancies/48288
+
+== Mongo
+
+db.vacancies.find({ employer_name: /@gmail\.com$/ }).count()
+db.vacancies.remove({ employer_name: /@gmail\.com$/ })
+
+Vacancy.where(employer_name: %r{@gmail.com$}).delete_all
+
+
+
+
+cd /app/rabotnegi/current
+bundle exec rails console production
+
+SimpleCaptcha::SimpleCaptchaData.last.key
+Object.new.extend(SimpleCaptcha::ImageHelpers).send :generate_simple_captcha_image, "e7f75ee04c7adf6f41c41f0d444d94383701c93d"

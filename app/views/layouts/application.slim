@@ -1,0 +1,41 @@
+doctype html
+
+head
+  title= window_title
+  meta{http-equiv="Content-Type" content="text/html;charset=UTF-8"}
+  - for name, content in meta_properties
+    meta(name=name content=content)
+  = stylesheet_link_tag %w(common application workers vacancies employers resumes).map { |s| "/#{settings.app_name.underscore}/stylesheets/#{s}" }
+
+body.public{id=@page_id class=@page_class}
+  #page
+    header#header
+      #logo
+        a{href="/"}
+          span#logo-pro Р
+          span#logo-rabotu аботнеги.ру
+
+      nav
+        ul#tabs{data-selected="##{@current_tab}"}
+          li#workers-tab.tab
+            a{href=url(:vacancies, :base)} Поиск вакансий
+          li#employers-tab.tab
+            a{href=url(:vacancies, :new)} Публикация вакансий
+          - if current_user!.favorite_vacancies.any?
+            li#favorite-vacancies-tab.tab
+              a{href=url(:favorite_worker_vacancies)} Сохраненные вакансии
+
+      .clear
+
+      = content_tag :div, flash[:notice], id: 'flash-notice' if flash[:notice]
+      = content_tag :div, flash[:error], id: 'flash-error' if flash[:error]
+
+    #content= yield :layout
+    #footer-push    
+
+  #plumbing
+    = javascript_include_tag %w(vendor/jquery-1.7.1.min vendor/jquery-ujs common application).map { |f| "/#{settings.app_name.underscore}/javascripts/#{f}" }
+    = render "layouts/google_analytics" if Mu.env.production?
+
+  footer#footer
+    p#footer-content © 2012 Работнеги.ру

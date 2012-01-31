@@ -1,0 +1,11 @@
+<%= centered do %>
+  <%= form_tag resumes_url, :method => :get, :id => 'resumes-search-form', :class => "search" do %>
+    <%= wrapper do %>
+      <%= tr :city, 'Город', select_tag(:city, options_for_select(DomainHelper::CityOptions, params[:city])) %>
+      <%= tr :industry, 'Отрасль', select_tag(:industry, grouped_options_for_select(DomainHelper::IndustryOptions, params[:industry], 'любая')) %>
+    	<%= tr :keywords, 'Ключевые слова', text_field_tag(:keywords) %>
+    	<%= tr :salary, 'Зарплата', select_tag(:salary, blank_option('любая') + options_for_select(DomainHelper::SalaryOptions, params[:salary])) %>
+    	<%= tr2 submit_tag('Найти', :class => 'button') %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,20 @@
+- page "vacancies", vacancies_page_title, path: %w(workers workers vacancy-search)
+- meta :description, "Работнеги.ру — это сайт который позволяет быстро найти работу или работников. Простой в использовании и не требует регистрации."
+- meta :keywords, "работа, вакансии"
+
+= partial "vacancies/search"
+
+- if @vacancies
+  - if @vacancies.any?
+    p.search-result-message= found_objects_info(@vacancies, 'ваканс', 'ия', 'ии', 'ий') + "."
+
+    = partial "vacancies/list", locals: {collection: @vacancies}
+
+  - else
+
+    p.message.warning
+      - if params[:q].present?
+        | По вашему запросу ничего не найдено<br>Попробуйте изменить ключевые слова или 
+        = link_to 'поискать без указания ключевых слов', request.request_parameters.merge(q: nil), :class => 'ui'
+      - else
+        | Информации о вакансиях в выбранном городе/отрасли сейчас нет

@@ -1,0 +1,66 @@
+/*
+*= require common
+*= require_self
+*= require workers
+*= require vacancies
+*= require employers
+*= require resumes
+*/
+
+
+@import "_helpers";
+
+$footer_height: 40px;
+
+html { height: 100%; }
+body { height: 100%; min-width: 480px; margin: 0 auto; width: 980px; }
+body { font: 13px "Lucida Grande", Verdana, sans-serif; behavior: javascript-url("csshover2.htc"); }
+
+#header { padding-bottom: 5px; border-bottom: 1px solid gray; }
+
+#page { margin-bottom: -$footer_height; min-height: 100%; }
+html.ie6 #page { height: auto !important; height: 100%; }
+
+#footer-push { height: $footer_height; }
+
+#footer { position: relative; margin-top: 10px; }
+#footer { text-align: center; color: #aaaaaa; }
+#footer-content { padding-top: 5px; }
+
+#logo { font-weight: bold;  font-size: x-large;  float: left;  margin: 0 10px;  height: 30px; line-height: 30px;
+  a { text-decoration: none; }
+  #logo-pro { color: red; }
+  #logo-rabotu { font-variant: small-caps;  color: black; } 
+}
+
+#tabs { float: left;  padding: 0;  margin: 0;  clear: right;
+  li { float: left; height: 30px; line-height: 30px; margin: 0 5px; list-style-type: none; }
+  li.tab { border: 1px solid white; @include rounded(5px); }
+  li.tab a {  padding: 5px 10px; color: black; text-decoration: none; } 
+  li:hover { border: 1px solid #555555; @include background-gradient(#eeeeee, #cccccc); }
+  li.selected { font-weight: bold; }
+  li.selected a:hover { color: black; } 
+}
+
+#links { clear: both; height: 25px; line-height: 25px;  padding: 5px 0; @include background-gradient(#eeeeee, #999999);
+  a { margin: 0 7px; padding: 5px;  text-decoration: none; color: #333333; }
+  a:hover { color: white; background: #666666; @include rounded(5px); }
+  a.selected { color: black; font-weight: bold; text-decoration: none; }
+  a.selected:hover { color: white; } 
+}
+
+#content { padding: 5px 10px;
+  h1 {  margin: 10px 0 5px; } 
+}
+
+#flash-notice, #flash-error { padding: 8px;  text-align: center; font-weight: bold; color: white; }
+#flash-notice { background: green; }
+#flash-error { background: red; }
+
+#info-panel { clear: both; width: 100%;  margin-top: 20px;  padding: 5px;
+  pre { font-family: "CMU Typewriter Text"; font-size: 12pt; }
+  p#trace-contents { text-align: center; font-size: larger; }
+  h2#info-panel-show { text-align: center; } 
+}
+
+p.central-message { text-align: center; font-size: 20px; margin: 30px 10px; color: #888; line-height: 1.5; }

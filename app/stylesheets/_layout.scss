@@ -1,0 +1,13 @@
+body {
+  margin: 10px 0; min-width: 600px;
+  font: 13px "Lucida Grande", Verdana, sans-serif;  
+  behavior: javascript-url("csshover2.htc"); 
+}
+
+#footer { clear: left; width: 100%; margin-top: 10px; padding-top: 3px; border-top: thin solid gray; text-align: center; color: gray; }
+
+#logo { font-weight: bold; font-size: x-large;
+  a { text-decoration: none; }
+  #logo-pro { color: red; }
+  #logo-rabotu { font-variant: small-caps; color: black; } 
+}

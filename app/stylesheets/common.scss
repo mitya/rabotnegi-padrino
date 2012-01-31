@@ -1,0 +1,94 @@
+@import "_helpers"; 
+
+table { border-collapse: collapse; }
+h1 { margin: 1em 0 0.25em; }
+h2 { margin: 1em 0 0.25em; }
+h3 { margin: 1em 0 0; }
+h4 { margin: 1em 0 0; }
+h5, h6, fieldset { margin: 0; padding: 0; border: none; }
+p { margin: 0.25em 0; padding: 0; }
+pre { margin: 0.25em 0; padding: 0; }
+
+a { text-decoration: none; }
+a:link { color: $link_color; }
+a:visited { color: purple; }
+a:hover { color: $hovered_link_color; text-decoration: underline; }
+a.ui:visited { color: $link_color; }
+
+table.form-layout { 
+  td { padding-bottom: 5px; }
+  th { text-align: left; vertical-align: top; padding-right: 10px; }
+  th label { font-variant: small-caps; line-height: 1.7; padding: 2px 0; margin: 2px 0; display: block; }
+  input[type=text], input[type=password] { width: 195px; padding: 3px; font-size: 13px; }
+  select { width: 205px; }
+  input.button, input[type=submit] { width: 200px; }
+  textarea { font-size: 13px; }
+  label input { width: auto; }
+  td small { color: gray; font-size: 11px; }
+  td span.required-mark { color: gray; font-size: 11px; }
+  td span.invalid + span.required-mark { color: red; }
+  td span.invalid textarea.inner-tooltip { color: red; }
+
+  * html form & { 
+    td { padding-top: 0; }
+    td input.checkbox { margin-left: -3px; }
+  }
+  
+  form.search & { 
+    input[type=text], input[type=password] { width: 185px; padding: 1px; font-size: 11px; }
+  }  
+}  
+
+table.rounded { @include rounded-table(10px); }
+
+form { 
+  .errors { margin: 10px 0 15px; color: #ad0000; 
+    h2 { margin: 5px 0; font-size: 16px; color: #ad0000; }
+    ul { margin: 5px 0; padding-left: 0px; list-style-position: inside; }
+  }
+  .inner-tooltip { color: gray; font-style: italic; }
+  .required-field { background: #ffff66; }
+  div.submit { margin-top: 3px; 
+    span.cancel { font-size: small; }
+  }
+  span.invalid label { color: red; }
+  tr.high td span.required-mark { vertical-align: top; }
+}
+
+form.inline { margin: 10px; text-align: center;
+  fieldset { border: 1px solid silver; @include rounded(10px); padding: 15px; display: inline; line-height: 2;
+    .field { display: inline; padding-right: 10px; }
+    select { width: 150px; }
+    label { padding-right: 5px; }
+    input.button { width: 150px; }
+  }
+}
+
+form.tableish { border: 1px solid silver; margin: 10px auto; width: 380px; @include rounded(10px); padding: 15px; line-height: 2;
+  label { display: block; float: left; width: 130px; }
+  label { text-align: right; padding-right: 5px; font-variant: small-caps; font-weight: bold; }
+  select { width: 205px; }
+  input.button { width: 205px; }
+}
+
+form.front { margin-top: 50px; }
+
+.pager { margin: 1em 0; }
+.pager .pagination { display: inline; }
+
+.pagination {
+  a, a:visited { padding: 5px; color: $link-color; }
+  a:hover, a:visited:hover { color: $hovered-link-color; }
+  a.num:hover, a.num:visited:hover { @include rounded(5px); padding: 4px; text-decoration: none; border: solid 1px $hovered-link-color; }
+  
+  span.dir { color: #999; }
+  span.stub { color: #999; cursor: default; padding: 5px 5px; }
+  em { font-style: normal; padding: 5px 5px; background: #ddd; cursor: default; @include rounded(5px); }
+}
+
+
+div.message, p.message { text-align: center; font-weight: bold; padding: 8px; margin: 8px 0 8px; }
+div.warning, p.warning { background: gold; }
+
+.clear { clear: both; }
+.centered { margin: 0 auto; }
