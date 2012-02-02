@@ -34,7 +34,8 @@ Rabotnegi.helpers do
     return @current_user if defined? @current_user
   
     @current_user = if request.cookies[:uid].present?
-      User.where(_id: Encryptor.decrypt(request.cookies[:uid])).first
+      encryptor = ActiveSupport::MessageEncryptor.new(settings.uid_secret_token)
+      User.where(_id: encryptor.decrypt(request.cookies[:uid])).first
     else
       User.where(agent: request.user_agent, ip: request.ip).first
     end
@@ -51,7 +52,8 @@ Rabotnegi.helpers do
   
   def current_user=(user)
     @current_user = user
-    response.set_cookie :uid, Encryptor.encrypt(user.id), expires: 2.years.from_now
+    encryptor = ActiveSupport::MessageEncryptor.new(settings.uid_secret_token)
+    response.set_cookie :uid, encryptor.encrypt(user.id), expires: 2.years.from_now
   end
 
   def current_user!
@@ -117,6 +119,17 @@ Rabotnegi.helpers do
     false
   end  
   
+  def dump_errors!(boom)
+    if Array === boom.backtrace
+      boom.backtrace.reject! { |line| line =~ /thin|thor|eventmachine|rack|barista|http_router/ }
+      boom.backtrace.map! { |line| line.gsub(Padrino.root, 'ROOT') }
+    end
+  
+    msg = ["#{boom.class} - #{boom.message}:", *boom.backtrace].join("\n\t")
+    @env['rack.errors'].puts(msg)
+  end
+  
+  
   # include SimpleCaptcha::ControllerHelpers
   # include ControllerHelper
   # include EventLog::Accessor
@@ -146,7 +159,6 @@ Rabotnegi.helpers do
   # 
   # protect_from_forgery
   # 
-  # Encryptor = ActiveSupport::MessageEncryptor.new(Rabotnegi::Application.config.secret_token)
   # 
   # before_filter do
   #   logger.debug "  Session: #{session.inspect}"
