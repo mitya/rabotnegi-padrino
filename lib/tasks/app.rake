@@ -2,10 +2,10 @@
 # 
 # namespace :app do
 #   task :load_demo_data do
-#     Mu.env = 'test'
+#     Gore.env = 'test'
 #     Rake::Task['environment'].invoke
 # 
-#     puts "Loading 100 vacancies into the `#{Mu.env}` database" 
+#     puts "Loading 100 vacancies into the `#{Gore.env}` database" 
 #     100.times { Vacancy.create title: "Test", description: "Hello", industry: "it", city: "msk" }
 #   end
 # 

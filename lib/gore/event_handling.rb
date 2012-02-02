@@ -1,4 +1,4 @@
-module EventHandling
+module Gore::EventHandling
   def event_handlers
     @event_handlers ||= {}
   end

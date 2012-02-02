@@ -8,11 +8,11 @@ Rabotnegi.controllers do
   end
 
   get "/site/info" do
-    render env: Mu.env, db: Vacancy.db.name, counts: { vacancies: Vacancy.count, events: EventLog::Item.count, users: User.count }
+    render env: Gore.env, db: Vacancy.db.name, counts: { vacancies: Vacancy.count, events: Gore::EventLog::Item.count, users: User.count }
   end
 
   get "/site/env" do
-    Mu.env
+    Gore.env
   end
 
   # 

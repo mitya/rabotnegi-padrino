@@ -1,6 +1,6 @@
 module VacancyCleaner
   extend self
-  include EventLog::Accessor
+  include Gore::EventLog::Accessor
 
   UNESCAPES = {"&quot;" => '"', "&laquo;" => '«', "&raquo;" => '»', "&ndash;" => '–', "&mdash;" => '—', "&#039;" => "'"}
   SANITIZER_OPTIONS = {tags: %w(div strong em b i ul ol li p h3 h4 br hr h5), attributes: %w(id class style)}
@@ -26,7 +26,7 @@ module VacancyCleaner
     vacancy.save!
 
   rescue => e
-    Err.register("VacancyCleaner.clean", e, params: {vacancy_id: vacancy.id})
+    Gore::Err.register("VacancyCleaner.clean", e, params: {vacancy_id: vacancy.id})
   end
 
   def clean_title(title)

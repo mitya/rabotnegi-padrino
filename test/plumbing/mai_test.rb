@@ -1,7 +1,4 @@
 require 'test_helper'
 
-unit_test Mai do
-  test "aliases" do
-    assert_equal Mu, Mai
-  end
+unit_test Gore do
 end

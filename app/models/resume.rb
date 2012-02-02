@@ -1,4 +1,4 @@
-class Resume < ApplicationModel
+class Resume < Gore::ApplicationModel
   field :id, type: Integer
   field :fname
   field :lname

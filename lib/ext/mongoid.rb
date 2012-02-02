@@ -1,5 +1,22 @@
-module MongoidExt
-  module PagedCollection
+module MongoidPagination
+  extend ActiveSupport::Concern
+
+  included do
+    def self.paginate(page_num, page_size = 10)
+      criteria = page(page_num, page_size)
+      results = criteria.to_a
+      results.extend(MongoidPagination::Collection)
+      results.criteria = criteria
+      results.total_count = criteria.count
+      results
+    end
+
+    scope :page, proc { |page_num, page_size = 10| limit(page_size).offset(page_size * ([page_num.to_i, 1].max - 1)) } do
+      include MongoidPagination::Collection
+    end
+  end
+
+  module Collection
     def criteria
       @criteria || self
     end
@@ -64,25 +81,6 @@ module MongoidExt
       current_page < total_pages ? (current_page + 1) : nil
     end    
   end
-
-  module Pagination
-    extend ActiveSupport::Concern
-
-    included do
-      def self.paginate(page_num, page_size = 10)
-        criteria = page(page_num, page_size)
-        results = criteria.to_a
-        results.extend(MongoidExt::PagedCollection)
-        results.criteria = criteria
-        results.total_count = criteria.count
-        results
-      end
-
-      scope :page, proc { |page_num, page_size = 10| limit(page_size).offset(page_size * ([page_num.to_i, 1].max - 1)) } do
-        include MongoidExt::PagedCollection
-      end
-    end
-  end
 end
 
 module Mongoid::Document
@@ -119,5 +117,5 @@ module Mongoid::Document
     end
   end
   
-  include MongoidExt::Pagination
+  include MongoidPagination
 end

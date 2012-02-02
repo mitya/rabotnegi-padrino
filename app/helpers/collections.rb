@@ -2,9 +2,9 @@ Rabotnegi.helpers do
 	def found_objects_info(collection, word, e1, e2, e5)
 		if collection.total_pages <= 1
 			count = collection.size
-			object = RussianInflector.inflect(collection.size, word, e1, e2, e5)
+			object = Gore::RussianInflector.inflect(collection.size, word, e1, e2, e5)
 		else
-			object = RussianInflector.inflect(collection.total_count, word, e1, e2, e5)
+			object = Gore::RussianInflector.inflect(collection.total_count, word, e1, e2, e5)
 		end
 
 		"Найдено <b>#{collection.total_count}</b> #{object}.
@@ -40,7 +40,7 @@ Rabotnegi.helpers do
   end
   
   def sorting_state_class_for(field)
-    current_field, reverse = SortExpressions.decode_order_to_array(params[:sort])
+    current_field, reverse = Gore::SortExpressions.decode_order_to_array(params[:sort])
     field.to_s == current_field ? "sorted" : ""
   end    
 end

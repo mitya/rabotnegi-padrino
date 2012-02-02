@@ -1,4 +1,4 @@
-MongoReflector.define_metadata do
+Gore::MongoReflector.define_metadata do
   desc Vacancy do
     list :industry, :city, [:title, :link, trim: 50], [:employer_name, trim: 40], :created_at, :updated_at, :loaded_at
     list_order [:updated_at, :desc]
@@ -15,7 +15,7 @@ MongoReflector.define_metadata do
     list :industry, :city, [:ip, :link], [:agent, trim: 100], :created_at
   end
 
-  desc Err do
+  desc Gore::Err do
     list created_at: _, source: :link, 
       url: [trim: 60],
       exception: [ ->(err) { "#{err.exception_class}: #{err.exception_message}" }, trim: 100 ]
@@ -28,7 +28,7 @@ MongoReflector.define_metadata do
     actions update: false, delete: false
   end
 
-  desc EventLog::Item, 'event_log_items' do
+  desc Gore::EventLog::Item, 'event_log_items' do
     list :created_at, :severity, :source, [:event, 'stringify', link: true], [:data, 'inline_multi_view']
     view :id, :created_at, :severity, :source, :event, [:data, 'multi_view'], [:extra, 'hash_view']
     actions update: false, delete: false

@@ -1,9 +1,10 @@
 class Rabotaru::Processor
   attr_accessor :vacancies, :work_dir
-  include EventLog::Accessor
-  include EventHandling
+
+  include Gore::EventLog::Accessor
+  include Gore::EventHandling
   
-  def initialize(key = Mu.date_stamp)
+  def initialize(key = Gore.date_stamp)
     @vacancies = []
     @work_dir = Se.rabotaru_dir.join(key)
     @converter = Rabotaru::Converter.new
@@ -23,7 +24,7 @@ class Rabotaru::Processor
   def read
     Pathname.glob(@work_dir.join "*.json").each do |file|
       data = file.read.sub!(/;\s*$/, '')
-      items = Mu.json.decode(data)
+      items = Gore.json.decode(data)
       vacancies = items.map { |item| convert(item) }.compact
       @vacancies.concat(vacancies)
     end
@@ -74,7 +75,7 @@ class Rabotaru::Processor
   def convert(item)
     @converter.convert(item)
   rescue => e
-    log.warn "convert.fail", reason: Mu.format_error(e), item: item['position']
+    log.warn "convert.fail", reason: Gore.format_error(e), item: item['position']
     nil
   end  
 end

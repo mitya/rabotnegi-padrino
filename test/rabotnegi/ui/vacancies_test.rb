@@ -79,7 +79,7 @@ ui_test "Vacancies" do
   end
   
   test "post" do
-    title = "Негr ##{M.time_stamp}"
+    title = "Негr ##{Gore.time_stamp}"
     
     visit "/vacancies/new"
     
@@ -108,7 +108,7 @@ ui_test "Vacancies" do
   end
   
   test "post invalid data" do
-    title = "Негr ##{M.time_stamp}"
+    title = "Негr ##{Gore.time_stamp}"
     
     visit "/vacancies/new"
     click_button "Опубликовать"

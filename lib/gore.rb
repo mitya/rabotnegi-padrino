@@ -1,6 +1,6 @@
 require 'net/http'
 
-module Mai
+module Gore
   def logger
     @logger ||= Logger.new
   end
@@ -73,7 +73,7 @@ module Mai
     def enqueue(klass, method, *args)
       # Resque.enqueue_to(:main, ProxyWorker, args)
       Log.info "Job scheduled #{klass}.#{method}#{args.inspect}"
-      Resque::Job.create('main', 'Mai::Jobs::Worker', klass.to_s, method.to_s, args)
+      Resque::Job.create('main', 'Gore::Jobs::Worker', klass.to_s, method.to_s, args)
     end
 
     class Worker
@@ -101,7 +101,7 @@ module Mai
     end
 
     def format_error_and_stack(exception)
-        # logger.error Mu.backtrace_cleaner.clean(exception.backtrace).join("\n")
+        # logger.error Gore.backtrace_cleaner.clean(exception.backtrace).join("\n")
       format_error(exception) + "\n#{exception.backtrace.join("\n")}"
     end    
   end
@@ -167,11 +167,12 @@ module Mai
   def root
     Pathname(Padrino.root)
   end
+  
+  def self.method_missing(selector, *args, &block)
+    return const_get(selector) if const_defined?(selector)
+    super
+  end
 end
 
-Log = Mai.logger
-Http = Mai.http
-
-M = Mai
-U = Mai
-Mu = Mai
+Log = Gore.logger
+Http = Gore.http

@@ -4,44 +4,51 @@ class Rabotnegi < Padrino::Application
   register Padrino::Mailer
   register Padrino::Helpers
 
-  def self.init(name = nil, &block) instance_eval(&block) end
-  
-  init do
-    class ::Padrino::Logger
-      FILTERED_LOG_ENTRIES = [
-        "Served asset", 'Started GET "/assets/',
-        "['system.namespaces'].find({})",
-      ]
-  
-      def write(message = nil)
-        return if String === message && FILTERED_LOG_ENTRIES.any? { |pattern| message.include?(pattern) }
-        self << message
-      end  
-    end 
-  end if Mu.env.development?
-  
-  init do
-    register Barista::Integration::Sinatra
-  
-    def Barista.debug(message) end
-  
-    Barista.configure do |c|
-      c.root = Mu.root.join("app", "javascripts")
-      c.output_root = Mu.root.join("public", app_name.to_s, "javascripts")
-    end    
-  end
-  
-  init do
-    Slim::Engine.set_default_options disable_escape: true, disable_capture: false
-  end
-  
   enable :sessions
-
   set :xhr do |truth| condition { request.xhr? } end
   set :show_exceptions, :after_handler
-  
   set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
 
+  configure :testprod do    
+    enable :logging
+    disable :show_exceptions
+    disable :static
+    disable :reload_templates
+  end
+
+
+  ## Logger
+
+  class ::Padrino::Logger
+    FILTERED_LOG_ENTRIES = [
+      "Served asset", 'Started GET "/assets/',
+      "['system.namespaces'].find({})",
+    ]
+  
+    def write(message = nil)
+      return if String === message && FILTERED_LOG_ENTRIES.any? { |pattern| message.include?(pattern) }
+      self << message
+    end  
+  end if Gore.env.development?
+
+   
+  ## Barista
+
+  register Barista::Integration::Sinatra
+  
+  def Barista.debug(message) end
+  
+  Barista.configure do |c|
+    c.root = Gore.root.join("app", "javascripts")
+    c.output_root = Gore.root.join("public", app_name.to_s, "javascripts")
+  end    
+
+
+  ## Slim
+
+  Slim::Engine.set_default_options disable_escape: true, disable_capture: false
+
+  
   ##
   # Caching support
   #
@@ -71,12 +78,5 @@ class Rabotnegi < Padrino::Application
   # disable :flash                # Disables sinatra-flash (enabled by default if Sinatra::Flash is defined)
   # layout  :my_layout            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
   #
-
-  configure :testprod do    
-    enable :logging
-    disable :show_exceptions
-    disable :static
-    disable :reload_templates
-  end
   
 end

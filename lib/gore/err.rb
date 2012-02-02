@@ -1,4 +1,4 @@
-class Err < ApplicationModel
+class Gore::Err < Gore::ApplicationModel
   field :source
   field :host
   field :params, type: Hash
@@ -27,7 +27,7 @@ class Err < ApplicationModel
   end
 
   def notify
-    ErrMailer.notification(self).deliver unless Mu.env.development?
+    Mailer.notification(self).deliver unless Gore.env.development?
   end
 
   def to_s
@@ -36,7 +36,8 @@ class Err < ApplicationModel
 
   class << self
     def register(source, exception, data = {})
-      Log.error "!!! #{exception.class}: #{exception.message}"
+      Log.error "!!! Error logged: #{exception.class} #{exception.message}"
+      # Gore.logger.error "!!! Error logged: #{exception.class} #{exception.message}"
       
       data.update(
         source: source,
@@ -50,9 +51,9 @@ class Err < ApplicationModel
       err = create!(data)
       # err.notify if recent.count < Se.err_max_notifications_per_hour
       err
-            
+
     rescue => e
-      puts "!!! (ERROR IN ERROR LOGGING) #{e.class}: #{e.message}"
+      puts "!!! ERROR IN ERROR LOGGING: #{e.class}: #{e.message}"
       puts e.backtrace.join("\n")
     end
     
@@ -66,4 +67,14 @@ class Err < ApplicationModel
       scope
     end    
   end
+  
+  # class Mailer < ActionMailer::Base
+  #   default from: Se.err_sender
+  #   helper :application, :format
+  # 
+  #   def notification(err)
+  #     @err = err
+  #     mail to: Se.err_recipients, subject: "[rabotnegi.ru errors] #{@err}"
+  #   end
+  # end  
 end

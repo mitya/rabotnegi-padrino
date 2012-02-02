@@ -10,13 +10,13 @@ class ApplicationControllerTest < ActionController::TestCase
   
   test "error notifications" do
     $test_error_reporting_enabled = true
-    Err.delete_all
+    Gore::Err.delete_all
     
     assert_raise ArgumentError do
       get :error
     end
     
-    assert_equal 1, Err.count
+    assert_equal 1, Gore::Err.count
     assert_emails 1
 
     puts response.code

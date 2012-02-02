@@ -1,4 +1,4 @@
-class Vacancy < ApplicationModel
+class Vacancy < Gore::ApplicationModel
   field :title
   field :description
   field :external_id, type: Integer
@@ -41,7 +41,7 @@ class Vacancy < ApplicationModel
   end
   
   def slug
-    RussianInflector.parameterize(title).truncate(60, separator: '-', omission: '')    
+    Gore::RussianInflector.parameterize(title).truncate(60, separator: '-', omission: '')    
   end
 
   def city_name

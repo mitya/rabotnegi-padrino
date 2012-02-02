@@ -5,7 +5,7 @@
         th= field.title
       th
   - models.each do |model|
-    tr{class=Mu.css_classes_for(collection.list_css_classes.(model))}
+    tr{class=Gore.css_classes_for(collection.list_css_classes.(model))}
       - collection.list_fields.each do |field|
         td= inspect_field(model, field, compact: true)
       td.actions

@@ -1,8 +1,8 @@
 require 'test_helper'
 
-unit_test EventHandling do
+unit_test Gore::EventHandling do
   service_klass = temp_class do
-    include EventHandling
+    include Gore::EventHandling
     attr :ivar
     
     def f1

@@ -31,7 +31,7 @@ unit_test Rabotaru::Converter do
       salary: Salary.make(min: 20000.0, max: 30000.0, currency: :rub)
     )
 
-    @converter = Mu::PureDelegator.new(Rabotaru::Converter.new)
+    @converter = Gore::PureDelegator.new(Rabotaru::Converter.new)
   end
 
   test "convert vacancy" do

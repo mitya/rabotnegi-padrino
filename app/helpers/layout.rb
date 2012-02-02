@@ -1,5 +1,5 @@
 Rabotnegi.helpers do
-  include Mai::AdvAttrAccessor
+  include Gore::AdvAttrAccessor
   adv_attr_accessor :page_id, :page_title, :page_class
 
 	# sets the page title, id, class

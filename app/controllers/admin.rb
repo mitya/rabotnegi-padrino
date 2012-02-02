@@ -9,7 +9,7 @@ end
 
 Rabotnegi.controller :admin_items, map: "admin/items/:collection/" do
   before { admin_required }
-  before { @collection = MongoReflector.metadata_for(params[:collection]) }
+  before { @collection = Gore::MongoReflector.metadata_for(params[:collection]) }
   layout "admin"
 
   get :index, map: '/' + @_map do
@@ -36,6 +36,6 @@ Rabotnegi.controller :admin_items, map: "admin/items/:collection/" do
     @model = @collection.klass.get(params[:id])    
     @model.destroy
     flash.notice = "#{@model} была удалена"
-    redirect_to url(:admin_items, @collection.key)
+    redirect url(:admin_items, @collection.key)
   end
 end

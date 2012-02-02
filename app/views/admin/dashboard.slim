@@ -15,7 +15,7 @@ table.properties
     td.num= f Rabotaru::Job.count
   tr
     th Событий в логе
-    td.num= limited_number EventLog::Item.count, 20_000
+    td.num= limited_number Gore::EventLog::Item.count, 20_000
   tr
     th Пользователей
     td.num= User.count

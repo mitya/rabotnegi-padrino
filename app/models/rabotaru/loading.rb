@@ -15,7 +15,7 @@ module Rabotaru
     
     def queue
       mark :queued
-      Mu.enqueue(Rabotaru::Loading, :run, job.id, id)
+      Gore.enqueue(Rabotaru::Loading, :run, job.id, id)
     end
 
     def run
@@ -24,8 +24,8 @@ module Rabotaru
       loader.load
       mark :done
     rescue => e
-      Err.register("Rabotaru::Loading.run", e, params: {city: city, industry: industry})
-      mark :failed, error: Mu.format_error(e), fail_count: fail_count.to_i + 1
+      Gore::Err.register("Rabotaru::Loading.run", e, params: {city: city, industry: industry})
+      mark :failed, error: Gore.format_error(e), fail_count: fail_count.to_i + 1
     end
     
     def changed_at
@@ -33,7 +33,7 @@ module Rabotaru
     end
     
     def inspect(*args)
-      Mu.inspection(self, [city, industry], state)
+      Gore.inspection(self, [city, industry], state)
     end
     
     def to_s

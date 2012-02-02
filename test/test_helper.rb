@@ -10,7 +10,7 @@ require "support/helpers"
 require "support/capybara"
 require "support/stubbing"
 
-raise "No vacancies in the database" if Mu.env.testprod? && Vacancy.count < 100
+raise "No vacancies in the database" if Gore.env.testprod? && Vacancy.count < 100
 
 class ActiveSupport::TestCase
   fixtures :all
@@ -26,5 +26,5 @@ class ActiveSupport::TestCase
   teardown do
     Vacancy.delete_all
     User.delete_all
-  end unless Mu.env.testprod? || Mu.env.testui?
+  end unless Gore.env.testprod? || Gore.env.testui?
 end

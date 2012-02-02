@@ -27,7 +27,7 @@ Vacancy.uncached do
   Vacancy.limit(5).all
 
   Benchmark.bm(20) do |b|
-    Mu.logger.debug "---------------------------------------"
+    Gore.logger.debug "---------------------------------------"
 
     b.report("p_ar", &p_ar)
     b.report("p_select_rows", &p_select_rows)
