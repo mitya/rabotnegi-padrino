@@ -7,6 +7,8 @@ require 'rubygems' unless defined?(Gem)
 require 'bundler/setup'
 Bundler.require(:default, PADRINO_ENV)
 
+require "active_support/backtrace_cleaner"
+
 ##
 # Enable devel logging
 #

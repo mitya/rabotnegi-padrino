@@ -39,6 +39,8 @@ class Rabotnegi < Padrino::Application
 
   set :xhr do |truth| condition { request.xhr? } end
   set :show_exceptions, :after_handler
+  
+  set :uid_secret_token, 'REDACTED'
 
   ##
   # Caching support
