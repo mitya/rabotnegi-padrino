@@ -1,4 +1,4 @@
-module SortExpressions
+module Gore::SortExpressions
   module_function
   
   # generates a sort parameter like "date" or "-date"

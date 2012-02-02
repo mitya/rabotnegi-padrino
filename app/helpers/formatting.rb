@@ -17,7 +17,7 @@ Rabotnegi.helpers do
       hash.map do |key, value|
         element(:tr) do
           title = key.to_s.titleize.gsub(' ', '-')
-          element(:th, title) + element(:td, Mu.inspect_value(value))
+          element(:th, title) + element(:td, Gore.inspect_value(value))
         end        
       end.join.html_safe
     end
@@ -26,7 +26,7 @@ Rabotnegi.helpers do
   def hash_of_lines(hash)
     hash = hash.dup
     hash.each_key do |k|
-      hash[k] = Mu.inspect_value(hash[k])
+      hash[k] = Gore.inspect_value(hash[k])
     end
     hash_view(hash)
   end
@@ -40,7 +40,7 @@ Rabotnegi.helpers do
   end
 
   def array_inline(array)
-    Mu.inspect_array(array)
+    Gore.inspect_array(array)
   end
   
   def stringify(obj)
@@ -50,7 +50,7 @@ Rabotnegi.helpers do
   def inline_multi_view(obj)
     case obj
       when Array then array_inline(obj)
-      when Hash then Mu.inspect_hash(obj)
+      when Hash then Gore.inspect_hash(obj)
       when String then obj
     end
   end

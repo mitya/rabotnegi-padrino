@@ -1,4 +1,4 @@
-class User < ApplicationModel
+class User < Gore::ApplicationModel
   field :industry
   field :city  
   field :agent

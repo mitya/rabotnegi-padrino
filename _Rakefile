@@ -58,25 +58,25 @@ namespace :data do
     file = case dataset_name
       when 'testui' then "test/fixtures/data.rb"
     end
-    [Vacancy, User, EventLog::Item].each(&:delete_all)
+    [Vacancy, User, Gore::EventLog::Item].each(&:delete_all)
     load(file)
-    puts "Seeded #{Mu.env} - #{{vacancies: Vacancy.count, users: User.count}.inspect}"
+    puts "Seeded #{Gore.env} - #{{vacancies: Vacancy.count, users: User.count}.inspect}"
   end  
 
 end
 
 namespace :dev do
   task :rm do
-    system "rm -rf #{Mu.root}/public/javascripts/pack"
-    system "rm -rf #{Mu.root}/public/stylesheets/pack"
-    system "rm -rf #{Mu.root}/tmp/cache/*"
-    system "rm -rf #{Mu.root}/public/vacancies"
+    system "rm -rf #{Gore.root}/public/javascripts/pack"
+    system "rm -rf #{Gore.root}/public/stylesheets/pack"
+    system "rm -rf #{Gore.root}/tmp/cache/*"
+    system "rm -rf #{Gore.root}/public/vacancies"
   end  
 end
 
 namespace :cron do
   task :ping => :environment  do
-    Log.info "Cron ping: event.count=#{EventLog::Item.count}"
+    Log.info "Cron ping: event.count=#{Gore::EventLog::Item.count}"
     Resque.enqueue(MiscWorker)
   end
 end

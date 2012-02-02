@@ -1,13 +1,13 @@
 require 'test_helper'
 
-unit_test RussianInflector do
+unit_test Gore::RussianInflector do
   test "parameterize" do
-    assert_equal "ruby-developer", RussianInflector.parameterize("Ruby Developer")    
-    assert_equal "ruby-разработчик", RussianInflector.parameterize("Ruby Разработчик")    
-    assert_equal "ruby-разработчик", RussianInflector.parameterize("Ruby - Разработчик.")  
-    assert_equal "торговый-представитель-20", RussianInflector.parameterize("Торговый представитель № 20")
-    assert_equal "менеджер-по-продажам-промышленного-оборудования", RussianInflector.parameterize("Менеджер по продажам промышленного оборудования")
-    assert_equal "бухгалтер-по-расчету-заработной-платы", RussianInflector.parameterize("Бухгалтер по расчету заработной платы")
+    assert_equal "ruby-developer", Gore::RussianInflector.parameterize("Ruby Developer")    
+    assert_equal "ruby-разработчик", Gore::RussianInflector.parameterize("Ruby Разработчик")    
+    assert_equal "ruby-разработчик", Gore::RussianInflector.parameterize("Ruby - Разработчик.")  
+    assert_equal "торговый-представитель-20", Gore::RussianInflector.parameterize("Торговый представитель № 20")
+    assert_equal "менеджер-по-продажам-промышленного-оборудования", Gore::RussianInflector.parameterize("Менеджер по продажам промышленного оборудования")
+    assert_equal "бухгалтер-по-расчету-заработной-платы", Gore::RussianInflector.parameterize("Бухгалтер по расчету заработной платы")
   end
   
   test "truncate" do

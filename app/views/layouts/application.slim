@@ -35,7 +35,7 @@ body.public{id=@page_id class=@page_class}
 
   #plumbing
     = javascript_include_tag %w(vendor/jquery-1.7.1.min vendor/jquery-ujs common application).map { |f| "/#{settings.app_name.underscore}/javascripts/#{f}" }
-    = render "layouts/google_analytics" if Mu.env.production?
+    = render "layouts/google_analytics" if Gore.env.production?
 
   footer#footer
     p#footer-content © 2012 Работнеги.ру

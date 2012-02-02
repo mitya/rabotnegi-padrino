@@ -1,6 +1,6 @@
 require 'test_helper'
 
-unit_test 'ApplicationModel' do
+unit_test 'Gore::ApplicationModel' do
   test 'default salary' do
     vacancy = make Vacancy
     

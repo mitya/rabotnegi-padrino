@@ -1,4 +1,4 @@
-class MongoReflector
+class Gore::MongoReflector
   cattr_accessor :collections
   @@collections = {}
   
@@ -77,11 +77,11 @@ class MongoReflector
     end
     
     def css
-      Mu.css_classes_for @css, wide: format.in?([:hash, :pre])
+      Gore.css_classes_for @css, wide: format.in?([:hash, :pre])
     end
     
     def inspect
-      Mu.inspection(self, name, format: format)
+      Gore.inspection(self, name, format: format)
     end
   end
   
@@ -100,7 +100,7 @@ class MongoReflector
     end
     
     def collection
-      MongoReflector.metadata_for(key)
+      Gore::MongoReflector.metadata_for(key)
     end
   end
 
@@ -109,7 +109,7 @@ class MongoReflector
     
     def desc(klass, key = nil, &block)
       @current_collection = Collection.new(klass, key)
-      MongoReflector.collections[@current_collection.key] = @current_collection
+      Gore::MongoReflector.collections[@current_collection.key] = @current_collection
       instance_eval(&block) if block_given?
       @current_collection      
     end

@@ -1,9 +1,11 @@
+##
 # Comments
 # * data, extra attributes are not stored when they are nil
 # * severity is not stored if it is :info
 # * updated_at is not stored
 # * created_at is explicitely stored, while it can be extracted from _id
-class EventLog
+# 
+class Gore::EventLog
   class << self
     def write(source, event, severity = :info, data = nil, extra = nil)
       return nil unless severity_logged?(severity)
@@ -62,7 +64,7 @@ class EventLog
 
     def method_missing(selector, *args, &block)
       if METHODS.include?(selector.to_s)
-        EventLog.send(selector, source, *args, &block)
+        Gore::EventLog.send(selector, source, *args, &block)
       else
         super
       end
@@ -77,7 +79,7 @@ class EventLog
     end
   end
 
-  class Item < ApplicationModel
+  class Item < Gore::ApplicationModel
     store_in :event_log
     
     field :source
@@ -97,7 +99,7 @@ class EventLog
     end
     
     def as_string
-      "#{time} #{source}::#{event} (#{Mu.inspect_value(data)})"
+      "#{time} #{source}::#{event} (#{Gore.inspect_value(data)})"
     end
     
     def to_s

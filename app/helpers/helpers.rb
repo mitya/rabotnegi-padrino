@@ -45,7 +45,7 @@ Rabotnegi.helpers do
 
   # (wide: true, narrow: false, thin: true) => "wide thin"
   def classes_from(*args)
-    M.css_classes_for(*args)
+    Gore.css_classes_for(*args)
   end  
   
   def block_is_template?(block)

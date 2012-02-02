@@ -1,6 +1,6 @@
 module Tasks
   extend self
-  include EventLog::Accessor
+  include Gore::EventLog::Accessor
   
   def kill_spam
     bad_emails = %w(gmail.com anyerp.com).join('|')

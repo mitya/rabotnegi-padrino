@@ -1,6 +1,6 @@
 # Convert json data to vacancy models
 class Rabotaru::Converter
-  include EventLog::Accessor
+  include Gore::EventLog::Accessor
 
   def convert(hash)
     vacancy = Vacancy.new

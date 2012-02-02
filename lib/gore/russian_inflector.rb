@@ -1,4 +1,4 @@
-module RussianInflector
+module Gore::RussianInflector
 	def self.inflect(number, word, end1, end2, end5, strategy = :normal)
 		number_by_100 = number % 100
 	  ending = case strategy
@@ -46,13 +46,13 @@ end
 if $0 == __FILE__
 	1.upto(150) do |i|
 		print "#{i} "
-		print RussianInflector.inflect(i, 'ваканс', 'ия', 'ии', 'ий' )
+		print Gore::RussianInflector.inflect(i, 'ваканс', 'ия', 'ии', 'ий' )
 		print "\n"
 	end
 
 	1.upto(150) do |i|
 		print "более #{i} "
-		print RussianInflector.inflect(i, 'ваканс', 'ия', 'ии', 'ий', :more)
+		print Gore::RussianInflector.inflect(i, 'ваканс', 'ия', 'ии', 'ий', :more)
 		print "\n"
 	end
 end

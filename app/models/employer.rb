@@ -1,4 +1,4 @@
-class Employer < ApplicationModel
+class Employer < Gore::ApplicationModel
   field :name
   field :login
   field :password

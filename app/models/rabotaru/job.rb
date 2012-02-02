@@ -1,5 +1,5 @@
 module Rabotaru
-  class Job < ApplicationModel
+  class Job < Gore::ApplicationModel
     field :state, type: Symbol, default: 'pending'
     field :cities, type: Array
     field :industries, type: Array
@@ -35,8 +35,8 @@ module Rabotaru
       loop { done = tick; break if done }
       
     rescue => e
-      Err.register("Rabotaru::Job.run", e, params: {job_id: id})
-      mark :failed, error: Mu.format_error(e)
+      Gore::Err.register("Rabotaru::Job.run", e, params: {job_id: id})
+      mark :failed, error: Gore.format_error(e)
     end
     
     def rerun
@@ -54,8 +54,8 @@ module Rabotaru
       mark :cleaned
       
     rescue => e
-      Err.register("Rabotaru::Job.postprocess", e, params: {job_id: id})
-      mark :failed, error: Mu.format_error(e)
+      Gore::Err.register("Rabotaru::Job.postprocess", e, params: {job_id: id})
+      mark :failed, error: Gore.format_error(e)
     end
     
     def to_s
@@ -83,7 +83,7 @@ module Rabotaru
       case current.try(:state)
       when nil
         mark :loaded
-        Mu.enqueue(Rabotaru::Job, :postprocess, id)
+        Gore.enqueue(Rabotaru::Job, :postprocess, id)
         return true
       when :pending
         loadings << current unless loadings.include?(current)

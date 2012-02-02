@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ErrMailerTest < ActionMailer::TestCase
   test "notification" do
-    @err = Err.new(
+    @err = Gore::Err.new(
       controller: "vacancies", 
       action: "show", 
       url: "http://rabotnegi.test/vacancies/1234", 
@@ -19,8 +19,8 @@ class ErrMailerTest < ActionMailer::TestCase
       response_headers: {}
     )
  
-    email = ErrMailer.notification(@err)
-    body = M.unescape_action_mailer_stuff(email.body.to_s)
+    email = Gore::Err::Mailer.notification(@err)
+    body = Gore.unescape_action_mailer_stuff(email.body.to_s)
  
     assert_equal [Se.err_recipients], email.to
     assert_equal [Se.err_sender], email.from

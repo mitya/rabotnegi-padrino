@@ -7,8 +7,6 @@ require 'rubygems' unless defined?(Gem)
 require 'bundler/setup'
 Bundler.require(:default, PADRINO_ENV)
 
-require "active_support/backtrace_cleaner"
-
 ##
 # Enable devel logging
 #
@@ -21,6 +19,7 @@ Padrino::Logger::Config[:testprod] = { :log_level => :info, :stream => :to_file 
 # Add your before load hooks here
 #
 Padrino.before_load do
+  I18n.locale = 'ru'
 end
 
 ##

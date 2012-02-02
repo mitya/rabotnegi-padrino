@@ -1,8 +1,8 @@
 require 'test_helper'
 
-unit_test MongoReflector do
+unit_test Gore::MongoReflector do
   test "real definitions" do
-    vacancy = MongoReflector.metadata_for('vacancies')
+    vacancy = Gore::MongoReflector.metadata_for('vacancies')
   
     assert_equal 'vacancy', vacancy.singular
     assert_equal 'vacancies', vacancy.plural
@@ -10,7 +10,7 @@ unit_test MongoReflector do
     assert_equal true, vacancy.searchable?
     assert_equal Vacancy, vacancy.klass
 
-    # log_item = MongoReflector.metadata_for('log_items')
+    # log_item = Gore::MongoReflector.metadata_for('log_items')
     #   
     # assert_equal 'mongo_log_item', log_item.singular
     # assert_equal 'mongo_log_items', log_item.plural
@@ -20,19 +20,19 @@ unit_test MongoReflector do
   end
 end
 
-unit_test MongoReflector::Builder do
-  dummy = temp_class ApplicationModel do
+unit_test Gore::MongoReflector::Builder do
+  dummy = temp_class Gore::ApplicationModel do
     field :name
     field :email    
   end
   
   test "list" do
-    collection_1 = MongoReflector::Builder.new.desc(dummy) do
+    collection_1 = Gore::MongoReflector::Builder.new.desc(dummy) do
       list :id, [:name, :link], [:email, trim: 20], [:url, :link, trim: 30]
     end
     fields_1 = collection_1.list_fields.index_by { |field| field.name.to_sym }
   
-    collection_2 = MongoReflector::Builder.new.desc(dummy) do
+    collection_2 = Gore::MongoReflector::Builder.new.desc(dummy) do
       list id: _, name: :link, email: {trim: 20}, url: [:link, trim: 30]
     end
     fields_2 = collection_2.list_fields.index_by { |field| field.name.to_sym }
@@ -51,7 +51,7 @@ unit_test MongoReflector::Builder do
   end  
   
   test "list options" do
-    collection = MongoReflector::Builder.new.desc(dummy) do
+    collection = Gore::MongoReflector::Builder.new.desc(dummy) do
       list_order :name
       list_page_size 33
       actions update: false
@@ -64,7 +64,7 @@ unit_test MongoReflector::Builder do
   end
   
   test "list_css_classes" do
-    collection = MongoReflector::Builder.new.desc(dummy) do
+    collection = Gore::MongoReflector::Builder.new.desc(dummy) do
       list_css_classes { |x| {joe: x.name == 'Joe'} }
     end
   
@@ -73,17 +73,17 @@ unit_test MongoReflector::Builder do
   end
   
   test "view_subcollection" do
-    collection = MongoReflector::Builder.new.desc(dummy) do
+    collection = Gore::MongoReflector::Builder.new.desc(dummy) do
       view_subcollection :loadings, 'rabotaru_loadings'
     end
     
     assert_equal :loadings, collection.view_subcollections.first.accessor
     assert_equal 'rabotaru_loadings', collection.view_subcollections.first.key
-    assert_equal MongoReflector.metadata_for('rabotaru_loadings'), collection.view_subcollections.first.collection
+    assert_equal Gore::MongoReflector.metadata_for('rabotaru_loadings'), collection.view_subcollections.first.collection
   end
   
   test "edit" do
-    collection = MongoReflector::Builder.new.desc(dummy) do
+    collection = Gore::MongoReflector::Builder.new.desc(dummy) do
       edit title: 'text', city_name: ['combo', City.all], created_at: 'date_time'
     end
   
