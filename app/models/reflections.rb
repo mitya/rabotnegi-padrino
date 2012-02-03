@@ -15,7 +15,7 @@ Gore::MongoReflector.define_metadata do
     list :industry, :city, [:ip, :link], [:agent, trim: 100], :created_at
   end
 
-  desc Gore::Err do
+  desc Gore::Err, 'errs' do
     list created_at: _, source: :link, 
       url: [trim: 60],
       exception: [ ->(err) { "#{err.exception_class}: #{err.exception_message}" }, trim: 100 ]

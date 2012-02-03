@@ -56,7 +56,7 @@
 #   
 #   def visit_link(locator)
 #     link = find_link(locator)
-#     assert_not_nil link, "Link [#{locator}] is not found"
+#     assert link, "Link [#{locator}] is not found"
 #     visit link['href']
 #   end
 #   

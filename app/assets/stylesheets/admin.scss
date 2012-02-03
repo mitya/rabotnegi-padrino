@@ -101,7 +101,7 @@ form.resource {
 table.hash {
   th { color: $label-color; }
   th, td { padding: 2px 5px; }
-  th { padding-left: 0; }
+  th { padding-left: 0; white-space: nowrap; }
 }
 
 table.properties {

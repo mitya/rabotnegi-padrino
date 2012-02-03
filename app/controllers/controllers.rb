@@ -23,7 +23,7 @@ Rabotnegi.controllers do
     render env.select { |k,v| [String, Numeric, Symbol, TrueClass, FalseClass, NilClass, Array, Hash].any? { |klass| klass === v } }
   end  
   
-  get :errorthing, "error" do
+  get "error" do
     raise "shit happens"
   end
 

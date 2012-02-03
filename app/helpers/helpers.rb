@@ -75,6 +75,8 @@ Rabotnegi.helpers do
 
   def asset_path(kind, source)
     return source if source =~ /^http/
-    "/rabotnegi/assets/" + settings.assets.find_asset(source).digest_path
+    asset = settings.assets.find_asset(source)
+    return nil unless asset
+    "/rabotnegi/assets/" + asset.digest_path
   end
 end

@@ -22,6 +22,8 @@ silence_warnings { Sass::Engine::DEFAULT_OPTIONS = Sass::Engine::DEFAULT_OPTIONS
 #
 Padrino.before_load do
   I18n.locale = 'ru'
+  # I18n.backend.load_translations Padrino.root("config/locales/ru.core.yml")
+  # I18n.backend.load_translations Padrino.root("config/locales/ru.yml")
 end
 
 ##

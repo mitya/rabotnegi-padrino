@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 unit_test Object do
   dummy = temp_class do
@@ -25,11 +25,11 @@ unit_test Object do
     person.assign_attributes(fname: "Joe", lname: "Smith", age: 25)
     assert_equal "Joe", person.fname
     assert_equal "Smith", person.lname
-    assert_not_respond_to person, :age
+    assert !person.respond_to?(:age)
   end
 
   test "assign_attributes!" do
-    assert_raise NoMethodError do
+    assert_raises NoMethodError do
       dummy.new.assign_attributes!(fname: "Joe", lname: "Smith", age: 25)
     end
   end
@@ -49,7 +49,7 @@ unit_test Hash do
     assert_equal "AA and AA", hash[:aa]
     
     hash.append_string(:bb, "and BB")
-    assert_equal "and BB", hash[:bb]  
+    assert_equal "and BB", hash[:bb]
   end
 
   test "prepend_string" do
@@ -71,7 +71,7 @@ unit_test "JSON conversions" do
   
   test "BSON::ObjectId" do
     id = BSON::ObjectId.new
-    assert_not_equal id.to_json, id.as_json
+    assert id.to_json != id.as_json
   end
 end
 

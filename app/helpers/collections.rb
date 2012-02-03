@@ -32,7 +32,7 @@ Rabotnegi.helpers do
   # Render either a list of items with pager, either "no data" message.
   def listing(collection, &block)
     html = if collection.any?
-      element(:table, "listing", &block) + pagination(collection)
+      element(:table, "listing", &block).to_s + pagination(collection).to_s
     else
       element :div, "Ничего не найдено.", "no-data-message"
     end

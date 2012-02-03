@@ -1,6 +1,5 @@
 source :rubygems
 
-# Project requirements
 gem 'padrino', '0.10.5'
 gem 'rake'
 gem 'sinatra-flash', :require => 'sinatra/flash'
@@ -12,11 +11,11 @@ gem 'bson_ext', :require => "mongo"
 gem "unicode_utils"
 gem 'coffee-script'
 gem "uglifier"
-# gem 'resque'
-# gem 'rmagick' # for captcha
+gem 'resque'
+gem 'rmagick'
+gem "syslog-logger", :require => 'syslog_logger'
+gem "daemons"
 # gem "galetahub-simple_captcha", :require => "simple_captcha"
-# gem "syslog-logger", :require => 'syslog_logger'
-# gem "daemons"
 # gem "therubyracer" # weird bugs otherwise
 
 group :test do

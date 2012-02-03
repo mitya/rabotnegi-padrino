@@ -12,7 +12,7 @@ class ApplicationControllerTest < ActionController::TestCase
     $test_error_reporting_enabled = true
     Gore::Err.delete_all
     
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       get :error
     end
     
@@ -59,7 +59,7 @@ class CurrentUserTest < ActionController::TestCase
     
     current_user = @controller.send(:current_user!)
     
-    assert_not_nil current_user
+    assert current_user
     assert ! [@user_1, @user_2, @user_3].include?(current_user)
     assert_equal @request.remote_ip, current_user.ip
     assert_equal @request.user_agent, current_user.agent
