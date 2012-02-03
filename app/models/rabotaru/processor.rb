@@ -6,7 +6,7 @@ class Rabotaru::Processor
   
   def initialize(key = Gore.date_stamp)
     @vacancies = []
-    @work_dir = Se.rabotaru_dir.join(key)
+    @work_dir = Rabotnegi.config.rabotaru_dir.join(key)
     @converter = Rabotaru::Converter.new
   end
 

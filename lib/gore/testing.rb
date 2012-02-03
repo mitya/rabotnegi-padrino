@@ -4,16 +4,7 @@ module Gore::Testing
       test_case = Class.new(Gore::CapybaraTest)
       Object.const_set((name.to_s.tr_s(' :', '_') + 'CapybaraTest').classify, test_case)
       test_case.class_eval(&block)
-    end
-  
-    def make(factory_name, *args, &block)
-      factory_name = factory_name.model_name.singular if Class === factory_name
-      Factory(factory_name, *args, &block)
-    end
-    
-    def patch(*args)
-      Stubber.stub(*args)
-    end    
+    end  
   end
   
   module Cases
@@ -27,6 +18,17 @@ module Gore::Testing
     def temp_class(base = Object, &block)
       name = "TempClass#{rand(1000)}"
       Gore::Testing::Cases.const_set(name, Class.new(base, &block))
+    end        
+  end
+
+  module Helpers
+    def make(factory_name, *args, &block)
+      factory_name = factory_name.model_name.singular if Class === factory_name
+      Factory(factory_name, *args, &block)
+    end
+    
+    def patch(*args)
+      Stubber.stub(*args)
     end        
   end
   

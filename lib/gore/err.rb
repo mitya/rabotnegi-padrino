@@ -49,7 +49,7 @@ class Gore::Err < Gore::ApplicationModel
       )
       
       err = create!(data)
-      # err.notify if recent.count < Se.err_max_notifications_per_hour
+      # err.notify if recent.count < Rabotnegi.config.err_max_notifications_per_hour
       err
 
     rescue => e
@@ -69,12 +69,12 @@ class Gore::Err < Gore::ApplicationModel
   end
   
   # class Mailer < ActionMailer::Base
-  #   default from: Se.err_sender
+  #   default from: Rabotnegi.config.err_sender
   #   helper :application, :format
   # 
   #   def notification(err)
   #     @err = err
-  #     mail to: Se.err_recipients, subject: "[rabotnegi.ru errors] #{@err}"
+  #     mail to: Rabotnegi.config.err_recipients, subject: "[rabotnegi.ru errors] #{@err}"
   #   end
   # end  
 end

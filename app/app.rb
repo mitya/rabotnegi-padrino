@@ -18,18 +18,18 @@ class Rabotnegi < Padrino::Application
   configure do
     Slim::Engine.set_default_options disable_escape: true, disable_capture: false
     Resque.redis.namespace = "rabotnegi:jobs"
-    
-    ::Se = OpenStruct.new
-    Se.admin_login = 'admin'
-    Se.admin_password = '0000'
-    Se.err_max_notifications_per_hour = 2
-    Se.err_sender = "errors@rabotnegi.ru"
-    Se.err_recipients = "dmitry.sokurenko@gmail.com"
-    Se.original_vacancies_data_dir = Padrino.root("tmp/vacancies_content")
-    Se.rabotaru_dir = Padrino.root("tmp/rabotaru")
-    Se.rabotaru_period = 15
-    Se.default_queue = :main
-    Se.google_analytics_id = "UA-1612812-2"    
+
+    set :config, OpenStruct.new
+    config.admin_login = 'admin'
+    config.admin_password = '0000'
+    config.err_max_notifications_per_hour = 2
+    config.err_sender = "errors@rabotnegi.ru"
+    config.err_recipients = "dmitry.sokurenko@gmail.com"
+    config.original_vacancies_data_dir = Gore.root.join("tmp/vacancies_content")
+    config.rabotaru_dir = Gore.root.join("tmp/rabotaru")
+    config.rabotaru_period = 15
+    config.default_queue = :main
+    config.google_analytics_id = "UA-1612812-2" 
   end
 
   configure :testprod do    
@@ -41,15 +41,15 @@ class Rabotnegi < Padrino::Application
 
   configure :development do
     register Gore::LogFilter
+    config.rabotaru_period = 5
     Slim::Engine.set_default_options pretty: true
-    Resque.inline = true
-    Se.rabotaru_period = 5
+    Resque.inline = true    
   end
 
   configure :test do
+    config.rabotaru_dir = Gore.root.join("tmp/rabotaru.test")
+    config.original_vacancies_data_dir = Gore.root.join("tmp/vacancies_content.test")
     Resque.inline = true
-    Se.rabotaru_dir = Padrino.root("tmp/rabotaru.test")
-    Se.original_vacancies_data_dir = Padrino.root("tmp/vacancies_content.test")    
   end
 
   ##

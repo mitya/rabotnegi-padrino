@@ -5,7 +5,8 @@ class Rabotaru::Loader
   include Gore::EventLog::Accessor
 
   def initialize(city, industry, job_key = Gore.date_stamp)
-    @working_directory = Se.rabotaru_dir.join(job_key)
+    @working_directory = Rabotnegi.config.rabotaru_dir.join(job_key)
+    @working_directory = Rabotnegi.config.rabotaru_dir.join(job_key)
     @city = City.get(city)
     @industry = Industry.get(industry)
   end

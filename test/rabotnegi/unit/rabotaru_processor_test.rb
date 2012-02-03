@@ -7,6 +7,7 @@ unit_test Rabotaru::Processor do
   end
   
   test "load" do
+    skip
     FileUtils.cp Dir.glob(Gore.root.join "test/fixtures/rabotaru/*"), @processor.work_dir
     @processor.read
     assert_equal 60, @processor.vacancies.count

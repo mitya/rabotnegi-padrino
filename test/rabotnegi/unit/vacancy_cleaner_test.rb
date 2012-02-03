@@ -36,7 +36,7 @@ unit_test VacancyCleaner do
     assert_equal '"Газпром"', vacancy.employer_name
     assert_equal "Тест", vacancy.description
     
-    original_data = JSON.parse Se.original_vacancies_data_dir.join(Time.now.strftime("%Y%m")).join("#{vacancy.id}.json").read
+    original_data = JSON.parse Rabotnegi.config.original_vacancies_data_dir.join(Time.now.strftime("%Y%m")).join("#{vacancy.id}.json").read
     
     assert_equal "РАБОЧИЙ", original_data["title"]
     assert_equal '&quot;Газпром&quot;', original_data["employer_name"]

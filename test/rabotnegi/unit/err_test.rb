@@ -19,6 +19,7 @@ unit_test Gore::Err do
   end
   
   test "register a web error" do
+    skip "emailing"
     err = Gore::Err.register("vacancies/show", @exception, ERROR_DATA)
     
     assert_equal 1, Gore::Err.count
@@ -26,15 +27,16 @@ unit_test Gore::Err do
     assert_equal "ArgumentError", Gore::Err.last.exception_class
     assert_equal ["stack line 1", "stack line 2", "stack line 3"].join("\n"), Gore::Err.last.backtrace
 
-    # assert_emails 1
-    # assert_match "test error message", ActionMailer::Base.deliveries.last.subject
+    assert_emails 1
+    assert_match "test error message", ActionMailer::Base.deliveries.last.subject
   end
 
   test "register an error when there were too many other errors this hour" do
-    Se.err_max_notifications_per_hour.times { Gore::Err.create!(ERROR_DATA.merge(exception_class: "ArgumentError")) }
+    skip "emailing"
+    Rabotnegi.config.err_max_notifications_per_hour.times { Gore::Err.create!(ERROR_DATA.merge(exception_class: "ArgumentError")) }
 
     err = Gore::Err.register("vacancies/show", @exception, ERROR_DATA)
-    assert_equal Se.err_max_notifications_per_hour + 1, Gore::Err.count
+    assert_equal Rabotnegi.config.err_max_notifications_per_hour + 1, Gore::Err.count
     assert_emails 0
   end
 end

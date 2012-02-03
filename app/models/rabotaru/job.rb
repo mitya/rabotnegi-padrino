@@ -20,7 +20,7 @@ module Rabotaru
     end
 
     def run
-      @period ||= Se.rabotaru_period
+      @period ||= Rabotnegi.config.rabotaru_period
       @queue ||= cities.product(industries).map { |city, industry| Loading.new(city: city, industry: industry) }
       @current = queue.shift
 
