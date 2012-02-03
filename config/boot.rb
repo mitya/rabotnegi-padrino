@@ -15,6 +15,8 @@ Bundler.require(:default, PADRINO_ENV)
 #
 Padrino::Logger::Config[:testprod] = { :log_level => :info, :stream => :to_file }
 
+silence_warnings { Sass::Engine::DEFAULT_OPTIONS = Sass::Engine::DEFAULT_OPTIONS.dup.merge(style: :compact) }  
+
 ##
 # Add your before load hooks here
 #
@@ -26,7 +28,6 @@ end
 # Add your after load hooks here
 #
 Padrino.after_load do
-  silence_warnings { Sass::Engine::DEFAULT_OPTIONS = Sass::Engine::DEFAULT_OPTIONS.dup.merge(style: :compact) }  
 end
 
 Padrino.load!
