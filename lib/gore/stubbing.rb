@@ -1,4 +1,4 @@
-module Stubbing
+module Gore::Stubbing
   @@stubs = []
   
   def self.stub(target, method, &block)

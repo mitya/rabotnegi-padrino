@@ -72,4 +72,9 @@ Rabotnegi.helpers do
   def current_url(params = {})
     current_path(params.stringify_keys)
   end
+
+  def asset_path(kind, source)
+    return source if source =~ /^http/
+    "/rabotnegi/assets/" + settings.assets.find_asset(source).digest_path
+  end
 end

@@ -6,4 +6,11 @@
 
 require File.expand_path("../config/boot.rb", __FILE__)
 
+map '/rabotnegi/assets' do
+  run Rabotnegi.assets
+end
+
 run Padrino.application
+map '/' do
+  run Padrino.application
+end

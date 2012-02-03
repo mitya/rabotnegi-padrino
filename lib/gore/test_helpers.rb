@@ -1,5 +1,5 @@
-module Testing
-  module GlobalHelpers
+module Gore::TestHelpers
+  module Globals
     def unit_test(name, &block)
       test_case = Class.new(ActiveSupport::TestCase)
       Object.const_set(("GeneratedTest_" + name.to_s.tr_s(' :', '_')).classify, test_case)
@@ -7,13 +7,11 @@ module Testing
     end
 
     def ui_test(name, &block)
-      test_case = Class.new(UITest)
-      Object.const_set((name.to_s.tr_s(' :', '_') + 'UITest').classify, test_case)
+      test_case = Class.new(Gore::CapybaraTest)
+      Object.const_set((name.to_s.tr_s(' :', '_') + 'CapybaraTest').classify, test_case)
       test_case.class_eval(&block)
     end
-  end
   
-  module TestHelpers
     def make(factory_name, *args, &block)
       factory_name = factory_name.model_name.singular if Class === factory_name
       Factory(factory_name, *args, &block)
@@ -24,7 +22,7 @@ module Testing
     end    
   end
   
-  module CaseHelpers
+  module Cases
     def no_test(*args)
     end
     
@@ -53,6 +51,4 @@ module Testing
     end
   end
 end
-
-include Testing::GlobalHelpers
 
