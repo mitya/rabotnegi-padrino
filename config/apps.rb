@@ -21,14 +21,9 @@
 #   Padrino.mount("AppName", :app_file => "path/to/file", :app_class => "BlogApp").to('/')
 #
 
-##
-# Setup global project settings for your apps. These settings are inherited by every subapp. You can
-# override these settings in the subapps as needed.
-#
 Padrino.configure_apps do
-  # enable :sessions
+  enable :sessions
   set :session_secret, '197c9135b8e74d36581d58be3765e656910e3789a1ee8af1bc20352602f54721'
 end
 
-# Mounts the core application for this project
 Padrino.mount("Rabotnegi").to('/')

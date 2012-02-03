@@ -1,10 +1,8 @@
 class Rabotnegi < Padrino::Application
-  # register SassInitializer
   register Padrino::Rendering
   register Padrino::Mailer
   register Padrino::Helpers
 
-  enable :sessions
   set :xhr do |truth| condition { request.xhr? } end
   set :show_exceptions, :after_handler
   set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
@@ -16,31 +14,30 @@ class Rabotnegi < Padrino::Application
     disable :reload_templates
   end
 
-  set :assets, Sprockets::Environment.new
-  assets.append_path 'app/assets/javascripts'
-  assets.append_path 'app/assets/stylesheets'
-  assets.append_path 'public/vendor'
-  # assets.js_compressor = Uglifier.new
-  # assets.css_compressor = :yui
+  configure do
+    set :assets, Sprockets::Environment.new
+    assets.append_path 'app/assets/javascripts'
+    assets.append_path 'app/assets/stylesheets'
+    assets.append_path 'public/vendor'
+  end
 
-  ## Logger
-
-  class ::Padrino::Logger
-    FILTERED_LOG_ENTRIES = [
-      "Served asset", 'Started GET "/assets/',
-      "['system.namespaces'].find({})",
-    ]
+  configure :development do
+    Padrino::Logger.class_eval do
+      FILTERED_LOG_ENTRIES = [
+        "Served asset", 'Started GET "/assets/',
+        "['system.namespaces'].find({})",
+      ]
   
-    def write(message = nil)
-      return if String === message && FILTERED_LOG_ENTRIES.any? { |pattern| message.include?(pattern) }
-      self << message
-    end  
-  end if Gore.env.development?
+      def write(message = nil)
+        return if String === message && FILTERED_LOG_ENTRIES.any? { |pattern| message.include?(pattern) }
+        self << message
+      end  
+    end
+  end
 
-
-  ## Slim
-
-  Slim::Engine.set_default_options disable_escape: true, disable_capture: false
+  configure do
+    Slim::Engine.set_default_options disable_escape: true, disable_capture: false
+  end
 
   
   ##
@@ -49,14 +46,12 @@ class Rabotnegi < Padrino::Application
   # register Padrino::Cache
   # enable :caching
   #
-  # You can customize caching store engines:
-  #
-  #   set :cache, Padrino::Cache::Store::Memcache.new(::Memcached.new('127.0.0.1:11211', :exception_retry_limit => 1))
-  #   set :cache, Padrino::Cache::Store::Memcache.new(::Dalli::Client.new('127.0.0.1:11211', :exception_retry_limit => 1))
-  #   set :cache, Padrino::Cache::Store::Redis.new(::Redis.new(:host => '127.0.0.1', :port => 6379, :db => 0))
-  #   set :cache, Padrino::Cache::Store::Memory.new(50)
-  #   set :cache, Padrino::Cache::Store::File.new(Padrino.root('tmp', app_name.to_s, 'cache')) # default choice
-  #
+  # set :cache, Padrino::Cache::Store::Memcache.new(::Memcached.new('127.0.0.1:11211', :exception_retry_limit => 1))
+  # set :cache, Padrino::Cache::Store::Memcache.new(::Dalli::Client.new('127.0.0.1:11211', :exception_retry_limit => 1))
+  # set :cache, Padrino::Cache::Store::Redis.new(::Redis.new(:host => '127.0.0.1', :port => 6379, :db => 0))
+  # set :cache, Padrino::Cache::Store::Memory.new(50)
+  # set :cache, Padrino::Cache::Store::File.new(Padrino.root('tmp', app_name.to_s, 'cache')) # default choice
+  # 
 
   ##
   # Application configuration options
