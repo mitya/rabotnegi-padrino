@@ -1,30 +1,33 @@
-ENV["RAILS_ENV"] = ENV["X_RAILS_ENV"] || "test"
+PADRINO_ENV = 'test' unless defined?(PADRINO_ENV)
+require File.expand_path('../../config/boot', __FILE__)
+# ENV["RAILS_ENV"] = ENV["X_RAILS_ENV"] || "test"
 
-require File.expand_path('../../config/environment', __FILE__)
-require 'rails/test_help'
-require 'pp'
-require 'fileutils'
-require "support/mocks"
-require "support/factories"
-require "support/helpers"
-require "support/capybara"
-require "support/stubbing"
+# require "support/mocks"
+# require "support/factories"
 
-raise "No vacancies in the database" if Gore.env.testprod? && Vacancy.count < 100
+class MiniTest::Spec
+  include Mocha::API
+  include Rack::Test::Methods
+  include Gore::Testing::Assertions
+  extend Gore::Testing::Cases
 
-class ActiveSupport::TestCase
-  fixtures :all
+  def app
+    Rabotnegi.tap { |app| }
+  end
 
-  self.use_transactional_fixtures = true  
-  self.use_instantiated_fixtures  = false
+  class << self
+    alias :test :it
+    alias :setup :before
+    alias :teardown :after
+  end
 
-  include ActionMailer::TestHelper
-  include Testing::TestHelpers
-  include Testing::Assertions
-  extend Testing::CaseHelpers
-  
   teardown do
     Vacancy.delete_all
     User.delete_all
   end unless Gore.env.testprod? || Gore.env.testui?
+end
+
+module Kernel
+  include Gore::Testing::Globals
+  alias :unit_test :describe
 end
