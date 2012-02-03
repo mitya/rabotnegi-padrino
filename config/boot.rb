@@ -26,6 +26,7 @@ end
 # Add your after load hooks here
 #
 Padrino.after_load do
+  silence_warnings { Sass::Engine::DEFAULT_OPTIONS = Sass::Engine::DEFAULT_OPTIONS.dup.merge(style: :compact) }  
 end
 
 Padrino.load!

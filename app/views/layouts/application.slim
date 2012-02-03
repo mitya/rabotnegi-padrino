@@ -5,7 +5,7 @@ head
   meta{http-equiv="Content-Type" content="text/html;charset=UTF-8"}
   - for name, content in meta_properties
     meta(name=name content=content)
-  = stylesheet_link_tag %w(common application workers vacancies employers resumes).map { |s| "/#{settings.app_name.underscore}/stylesheets/#{s}" }
+  = stylesheet_link_tag "bundle.css"
 
 body.public{id=@page_id class=@page_class}
   #page
@@ -34,7 +34,7 @@ body.public{id=@page_id class=@page_class}
     #footer-push    
 
   #plumbing
-    = javascript_include_tag %w(vendor/jquery-1.7.1.min vendor/jquery-ujs common application).map { |f| "/#{settings.app_name.underscore}/javascripts/#{f}" }
+    = javascript_include_tag "vendor.js", "bundle.js"
     = render "layouts/google_analytics" if Gore.env.production?
 
   footer#footer

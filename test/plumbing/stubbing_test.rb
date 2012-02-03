@@ -1,6 +1,6 @@
 require 'test_helper'
 
-unit_test Stubbing do
+unit_test Gore::Stubbing do
   dummy = temp_class do
     def self.foo(param)
       "original #{param}"
@@ -10,10 +10,10 @@ unit_test Stubbing do
   test "stubbing/unstubbing" do
     assert_equal "original passed", dummy.foo("passed")
 
-    Stubbing.stub(dummy, :foo) { |param| "patched #{param}" }
+    Gore::Stubbing.stub(dummy, :foo) { |param| "patched #{param}" }
     assert_equal "patched passed", dummy.foo("passed")    
 
-    Stubbing.unstub_all
+    Gore::Stubbing.unstub_all
     assert_equal "original passed", dummy.foo("passed")
   end
 end

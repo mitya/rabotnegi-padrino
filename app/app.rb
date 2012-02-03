@@ -1,5 +1,5 @@
 class Rabotnegi < Padrino::Application
-  register SassInitializer
+  # register SassInitializer
   register Padrino::Rendering
   register Padrino::Mailer
   register Padrino::Helpers
@@ -16,6 +16,12 @@ class Rabotnegi < Padrino::Application
     disable :reload_templates
   end
 
+  set :assets, Sprockets::Environment.new
+  assets.append_path 'app/assets/javascripts'
+  assets.append_path 'app/assets/stylesheets'
+  assets.append_path 'public/vendor'
+  # assets.js_compressor = Uglifier.new
+  # assets.css_compressor = :yui
 
   ## Logger
 
@@ -30,18 +36,6 @@ class Rabotnegi < Padrino::Application
       self << message
     end  
   end if Gore.env.development?
-
-   
-  ## Barista
-
-  register Barista::Integration::Sinatra
-  
-  def Barista.debug(message) end
-  
-  Barista.configure do |c|
-    c.root = Gore.root.join("app", "javascripts")
-    c.output_root = Gore.root.join("public", app_name.to_s, "javascripts")
-  end    
 
 
   ## Slim
