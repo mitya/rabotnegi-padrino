@@ -1,4 +1,4 @@
-# vacancy(title, industry = 'it', city = 'spb', other = {})
+# Syntax: vacancy(title, industry = 'it', city = 'spb', other = {})
 def vacancy(title, *args)
   other = args.extract_options!
   attrs = {title: title}
