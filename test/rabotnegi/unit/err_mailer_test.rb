@@ -22,8 +22,8 @@
 #     email = Gore::Err::Mailer.notification(@err)
 #     body = Gore.unescape_action_mailer_stuff(email.body.to_s)
 #  
-#     assert_equal [Se.err_recipients], email.to
-#     assert_equal [Se.err_sender], email.from
+#     assert_equal [Rabotnegi.config.err_recipients], email.to
+#     assert_equal [Rabotnegi.config.err_sender], email.from
 #     assert_equal "[rabotnegi.ru errors] vacancies/show - ApplicationError - a test thing", email.subject
 #     assert_match "GET http://rabotnegi.test/vacancies/1234", body
 #     assert_match "parameter_1", body

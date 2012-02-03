@@ -2,35 +2,35 @@ source :rubygems
 
 gem 'padrino', '0.10.5'
 gem 'rake'
-gem 'sinatra-flash', :require => 'sinatra/flash'
+gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'sass'
 gem 'slim'
+gem 'coffee-script'
 gem 'sprockets'
 gem 'mongoid'
-gem 'bson_ext', :require => "mongo"
+gem 'bson_ext', require: "mongo"
+gem "daemons"
+
 gem "unicode_utils"
-gem 'coffee-script'
-gem "uglifier"
 gem 'resque'
 gem 'rmagick'
-gem "syslog-logger", :require => 'syslog_logger'
-gem "daemons"
+gem "syslog-logger", require: 'syslog_logger'
+gem "sanitize"
+
 # gem "galetahub-simple_captcha", :require => "simple_captcha"
 # gem "therubyracer" # weird bugs otherwise
 
 group :test do
   gem 'mocha'
-  gem 'minitest', :require => "minitest/autorun"
-  gem 'rack-test', :require => "rack/test"  
+  gem 'minitest', require: "minitest/autorun"
+  gem 'rack-test', require: "rack/test"
+  gem "factory_girl"
+  gem 'turn'
+  # gem 'capybara'
+  # gem 'capybara-webkit'
 end
 
 group :development, :test do
   gem 'capistrano'
   gem 'thin'
-  # gem 'ruby-prof'
-  # gem "factory_girl"
-  # gem 'capybara'
-  # gem 'capybara-webkit'
-  # gem 'launchy'
-  # gem 'turn', :require => false
 end

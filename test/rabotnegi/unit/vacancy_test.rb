@@ -62,4 +62,3 @@ unit_test Vacancy do
     assert_nil Vacancy.get("4daebd518c2e000000000000")
   end  
 end
-

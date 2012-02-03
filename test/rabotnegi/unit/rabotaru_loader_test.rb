@@ -2,7 +2,7 @@ require 'test_helper'
 
 unit_test Rabotaru::Loader do
   setup do
-    @directory = Se.rabotaru_dir.join(Gore.date_stamp)
+    @directory = Rabotnegi.config.rabotaru_dir.join(Gore.date_stamp)
   end
 
   teardown do

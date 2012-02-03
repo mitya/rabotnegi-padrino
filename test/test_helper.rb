@@ -2,12 +2,13 @@ PADRINO_ENV = 'test' unless defined?(PADRINO_ENV)
 require File.expand_path('../../config/boot', __FILE__)
 # ENV["RAILS_ENV"] = ENV["X_RAILS_ENV"] || "test"
 
-# require "support/mocks"
-# require "support/factories"
+require "support/mocks"
+require "support/factories"
 
 class MiniTest::Spec
   include Mocha::API
   include Rack::Test::Methods
+  include Gore::Testing::Helpers
   include Gore::Testing::Assertions
   extend Gore::Testing::Cases
 

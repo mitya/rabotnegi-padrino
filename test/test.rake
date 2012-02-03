@@ -11,3 +11,5 @@ end
 
 desc "Run application test suite"
 task 'test' => test_folders.map { |f| "test:#{f.gsub('/', ':')}" }
+
+task "test:unit" => "test:rabotnegi:unit"

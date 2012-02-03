@@ -3,7 +3,11 @@ module VacancyCleaner
   include Gore::EventLog::Accessor
 
   UNESCAPES = {"&quot;" => '"', "&laquo;" => '«', "&raquo;" => '»', "&ndash;" => '–', "&mdash;" => '—', "&#039;" => "'"}
-  SANITIZER_OPTIONS = {tags: %w(div strong em b i ul ol li p h3 h4 br hr h5), attributes: %w(id class style)}
+  TOTAL_SANITIZER_OPTIONS = {}
+  SANITIZER_OPTIONS = {
+    elements:  %w(div strong em b i ul ol li p h3 h4 br hr h5),
+    attributes: { all: %w(id class style) }
+  }
 
   def clean_all(loaded_after = nil)
     collection = loaded_after ? Vacancy.where(:loaded_at.gte => loaded_after) : Vacancy.all
@@ -34,14 +38,14 @@ module VacancyCleaner
     result.gsub!(/&[#\w]+;/) { |match| UNESCAPES[match] || match }
     result = result.downcase if result.upcase == result
     result[0] = result[0].upcase if result.first.downcase == result.first
-    result = HTML::FullSanitizer.new.sanitize(result)
+    result = Sanitize.clean(result, TOTAL_SANITIZER_OPTIONS)
     result.to_s
   end
   
   def clean_employer_name(employer_name)
     result = (employer_name || "").dup.mb_chars
     result.gsub!(/&[#\w]+;/) { |match| UNESCAPES[match] || match }
-    result = HTML::FullSanitizer.new.sanitize(result)
+    result = Sanitize.clean(result, TOTAL_SANITIZER_OPTIONS)
     result.to_s
   end
 
@@ -79,7 +83,8 @@ module VacancyCleaner
     desc.gsub! %r{</ul></ul>}, '</ul>'
     desc.gsub! %r{<p>[\s-]*</p>}, ''
     desc.squish!
-    desc = HTML::WhiteListSanitizer.new.sanitize(desc, SANITIZER_OPTIONS)
+      
+    desc = Sanitize.clean(desc, SANITIZER_OPTIONS)
     
     desc.to_s
   end    
@@ -87,7 +92,7 @@ module VacancyCleaner
   private
     
   def store_original_data(vacancy, data)
-    working_dir = Se.original_vacancies_data_dir.join(vacancy.created_at.strftime("%Y%m"))
+    working_dir = Rabotnegi.config.original_vacancies_data_dir.join(vacancy.created_at.strftime("%Y%m"))
     working_dir.mkpath
     File.write(working_dir.join("#{vacancy.id}.json"), JSON.generate(data))
   end
