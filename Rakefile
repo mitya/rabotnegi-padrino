@@ -31,7 +31,7 @@ namespace :data do
         
         sh "env BOTO_CONFIG=/data/etc/boto.conf /data/gsutil/gsutil cp #{dir}/#{name}.tbz gs://#{bucket}"
       end
-    end    
+    end
   end
   
   # rake data:upload FILE=/u/backup/dump-20120101-120000.tbz BUCKET=/rabotnegi-backup  
@@ -40,13 +40,18 @@ namespace :data do
     sh "BOTO_CONFIG=/data/etc/boto.conf /data/gsutil/gsutil cp #{file} gs://#{bucket}"
   end
   
+  # rake data:upload FILE=/u/backup/dump-20120101-120000.tbz BUCKET=/rabotnegi-backup  
+  task :upload do
+    file, bucket = ENV.values_at['FILE', 'BUCKET']
+    sh "BOTO_CONFIG=/data/etc/boto.conf /data/gsutil/gsutil cp #{file} gs://#{bucket}"
+  end  
+  
   task :clone do
-    source = "rabotnegi_dev"
-    target = "rabotnegi_testprod"
-    sh "rm -rf tmp/dbclone/#{source}"
-    sh "mongodump -d #{source} -o tmp/dbclone"
-    sh "mongorestore -d #{target} --drop tmp/dbclone/#{source}"
-    sh "rm -rf tmp/dbclone/#{source}"
+    source, target = ENV.values_at('SRC', 'DST')
+    sh "rm -rf tmp/#{source}"
+    sh "mongodump -d #{source} -o tmp"
+    sh "mongorestore -d #{target} --drop tmp/#{source}"
+    sh "rm -rf tmp/#{source}"
   end
   
   task :restore do
@@ -69,10 +74,8 @@ end
 
 namespace :dev do
   task :rm do
-    system "rm -rf #{Gore.root}/public/javascripts/pack"
-    system "rm -rf #{Gore.root}/public/stylesheets/pack"
-    system "rm -rf #{Gore.root}/tmp/cache/*"
-    system "rm -rf #{Gore.root}/public/vacancies"
+    targets = %w(/public/rabotnegi/assets/* /tmp/cache/*).map { |f| Gore.root.join(f) }
+    system "rm -rf #{targets.join(' ')}"
   end  
 end
 
@@ -86,8 +89,6 @@ end
 task "resque:setup" => :environment do
   ENV['QUEUE'] = '*'
 end
-
-task "jobs:work" => "resque:work"
 
 Rake::SprocketsTask.new do |t|
   t.environment = Rabotnegi.assets

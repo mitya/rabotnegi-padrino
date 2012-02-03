@@ -1,6 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
-unit_test Gore::EventLog do
+describe Gore::EventLog do
   setup do
     Gore::EventLog::Item.delete_all
   end
@@ -43,8 +43,8 @@ unit_test Gore::EventLog do
 
     assert_equal nil, item.data
     assert_equal nil, item.extra    
-    assert !item.attributes.include?("data")
-    assert !item.attributes.include?("extra")
+    refute item.attributes.include?("data")
+    refute item.attributes.include?("extra")
   end
 
   test ":info severity is not stored" do
@@ -52,7 +52,7 @@ unit_test Gore::EventLog do
     item.reload
 
     assert_equal :info, item.severity
-    assert !item.attributes.include?("severity")
+    refute item.attributes.include?("severity")
   end
   
   test "events with low severity are not logged" do
@@ -67,15 +67,15 @@ unit_test Gore::EventLog do
       
       assert Gore::EventLog::Item.where(source: "Src", event: "warn-message").exists?
       assert Gore::EventLog::Item.where(source: "Src", event: "error-message").exists?
-      assert !Gore::EventLog::Item.where(source: "Src", event: "debug-message").exists?
-      assert !Gore::EventLog::Item.where(source: "Src", event: "info-message").exists?      
+      refute Gore::EventLog::Item.where(source: "Src", event: "debug-message").exists?
+      refute Gore::EventLog::Item.where(source: "Src", event: "info-message").exists?
     ensure
       Log.level = old_log_level.to_i
     end
   end
 end
 
-unit_test Gore::EventLog::Item do
+describe Gore::EventLog::Item do
   test "time" do
     item = Gore::EventLog::Item.create!(source: "Src", event: "evnt")
     assert_equal item.time, item.created_at
@@ -85,14 +85,14 @@ unit_test Gore::EventLog::Item do
     item = Gore::EventLog::Item.create!(source: "Src", event: "evnt")
     item.reload
 
-    assert_not_nil item.created_at
+    refute_nil item.created_at
     assert_nil item.updated_at
-    assert !item.attributes.include?("updated_at")
+    refute item.attributes.include?("updated_at")
   end
   
 end
 
-unit_test Gore::EventLog::Accessor do
+describe Gore::EventLog::Accessor do
   setup do
     Gore::EventLog::Item.delete_all
   end
@@ -108,7 +108,6 @@ unit_test Gore::EventLog::Accessor do
     assert_equal "vacancy", Vacancy.new.log.source
     assert_equal "user", User.log.source
     assert_equal "user", User.new.log.source
-    assert_equal "application_controller", ApplicationController.log.source
     assert_equal "rabotaru_job", Rabotaru::Job.log.source
   end
   
@@ -121,7 +120,7 @@ unit_test Gore::EventLog::Accessor do
   end  
 end
 
-unit_test Gore::EventLog::Writer do
+describe Gore::EventLog::Writer do
   setup do
     Gore::EventLog::Item.delete_all
   end

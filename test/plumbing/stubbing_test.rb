@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 unit_test Gore::Stubbing do
   dummy = temp_class do

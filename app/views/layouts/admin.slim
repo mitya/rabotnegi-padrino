@@ -3,8 +3,8 @@ doctype html
 head
   meta{http-equiv="Content-Type" content="text/html;charset=UTF-8"}
   title= "#{@page_title} - Админ Работнегов"
-  = stylesheet_link_tag "/#{settings.app_name.underscore}/stylesheets/admin"
-  = javascript_include_tag %w(vendor/jquery-1.7.1.min vendor/jquery-ujs common application).map { |f| "/#{settings.app_name.underscore}/javascripts/#{f}" }
+  = stylesheet_link_tag "admin.css"
+  = javascript_include_tag "vendor.js", "bundle.js"
 
 body.admin{id=@page_id class=@page_class}
   #header

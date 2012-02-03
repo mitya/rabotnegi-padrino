@@ -1,6 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
-unit_test Gore::MongoReflector do
+describe Gore::MongoReflector do
   test "real definitions" do
     vacancy = Gore::MongoReflector.metadata_for('vacancies')
   
@@ -20,7 +20,7 @@ unit_test Gore::MongoReflector do
   end
 end
 
-unit_test Gore::MongoReflector::Builder do
+describe Gore::MongoReflector::Builder do
   dummy = temp_class Gore::ApplicationModel do
     field :name
     field :email    

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 unit_test Gore::EventHandling do
   service_klass = temp_class do

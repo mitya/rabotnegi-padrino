@@ -15,17 +15,20 @@ ab -n 100 -c 20 http://rabotnegi.ru/vacancies/msk
 ab -n 100 -c 20 http://rabotnegi.ru/vacancies/48288
 
 == Mongo
-
 db.vacancies.find({ employer_name: /@gmail\.com$/ }).count()
 db.vacancies.remove({ employer_name: /@gmail\.com$/ })
 
 Vacancy.where(employer_name: %r{@gmail.com$}).delete_all
 
+== Tests
+rake test:rabotnegi:unit TESTOPTS="-v"
 
-
+---
 
 cd /app/rabotnegi/current
 bundle exec rails console production
 
 SimpleCaptcha::SimpleCaptchaData.last.key
 Object.new.extend(SimpleCaptcha::ImageHelpers).send :generate_simple_captcha_image, "e7f75ee04c7adf6f41c41f0d444d94383701c93d"
+
+

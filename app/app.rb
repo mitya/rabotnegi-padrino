@@ -6,6 +6,31 @@ class Rabotnegi < Padrino::Application
   set :xhr do |truth| condition { request.xhr? } end
   set :show_exceptions, :after_handler
   set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
+  set :locale_path, %w(config/locales/ru.core.yml config/locales/ru.yml)
+  set :assets do
+    env = Sprockets::Environment.new
+    env.append_path 'app/assets/javascripts'
+    env.append_path 'app/assets/stylesheets'
+    env.append_path 'public/vendor'
+    env
+  end
+
+  configure do
+    Slim::Engine.set_default_options disable_escape: true, disable_capture: false
+    Resque.redis.namespace = "rabotnegi:jobs"
+    
+    ::Se = OpenStruct.new
+    Se.admin_login = 'admin'
+    Se.admin_password = '0000'
+    Se.err_max_notifications_per_hour = 2
+    Se.err_sender = "errors@rabotnegi.ru"
+    Se.err_recipients = "dmitry.sokurenko@gmail.com"
+    Se.original_vacancies_data_dir = Padrino.root("tmp/vacancies_content")
+    Se.rabotaru_dir = Padrino.root("tmp/rabotaru")
+    Se.rabotaru_period = 15
+    Se.default_queue = :main
+    Se.google_analytics_id = "UA-1612812-2"    
+  end
 
   configure :testprod do    
     enable :logging
@@ -14,32 +39,19 @@ class Rabotnegi < Padrino::Application
     disable :reload_templates
   end
 
-  configure do
-    set :assets, Sprockets::Environment.new
-    assets.append_path 'app/assets/javascripts'
-    assets.append_path 'app/assets/stylesheets'
-    assets.append_path 'public/vendor'
-  end
-
   configure :development do
-    Padrino::Logger.class_eval do
-      FILTERED_LOG_ENTRIES = [
-        "Served asset", 'Started GET "/assets/',
-        "['system.namespaces'].find({})",
-      ]
-  
-      def write(message = nil)
-        return if String === message && FILTERED_LOG_ENTRIES.any? { |pattern| message.include?(pattern) }
-        self << message
-      end  
-    end
+    register Gore::LogFilter
+    Slim::Engine.set_default_options pretty: true
+    Resque.inline = true
+    Se.rabotaru_period = 5
   end
 
-  configure do
-    Slim::Engine.set_default_options disable_escape: true, disable_capture: false
+  configure :test do
+    Resque.inline = true
+    Se.rabotaru_dir = Padrino.root("tmp/rabotaru.test")
+    Se.original_vacancies_data_dir = Padrino.root("tmp/vacancies_content.test")    
   end
 
-  
   ##
   # Caching support
   #

@@ -26,15 +26,16 @@ unit_test Vacancy do
     results = Vacancy.search(q: "autocad")
     assert results.include?(v_text_in_title)
     assert results.include?(v_text_in_description)
-    assert !results.include?(v_no_match)
+    refute results.include?(v_no_match)
   end
   
   test "==" do
-    assert_not_equal Vacancy.new, nil
-    assert_not_equal Vacancy.new, Vacancy.new
-    assert_not_equal Vacancy.new(title: "Boss"), Vacancy.new(title: "Boss")
+    assert Vacancy.new != nil
+    assert Vacancy.new != Vacancy.new
+    assert Vacancy.new(title: "Boss") != Vacancy.new(title: "Boss")
     assert_equal Vacancy.new(title: "Boss", external_id: 100), Vacancy.new(title: "Developer", external_id: 100)
   end
+
   
   test "to_param" do
     v1 = make(Vacancy, title: "Ruby Разработчик")
