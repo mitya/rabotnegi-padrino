@@ -9,6 +9,7 @@ class MiniTest::Spec
   include Mocha::API
   include Rack::Test::Methods
   include Gore::Testing::Helpers
+  include Gore::Testing::RackHelpers
   include Gore::Testing::Assertions
   extend Gore::Testing::Cases
 
@@ -31,4 +32,8 @@ end
 module Kernel
   include Gore::Testing::Globals
   alias :unit_test :describe
+end
+
+Turn.config do |c|
+  c.format = :pretty # outline pretty dotted progress marshal cue
 end
