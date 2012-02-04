@@ -32,6 +32,12 @@ module Gore::Testing
     end        
   end
   
+  module RackHelpers
+    def xhr!
+      header "X-Requested-With", "XMLHttpRequest"
+    end
+  end
+  
   module Assertions
     def assert_size(size, collection)
       assert_equal size, collection.size

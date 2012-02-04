@@ -47,6 +47,8 @@ class Rabotnegi < Padrino::Application
   end
 
   configure :test do
+    enable :raise_errors
+    disable :show_exceptions
     config.rabotaru_dir = Gore.root.join("tmp/rabotaru.test")
     config.original_vacancies_data_dir = Gore.root.join("tmp/vacancies_content.test")
     Resque.inline = true

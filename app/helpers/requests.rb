@@ -26,7 +26,7 @@ Rabotnegi.helpers do
   def current_user=(user)
     @current_user = user
     encryptor = ActiveSupport::MessageEncryptor.new(settings.uid_secret_token)
-    response.set_cookie :uid, encryptor.encrypt(user.id), expires: 2.years.from_now
+    response.set_cookie :uid, value: encryptor.encrypt(user.id), expires: 2.years.from_now
   end
 
   def current_user!
@@ -101,6 +101,8 @@ Rabotnegi.helpers do
         
     raise env["sinatra.error"]
   end
+  
+  before { settings.set :last_instance, self } if Gore.env.test?
     
   # def employer_required
   #   current_employer || redirect(employer_path)

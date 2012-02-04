@@ -1,6 +1,6 @@
 require 'rake/testtask'
 
-test_folders = %w(plumbing rabotnegi/unit rabotnegi/functional)
+test_folders = %w(plumbing rabotnegi/unit rabotnegi/web)
 test_folders.each do |folder|
   Rake::TestTask.new("test:#{folder.gsub('/', ':')}") do |test|
     test.libs << "test"
@@ -13,3 +13,4 @@ desc "Run application test suite"
 task 'test' => test_folders.map { |f| "test:#{f.gsub('/', ':')}" }
 
 task "test:unit" => "test:rabotnegi:unit"
+task "test:web" => "test:rabotnegi:web"
