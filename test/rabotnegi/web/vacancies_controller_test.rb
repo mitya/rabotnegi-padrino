@@ -4,8 +4,7 @@ describe "Vacancies controller" do
   test 'GET /vacancies/:id via XHR' do
     @vacancy = make Vacancy, city: "spb", industry: "it", title: "Программист"
 
-    xhr!
-    get URI.encode("/vacancies/#{@vacancy.to_param}")
+    get URI.encode("/vacancies/#{@vacancy.to_param}"), {}, xhr: true
     
     assert last_response.ok?
     assert_includes last_response.body, "entry-details"
@@ -56,31 +55,34 @@ describe "Vacancies controller" do
     assert_match /#{v2.title}.*#{v1.title}/, last_response.body
   end
   
-  # test "new" do
-  #   get :new
-  #   assert_response :ok
-  #   assert_template "form"
-  # end
-  # 
-  # test "create valid record" do
-  #   post :create, vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
-  # 
-  #   new_vacancy = Vacancy.last
-  #   assert new_vacancy
-  #   assert_equal "Developer", new_vacancy.title
-  #   assert_equal "msk", new_vacancy.city
-  #   assert_equal "it", new_vacancy.industry
-  #   assert_equal 55_000, new_vacancy.salary.exact
-  #   assert_equal "0.0.0.0", new_vacancy.poster_ip
-  #   
-  #   assert_redirected_to vacancy_path(new_vacancy)
-  # end
-  # 
-  # test "create invalid record" do
-  #   post :create, vacancy: { title: nil }
-  # 
-  #   assert !Vacancy.last    
-  #   assert_response 422
-  #   assert_template "form"
-  # end
+  test "new" do
+    skip
+    get :new
+    assert_response :ok
+    assert_template "form"
+  end
+  
+  test "create valid record" do
+    skip
+    post :create, vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
+  
+    new_vacancy = Vacancy.last
+    assert new_vacancy
+    assert_equal "Developer", new_vacancy.title
+    assert_equal "msk", new_vacancy.city
+    assert_equal "it", new_vacancy.industry
+    assert_equal 55_000, new_vacancy.salary.exact
+    assert_equal "0.0.0.0", new_vacancy.poster_ip
+    
+    assert_redirected_to vacancy_path(new_vacancy)
+  end
+  
+  test "create invalid record" do
+    skip
+    post :create, vacancy: { title: nil }
+  
+    assert !Vacancy.last    
+    assert_response 422
+    assert_template "form"
+  end
 end

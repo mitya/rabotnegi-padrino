@@ -19,28 +19,28 @@ Rabotnegi.controllers do
   # Dev
   # 
 
+  get "/tests/noop" do
+    ""
+  end
+
+  get "/tests/error" do
+    raise ArgumentError, "shit happens"
+  end
+
+
   get '/dev/request' do
     render env.select { |k,v| [String, Numeric, Symbol, TrueClass, FalseClass, NilClass, Array, Hash].any? { |klass| klass === v } }
-  end  
+  end
   
-  get "error" do
+  get "/dev/error" do
     raise "shit happens"
   end
 
   get "dev/typo" do
     bum_bum_shit
   end
-
-  # 
-  # Test
-  # 
   
   get "/dev" do
     render "dev/dev"
   end
-  
-  get "/test" do
-    "Ok"
-  end
-  
 end
