@@ -27,7 +27,22 @@ class Gore::Err < Gore::ApplicationModel
   end
 
   def notify
-    Mailer.notification(self).deliver unless Gore.env.development?
+    err = self
+    Rabotnegi.email do
+      def method_missing(selector, *args, &block)
+        super
+      rescue NoMethodError
+        @__dummy__ ||= Rabotnegi.new!
+        @__dummy__.respond_to?(selector) ? @__dummy__.send(selector, *args, &block) : raise
+      end
+      
+      from Rabotnegi.config.err_sender
+      to Rabotnegi.config.err_recipients
+      subject "[rabotnegi.ru errors] #{err}"
+      content_type :html
+      locals err: err
+      body render("err_notification")
+    end
   end
 
   def to_s
@@ -37,7 +52,6 @@ class Gore::Err < Gore::ApplicationModel
   class << self
     def register(source, exception, data = {})
       Log.error "!!! Error logged: #{exception.class} #{exception.message}"
-      # Gore.logger.error "!!! Error logged: #{exception.class} #{exception.message}"
       
       data.update(
         source: source,
@@ -49,7 +63,7 @@ class Gore::Err < Gore::ApplicationModel
       )
       
       err = create!(data)
-      # err.notify if recent.count < Rabotnegi.config.err_max_notifications_per_hour
+      err.notify if recent.count < Rabotnegi.config.err_max_notifications_per_hour
       err
 
     rescue => e
@@ -65,16 +79,6 @@ class Gore::Err < Gore::ApplicationModel
       scope = self
       scope = scope.any_of({exception_class: query}, {exception_message: query}, {url: query}) if params[:q].present?
       scope
-    end    
-  end
-  
-  # class Mailer < ActionMailer::Base
-  #   default from: Rabotnegi.config.err_sender
-  #   helper :application, :format
-  # 
-  #   def notification(err)
-  #     @err = err
-  #     mail to: Rabotnegi.config.err_recipients, subject: "[rabotnegi.ru errors] #{@err}"
-  #   end
-  # end  
+    end
+  end  
 end

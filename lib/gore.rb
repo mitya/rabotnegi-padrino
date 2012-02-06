@@ -14,10 +14,6 @@ module Gore
   end
 
   module RandomHelpers
-    def unescape_action_mailer_stuff(string)
-      string.gsub("&#47;", '/').gsub("&amp;", '&')    
-    end    
-    
     def id(array)
       results = array ? array.map(&:id) : []
       results = results.map(&:to_s) if results.first.is_a?(BSON::ObjectId)
