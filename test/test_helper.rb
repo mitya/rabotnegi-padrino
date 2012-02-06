@@ -17,6 +17,10 @@ class MiniTest::Spec
     Rabotnegi.tap { |app| }
   end
 
+  def helpers
+    app.last_instance
+  end
+
   class << self
     alias :test :it
     alias :setup :before

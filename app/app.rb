@@ -14,6 +14,7 @@ class Rabotnegi < Padrino::Application
     env.append_path 'public/vendor'
     env
   end
+  set :message_encryptor, ActiveSupport::MessageEncryptor.new(uid_secret_token)
 
   configure do
     Slim::Engine.set_default_options disable_escape: true, disable_capture: false
@@ -81,5 +82,37 @@ class Rabotnegi < Padrino::Application
   # disable :flash                # Disables sinatra-flash (enabled by default if Sinatra::Flash is defined)
   # layout  :my_layout            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
   #
+
+  # 
+  # Filters & error handlers
+  # 
+
+  error 500..599 do
+    Gore::Err.register route.named || request.path, env["sinatra.error"],
+      params: params.except("captures"),
+      url: request.url, 
+      verb: request.request_method,
+      session: session.to_hash.except('flash'),
+      flash: flash.to_hash,
+      request_headers: env.select { |k,v| k.starts_with?("HTTP_") },
+      response_headers: headers
+        
+    raise env["sinatra.error"]
+  end
+  
+  before { settings.set :last_instance, self } if Gore.env.test?
+
+  #
+  # Overrides
+  #
+     
+  def dump_errors!(boom)
+    return unless Gore.env.development?
+    return unless Array === boom.backtrace
+
+    boom.backtrace.reject! { |line| line =~ /thin|thor|eventmachine|rack|barista|http_router/ }
+    boom.backtrace.map! { |line| line.gsub(Padrino.root, '/$PADRINO_ROOT') }
+    super
+  end
   
 end

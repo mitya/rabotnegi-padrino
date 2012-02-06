@@ -33,9 +33,6 @@ module Gore::Testing
   end
   
   module RackHelpers
-    def xhr!
-      header "X-Requested-With", "XMLHttpRequest"
-    end
   end
   
   module Assertions
