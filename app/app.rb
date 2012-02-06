@@ -69,6 +69,19 @@ class Rabotnegi < Padrino::Application
     Resque.inline = true
   end
 
+  helpers Gore::ControllerHelpers::Urls
+  helpers Gore::ControllerHelpers::Identification
+  helpers Gore::ControllerHelpers::Users
+
+  helpers Gore::ViewHelpers::Common
+  helpers Gore::ViewHelpers::Inspection
+  helpers Gore::ViewHelpers::Admin
+  helpers Gore::ViewHelpers::Formatting
+  helpers Gore::ViewHelpers::Editing
+  helpers Gore::ViewHelpers::Layout
+  helpers Gore::ViewHelpers::Collections
+
+  
   ##
   # Caching support
   #

@@ -21,6 +21,7 @@ module Gore
     end
     
     # f("fixed1", "fixed2", conditional1: true, conditional2: false) => "fixed1 fixed2 conditional1"
+    # f(wide: true, narrow: false, thin: true) => "wide thin"
     def css_classes_for(*args)
       return nil if args.empty?
 

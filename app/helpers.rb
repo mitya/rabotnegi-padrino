@@ -1,4 +1,22 @@
 Rabotnegi.helpers do
+  def inspect_field(model, field, options = {})
+    value = model.send_chain(field.name) unless field.custom?
+    options[:trim] = field.trim
+
+    result = case field.format
+      when :city then City.get(value)
+      when :industry then Industry.get(value)
+      when :pre then element(:pre, trim(value, options[:trim]))
+      when String then send(field.format, value)
+      when Proc then trim(field.format.(model), options[:trim])
+      else inspect_value(value, options)
+    end
+    
+    result = link_to(result, url(:admin_items, :show, collection: field.collection.key, id: model)) if field.format == :link || field.link
+    
+    result
+  end  
+    
   IndustryOptions = [
     ['Популярные', Industry.popular.map { |industry| [industry.name, industry.code.to_s] }],
     ['Остальные', Industry.other.map { |industry| [industry.name, industry.code.to_s] }]
@@ -56,4 +74,41 @@ Rabotnegi.helpers do
       "Поиск резюме"
     end
   end  
+  
+    
+  # class InvalidCaptcha < StandardError
+  #   attr :template
+  #   def initialize(template)
+  #     @template = template
+  #   end
+  # end
+  # 
+  # rescue_from InvalidCaptcha do |error|
+  #   render error.template, status: 422 if error.template
+  # end
+  # 
+  # def validate_captcha!(options = {})
+  #   if !captcha_done? && !simple_captcha_valid?
+  #     options[:model].errors.add(:captcha, "invalid") if options[:model]
+  #     log.warn 'captcha_wrong', ip_adress: request.remote_ip, 
+  #       actual_captcha: params[:captcha], expected_captcha: SimpleCaptcha::Utils::simple_captcha_value(session[:captcha])
+  #     raise InvalidCaptcha.new(options[:template])
+  #   else
+  #     skip_captcha
+  #   end    
+  # end
+  # 
+  # def skip_captcha
+  #   session["#{controller_name}_#{action_name}_captcha"] = true
+  # end
+  # 
+  # def reset_captcha
+  #   session.delete "#{controller_name}_#{action_name}_captcha"
+  #   session.delete "captcha"
+  # end
+  # 
+  # def captcha_done?
+  #   return true if Gore.env.starts_with?("test")
+  #   session["#{controller_name}_#{action_name}_captcha"]
+  # end
 end
