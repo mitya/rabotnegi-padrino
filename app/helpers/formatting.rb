@@ -133,7 +133,6 @@ Rabotnegi.helpers do
     options[:trim] = field.trim
 
     result = case field.format
-      # when :link then link_to(inspect_value(value, options), url(:admin_item, field.collection.key, model))
       when :city then City.get(value)
       when :industry then Industry.get(value)
       when :pre then element(:pre, trim(value, options[:trim]))

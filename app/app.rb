@@ -5,8 +5,11 @@ class Rabotnegi < Padrino::Application
 
   set :xhr do |truth| condition { request.xhr? } end
   set :show_exceptions, :after_handler
-  set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
   set :locale_path, %w(config/locales/ru.core.yml config/locales/ru.yml)
+
+  set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
+  set :message_encryptor, ActiveSupport::MessageEncryptor.new(uid_secret_token)
+
   set :assets do
     env = Sprockets::Environment.new
     env.append_path 'app/assets/javascripts'
@@ -14,7 +17,15 @@ class Rabotnegi < Padrino::Application
     env.append_path 'public/vendor'
     env
   end
-  set :message_encryptor, ActiveSupport::MessageEncryptor.new(uid_secret_token)
+
+  set :delivery_method, :smtp => {
+    address: "smtp.gmail.com",
+    port: 587,
+    user_name: "railsapp",
+    password: "demo120107",
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 
   configure do
     Slim::Engine.set_default_options disable_escape: true, disable_capture: false
@@ -38,10 +49,12 @@ class Rabotnegi < Padrino::Application
     disable :show_exceptions
     disable :static
     disable :reload_templates
+    set :delivery_method, :test
   end
 
   configure :development do
     register Gore::LogFilter
+    set :delivery_method, :test
     config.rabotaru_period = 5
     Slim::Engine.set_default_options pretty: true
     Resque.inline = true    
@@ -50,6 +63,7 @@ class Rabotnegi < Padrino::Application
   configure :test do
     enable :raise_errors
     disable :show_exceptions
+    set :delivery_method, :test    
     config.rabotaru_dir = Gore.root.join("tmp/rabotaru.test")
     config.original_vacancies_data_dir = Gore.root.join("tmp/vacancies_content.test")
     Resque.inline = true

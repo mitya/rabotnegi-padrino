@@ -1,0 +1,25 @@
+h2= @err
+
+h3 Request
+p= "#{err.verb} #{err.url}"
+
+h3 Time
+p= err.created_at
+
+h3 Host
+p= err.host
+
+h3 Parameters
+= hash_as_dl(err.params)
+
+h3 Session
+= hash_as_dl(err.session)
+
+h3 Cookie Names
+p= Array(err.cookies).to_sentence
+
+h3 Request Headers
+= hash_as_dl(err.request_headers)
+
+h3 Stack Trace
+pre= err.backtrace
