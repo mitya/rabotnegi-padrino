@@ -9,8 +9,15 @@ test_folders.each do |folder|
   end
 end
 
-desc "Run application test suite"
-task 'test' => test_folders.map { |f| "test:#{f.gsub('/', ':')}" }
+Rake::TestTask.new("test") do |test|
+  test.libs << "test"
+  test.test_files = FileList[
+    'test/rabotnegi/unit/**/*_test.rb',
+    'test/rabotnegi/web/**/*_test.rb',
+    'test/plumbing/**/*_test.rb', 
+  ]  
+  test.verbose = true
+end
 
 task "test:unit" => "test:rabotnegi:unit"
 task "test:web" => "test:rabotnegi:web"

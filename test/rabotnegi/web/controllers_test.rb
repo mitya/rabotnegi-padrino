@@ -14,7 +14,7 @@ describe "Controllers" do
     end
     
     assert_equal 1, Gore::Err.count
-    # assert_emails 1
+    assert_emails 1
   end
   
   describe "current user" do

@@ -39,7 +39,7 @@ class Gore::Err < Gore::ApplicationModel
       from Rabotnegi.config.err_sender
       to Rabotnegi.config.err_recipients
       subject "[rabotnegi.ru errors] #{err}"
-      content_type :html
+      content_type "text/html; charset=utf-8"
       locals err: err
       body render("err_notification")
     end
