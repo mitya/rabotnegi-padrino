@@ -29,7 +29,11 @@ module Gore::Testing
     
     def patch(*args)
       Stubber.stub(*args)
-    end        
+    end
+    
+    def sent_emails
+      Mail::TestMailer.deliveries
+    end
   end
   
   module RackHelpers
@@ -47,6 +51,10 @@ module Gore::Testing
     def assert_same_elements(a1, a2)
       assert_equal a1.size, a2.size
       a1.each { |x| assert a2.include?(x), "#{a2.inspect} is expected to include #{x.inspect}" }
+    end
+    
+    def assert_emails(count)
+      assert_equal count, sent_emails.count
     end
   end
 end

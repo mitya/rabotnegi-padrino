@@ -12,7 +12,7 @@ unit_test Gore::Err do
   }
 
   setup do
-    Mail::TestMailer.deliveries.clear
+    sent_emails.clear
     Gore::Err.delete_all
     @exception = ArgumentError.new("test error message")
     @exception.set_backtrace ["stack line 1", "stack line 2", "stack line 3"]
@@ -28,8 +28,8 @@ unit_test Gore::Err do
     assert_equal "ArgumentError", Gore::Err.last.exception_class
     assert_equal ["stack line 1", "stack line 2", "stack line 3"].join("\n"), Gore::Err.last.backtrace
 
-    assert_equal 1, Mail::TestMailer.deliveries.size
-    assert_match "test error message", Mail::TestMailer.deliveries.last.subject
+    assert_emails 1
+    assert_match "test error message", sent_emails.last.subject
   end
 
   test "register an error when there were too many other errors this hour" do
@@ -37,6 +37,6 @@ unit_test Gore::Err do
 
     err = Gore::Err.register("vacancies/show", @exception, ERROR_DATA)
     assert_equal Rabotnegi.config.err_max_notifications_per_hour + 1, Gore::Err.count
-    assert_equal 0, Mail::TestMailer.deliveries.size
+    assert_emails 0
   end
 end
