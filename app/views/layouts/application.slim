@@ -1,10 +1,11 @@
 doctype html
 
 head
-  title= window_title
+  title= document_title
   meta{http-equiv="Content-Type" content="text/html;charset=UTF-8"}
-  - for name, content in meta_properties
-    meta(name=name content=content)
+  - if @meta_properties
+    - for name, content in @meta_properties
+      meta(name=name content=content)
   = stylesheet_link_tag "bundle.css"
 
 body.public{id=@page_id class=@page_class}

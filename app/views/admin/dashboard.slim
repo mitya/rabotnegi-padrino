@@ -3,16 +3,16 @@
 table.properties
   tr
     th Вакансий
-    td.num= f Vacancy.count
+    td.num= inspect_value Vacancy.count
   tr
     th Резюме
-    td.num= f Resume.count
+    td.num= inspect_value Resume.count
   tr
     th Работодателей
-    td.num= f Employer.count
+    td.num= inspect_value Employer.count
   tr
     th Загрузок
-    td.num= f Rabotaru::Job.count
+    td.num= inspect_value Rabotaru::Job.count
   tr
     th Событий в логе
     td.num= limited_number Gore::EventLog::Item.count, 20_000
