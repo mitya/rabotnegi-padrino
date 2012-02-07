@@ -2,8 +2,6 @@ require 'test_helper'
 
 describe "Gore::Err mailer" do
   test "notification" do
-    get "/tests/noop" # hack to load helpers
-    
     err = Gore::Err.new(
       controller: "vacancies", 
       action: "show", 
@@ -22,15 +20,15 @@ describe "Gore::Err mailer" do
     )
  
     email = err.notify
+    email.to.must_equal [Rabotnegi.config.err_recipients]
+    email.from.must_equal [Rabotnegi.config.err_sender]
+    email.subject.must_equal "[rabotnegi.ru errors] vacancies/show - ApplicationError - a test thing"
+
     body = email.body.to_s
- 
-    assert_equal [Rabotnegi.config.err_recipients], email.to
-    assert_equal [Rabotnegi.config.err_sender], email.from
-    assert_equal "[rabotnegi.ru errors] vacancies/show - ApplicationError - a test thing", email.subject
-    assert_match "GET http://rabotnegi.test/vacancies/1234", body
-    assert_match "parameter_1", body
-    assert_match "parameter_1_value", body
-    assert_match "stack line 1", body
-    assert_match "stack line 2", body
+    body.must_match "GET http://rabotnegi.test/vacancies/1234"
+    body.must_match "parameter_1"
+    body.must_match "parameter_1_value"
+    body.must_match "stack line 1"
+    body.must_match "stack line 2"
   end
 end

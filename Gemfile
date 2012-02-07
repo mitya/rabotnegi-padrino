@@ -26,6 +26,7 @@ group :test do
   gem 'rack-test', require: "rack/test"
   gem "factory_girl"
   gem 'turn'
+  gem 'webrat'
   # gem 'capybara'
   # gem 'capybara-webkit'
 end

@@ -40,6 +40,14 @@ module Gore::Testing
   end
   
   module Assertions
+    def assert_equals(actual, expected, msg = nil)
+      assert_equal(expected, actual, msg)
+    end
+
+    def assert_matches(value, pattern, msg = nil)
+      assert_match(pattern, value, msg)
+    end
+  
     def assert_size(size, collection)
       assert_equal size, collection.size
     end
