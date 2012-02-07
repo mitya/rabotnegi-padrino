@@ -3,7 +3,7 @@ require 'test_helper'
 describe "Controllers" do
   test "default locale" do
     get "/tests/noop"
-    assert_equal :ru, I18n.locale
+    I18n.locale.must_equal :ru
   end
 
   test "error notifications" do
@@ -13,7 +13,7 @@ describe "Controllers" do
       get "/tests/error"
     end
     
-    assert_equal 1, Gore::Err.count
+    Gore::Err.count.must_eq 1
     assert_emails 1
   end
   
@@ -24,27 +24,25 @@ describe "Controllers" do
       @user_3 = User.create!(ip: "2.2.2.3")
     end
 
-    test "current_user can find the user when a valid user_id cookie is provided" do
+    it "find the user when a valid user_id cookie is provided" do
       set_cookie "uid=#{URI.encode_www_form_component app.message_encryptor.encrypt(@user_1.id)}"
       get "/tests/noop"
-    
-      assert_equal @user_1, app.last_instance.current_user
+      app.last_instance.current_user.must_eq @user_1
     end
 
-    test "current_user can find the user when the same user agent and ip address exist" do
+    it "find the user by the user agent and ip address" do
       get "/tests/noop", {}, {"REMOTE_ADDR" => "2.2.2.2", "HTTP_USER_AGENT" => "test browser"}
-    
-      assert_equal @user_2, app.last_instance.current_user
+      app.last_instance.current_user.must_eq @user_2
     end
     
-    test "when current_user! can't find a user it creates a new one" do
+    it "create a new one when can't find an existing" do
       get "/tests/noop", {}, {"REMOTE_ADDR" => "3.3.3.3", "HTTP_USER_AGENT" => "another browser"}
       current_user = app.last_instance.current_user!
-    
-      assert current_user
-      assert ! [@user_1, @user_2, @user_3].include?(current_user)
-      assert_equal "3.3.3.3", current_user.ip
-      assert_equal "another browser", current_user.agent
+
+      current_user.wont_be_nil
+      current_user.wont_be :in?, [@user_1, @user_2, @user_3]
+      current_user.ip.must_eq "3.3.3.3"
+      current_user.agent.must_eq "another browser"
     end    
   end
 end

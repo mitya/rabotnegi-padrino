@@ -18,18 +18,16 @@ unit_test Gore::Err do
     @exception.set_backtrace ["stack line 1", "stack line 2", "stack line 3"]
   end
   
-  test "register a web error" do
-    get "/tests/noop" # hax
-    
+  test "register a request error" do
     err = Gore::Err.register("vacancies/show", @exception, ERROR_DATA)
-    
-    assert_equal 1, Gore::Err.count
-    assert_equal "test error message", Gore::Err.last.exception_message
-    assert_equal "ArgumentError", Gore::Err.last.exception_class
-    assert_equal ["stack line 1", "stack line 2", "stack line 3"].join("\n"), Gore::Err.last.backtrace
+
+    Gore::Err.count.must_equal 1
+    Gore::Err.last.exception_message.must_equal "test error message"
+    Gore::Err.last.exception_class.must_equal "ArgumentError"
+    Gore::Err.last.backtrace.must_equal ["stack line 1", "stack line 2", "stack line 3"].join("\n")
 
     assert_emails 1
-    assert_match "test error message", sent_emails.last.subject
+    sent_emails.last.subject.must_match "test error message"
   end
 
   test "register an error when there were too many other errors this hour" do

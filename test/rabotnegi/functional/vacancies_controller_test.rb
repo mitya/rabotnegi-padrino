@@ -6,27 +6,27 @@ describe "Vacancies controller" do
 
     get URI.encode("/vacancies/#{@vacancy.to_param}"), {}, xhr: true
     
-    assert last_response.ok?
-    assert_includes last_response.body, "entry-details"
-    refute_includes last_response.body, "<meta"
+    assert response.ok?
+    assert_have_no_selector "meta"
+    assert_have_selector ".entry-details"
   end
 
   test "GET /vacancies/:non-existing" do
     get "/vacancies/4e415504e999fb2522000003"
-    assert_equal 404, last_response.status
+    assert_equal 404, response.status
   end
 
   test "GET /vacancies/:old-site-id" do
     get "/vacancies/123456"
-    assert_equal 410, last_response.status    
+    assert_equal 410, response.status    
   end
   
   test "GET /vacancies/:id-with-wrong-slug" do
     @vacancy = make Vacancy, title: "Программист"
     
     get "/vacancies/#{@vacancy.id}-developer"
-    assert last_response.redirect?
-    assert_match URI.encode("/vacancies/#{@vacancy.to_param}"), last_response.location
+    assert response.redirect?
+    assert_match URI.encode("/vacancies/#{@vacancy.to_param}"), response.location
   end
   
   test 'GET /vacancies/:city/:industry' do
@@ -36,12 +36,12 @@ describe "Vacancies controller" do
     v4 = make Vacancy, city: "spb", industry: "opt"
     
     get "/vacancies/spb/it"
-    
-    assert last_response.ok?
-    assert_includes last_response.body, v1.title
-    assert_includes last_response.body, v2.title
-    refute_includes last_response.body, v3.title
-    refute_includes last_response.body, v4.title
+
+    response.must_be :ok?
+    response.body.must_include v1.title
+    response.body.must_include v2.title
+    response.body.wont_include v3.title
+    response.body.wont_include v4.title
   end
   
   test "GET /vacancies/:city/:industry with sorting" do
@@ -49,21 +49,21 @@ describe "Vacancies controller" do
     v2 = make Vacancy, city: "spb", industry: "it", employer_name: "BBB"
   
     get "/vacancies/spb/it", sort: "employer_name"
-    assert_match /#{v1.title}.*#{v2.title}/, last_response.body
+    response.body.must_match %r{#{v1.title}.*#{v2.title}}
 
     get "/vacancies/spb/it", sort: "-employer_name"
-    assert_match /#{v2.title}.*#{v1.title}/, last_response.body
+    response.body.must_match %r{#{v2.title}.*#{v1.title}}
   end
   
   test "new" do
-    skip
+    skip "needs New Vacancy Form"
     get :new
     assert_response :ok
     assert_template "form"
   end
   
   test "create valid record" do
-    skip
+    skip "needs New Vacancy Form"
     post :create, vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
   
     new_vacancy = Vacancy.last
@@ -78,7 +78,7 @@ describe "Vacancies controller" do
   end
   
   test "create invalid record" do
-    skip
+    skip "needs New Vacancy Form"
     post :create, vacancy: { title: nil }
   
     assert !Vacancy.last    
