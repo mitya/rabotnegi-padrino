@@ -4,7 +4,7 @@ Rabotnegi.controllers do
   end
 
   get "/sitemap.xml" do
-    render "site/map"
+    render "shared/sitemap"
   end
 
   get "/site/info" do
