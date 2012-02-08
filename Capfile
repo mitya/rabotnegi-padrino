@@ -1,17 +1,17 @@
-load 'deploy' if respond_to?(:namespace)
-load 'deploy/assets'
-require 'bundler/capistrano'
 require "active_support/core_ext/string"
 
-Dir['vendor/plugins/*/recipes/*.rb', 'lib/recipes/*.rb'].each { |recipe| load(recipe) }
+load 'deploy' if respond_to?(:namespace)
+load 'deploy/assets'
 
-secrets = YAML.load_file("config/secrets.yml")
+require 'bundler/capistrano'
+
+Dir['lib/recipes/*.cap'].each { |recipe| load(recipe) }
 
 set :repository,  "git@sokurenko.unfuddle.com:sokurenko/rabotnegi.git"
 set :deploy_via, :remote_cache
 set :scm, :git
 set :user, "apprunner"
-set :password, secrets["password"]
+set :password, ENV["ABOX_PWD"]
 set :git_enable_submodules, true
 set :keep_releases, 3
 set :use_sudo, false

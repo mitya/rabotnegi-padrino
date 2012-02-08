@@ -85,7 +85,7 @@ namespace :backup do
   end
   
   task :download do
-    last_backup_name = capture("ls -x #{backups_path}/#{database}-????????_??????.tbz").split.sort.last
+    last_backup_name = capturex("ls -x #{backups_path}/#{database}-????????_??????.tbz").split.sort.last
     get last_backup_name, File.join("tmp", File.basename(last_backup_name))
   end
 

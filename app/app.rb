@@ -4,7 +4,6 @@ class Rabotnegi < Padrino::Application
   register Padrino::Helpers
 
   set :xhr do |truth| condition { request.xhr? } end
-  set :show_exceptions, :after_handler
   set :locale_path, %w(config/locales/ru.core.yml config/locales/ru.yml)
 
   set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
@@ -46,17 +45,18 @@ class Rabotnegi < Padrino::Application
     config.google_analytics_id = "UA-1612812-2" 
   end
 
-  configure :testprod do    
+  configure :testprod, :testui do    
     enable :logging
-    disable :show_exceptions
     disable :static
     disable :reload_templates
+    disable :raise_errors
     set :delivery_method, :test
   end
 
   configure :development do
     register Gore::LogFilter
     set :delivery_method, :test
+    set :show_exceptions, :after_handler
     config.rabotaru_period = 5
     Slim::Engine.set_default_options pretty: true
     Resque.inline = true    
@@ -64,10 +64,9 @@ class Rabotnegi < Padrino::Application
 
   configure :test do
     enable :raise_errors
-    disable :show_exceptions
-    set :delivery_method, :test    
-    config.rabotaru_dir = Gore.root.join("tmp/rabotaru.test")
-    config.original_vacancies_data_dir = Gore.root.join("tmp/vacancies_content.test")
+    set :delivery_method, :test
+    config.rabotaru_dir = Gore.root.join("tmp/test.rabotaru")
+    config.original_vacancies_data_dir = Gore.root.join("tmp/test.vacancies_content")
     Resque.inline = true
   end
 
@@ -96,20 +95,6 @@ class Rabotnegi < Padrino::Application
   # set :cache, Padrino::Cache::Store::File.new(Padrino.root('tmp', app_name.to_s, 'cache')) # default choice
   # 
 
-  ##
-  # Application configuration options
-  #
-  # set :raise_errors, true       # Raise exceptions (will stop application) (default for test)
-  # set :dump_errors, true        # Exception backtraces are written to STDERR (default for production/development)
-  # set :logging, true            # Logging in STDOUT for development and file for production (default only for development)
-  # set :public_folder, "foo/bar" # Location for static assets (default root/public)
-  # set :reload, false            # Reload application files (default in development)
-  # set :default_builder, "foo"   # Set a custom form builder (default 'StandardFormBuilder')
-  # set :locale_path, "bar"       # Set path for I18n translations (default your_app/locales)
-  # disable :sessions             # Disabled sessions by default (enable if needed)
-  # disable :flash                # Disables sinatra-flash (enabled by default if Sinatra::Flash is defined)
-  # layout  :my_layout            # Layout can be in views/layouts/foo.ext or views/foo.ext (default :application)
-  #
 
   # 
   # Filters & error handlers
@@ -165,8 +150,8 @@ class Rabotnegi < Padrino::Application
   end
        
   def dump_errors!(boom)
-    return unless Gore.env.development?
-    return unless Array === boom.backtrace
+    return super unless Gore.env.in?('development', 'testui')
+    return super unless Array === boom.backtrace
 
     boom.backtrace.reject! { |line| line =~ /thin|thor|eventmachine|rack|barista|http_router/ }
     boom.backtrace.map! { |line| line.gsub(Padrino.root, '/$PADRINO_ROOT') }

@@ -8,6 +8,7 @@ database_name = case Padrino.env
   when :production  then 'rabotnegi_prod'
   when :test        then 'rabotnegi_test'
   when :testprod    then 'rabotnegi_dev'
+  when :testui      then 'rabotnegi_testui'
 end
 
 Mongoid.database = Mongo::Connection.new(host, port).db(database_name)

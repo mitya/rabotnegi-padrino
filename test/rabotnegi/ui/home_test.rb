@@ -9,9 +9,4 @@ ui_test "Home" do
       assert_has_link "Публикация вакансий"
     end  
   end  
-  
-  # test "site info" do
-  #   visit "/site/info"
-  #   save_and_open_page
-  # end
 end
