@@ -67,8 +67,8 @@ class Gore::MongoReflector
     def title
       key = @name.gsub('.', '_')
       I18n.t(
-        "active_record.attributes.#{collection.singular}.#{key}",
-        default: [:"active_record.attributes.common.#{key}", key.humanize]
+        "attributes.#{collection.singular}.#{key}",
+        default: [:"attributes.common.#{key}", key.humanize]
       )
     end
     
@@ -94,8 +94,8 @@ class Gore::MongoReflector
     end
     
     def title
-      I18n.t("active_record.attributes.#{collection.singular}.#{accessor}", 
-        default: [:"active_record.attributes.common.#{accessor}", accessor.to_s.humanize]
+      I18n.t("attributes.#{collection.singular}.#{accessor}", 
+        default: [:"attributes.common.#{accessor}", accessor.to_s.humanize]
       )
     end
     

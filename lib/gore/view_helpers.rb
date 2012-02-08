@@ -255,7 +255,7 @@ module Gore::ViewHelpers
     def errors_for(object, options = {})
       return '' if object.errors.empty?
         
-      header_message = options.delete(:header_message) || translate("activerecord.errors.template.header")
+      header_message = options.delete(:header_message) || translate("errors.system.header")
       error_messages = object.errors.map do |attr, message|
         translate("errors.#{object.class.model_name.plural}.#{attr}", :default => message)
       end
