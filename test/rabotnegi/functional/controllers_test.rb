@@ -17,6 +17,13 @@ describe "Controllers" do
     assert_emails 1
   end
   
+  test "sitemap" do
+    get "sitemap.xml"    
+    response.must_be :ok?
+    response.body.must_match "/vacancies/msk/office"
+    response.body.must_match "/vacancies/spb/it"
+  end
+  
   describe "current user" do
     setup do
       @user_1 = User.create!(ip: "2.2.2.1")
