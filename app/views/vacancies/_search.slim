@@ -2,10 +2,10 @@
   fieldset
     .field
       = label_tag :city, 'Город:'
-      = select_tag :city, options: CityOptions, selected: params[:city], include_blank: false
+      = select_tag :city, options: CityOptions, selected: params[:city], include_blank: false, id: "city"
     .field
       = label_tag :industry, 'Отрасль:'
-      = select_tag :industry, grouped_options: IndustryOptions, selected: params[:industry], include_blank: "любая"
+      = select_tag :industry, grouped_options: IndustryOptions, selected: params[:industry], include_blank: "любая", id: "industry"
     .field
       = label_tag :q, 'Ключевые слова:'
       = text_field_tag :q, value: params[:q], id: "q"

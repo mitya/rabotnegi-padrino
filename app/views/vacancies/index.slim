@@ -15,6 +15,6 @@
     p.message.warning
       - if params[:q].present?
         | По вашему запросу ничего не найдено<br>Попробуйте изменить ключевые слова или 
-        = link_to 'поискать без указания ключевых слов', request.request_parameters.merge(q: nil), :class => 'ui'
+        a.ui{href=current_url(q: nil)} поискать без указания ключевых слов
       - else
         | Информации о вакансиях в выбранном городе/отрасли сейчас нет

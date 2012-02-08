@@ -42,6 +42,17 @@ def put_as_root(path, config)
   sudo "chown root:root #{path}"
 end
 
+def capturex(command, options={})
+  output = ""
+  invoke_command(command, options.merge(:once => true)) do |ch, stream, data|
+    case stream
+    when :out then output << data
+    when :err then warn "[err :: #{ch[:server]}] #{data}"
+    end
+  end
+  output
+end
+
 $cron_jobs = []
 
 def cron(command_type, time, command)

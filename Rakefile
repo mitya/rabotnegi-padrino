@@ -10,8 +10,8 @@ require 'rake/sprocketstask'
 
 namespace :data do
   # prod: rake data:dump DB=rabotnegi_prod DIR=/data/backup BUCKET=rabotnegi_backups
-  # dev: rake data:dump DB=rabotnegi_dev DIR=tmp BUCKET=rabotnegi_backups
-  # scp rba:/data/backup/rabotnegi_prod-latest.tbz ~/desktop
+  # dev:  rake data:dump DB=rabotnegi_dev DIR=tmp BUCKET=rabotnegi_backups
+  #       scp rba:/data/backup/rabotnegi_prod-latest.tbz ~/desktop
   task :dump do
     db, dir, bucket = ENV.values_at('DB', 'DIR', 'BUCKET')
     id = Time.now.strftime("%Y%m%d_%H%M%S")
@@ -34,18 +34,12 @@ namespace :data do
     end
   end
   
-  # rake data:upload FILE=/u/backup/dump-20120101-120000.tbz BUCKET=/rabotnegi-backup  
+  # eg. rake data:upload FILE=/u/backup/dump-20120101-120000.tbz BUCKET=/rabotnegi-backup  
   task :upload do
     file, bucket = ENV.values_at['FILE', 'BUCKET']
     sh "BOTO_CONFIG=/data/etc/boto.conf /data/gsutil/gsutil cp #{file} gs://#{bucket}"
   end
-  
-  # rake data:upload FILE=/u/backup/dump-20120101-120000.tbz BUCKET=/rabotnegi-backup  
-  task :upload do
-    file, bucket = ENV.values_at['FILE', 'BUCKET']
-    sh "BOTO_CONFIG=/data/etc/boto.conf /data/gsutil/gsutil cp #{file} gs://#{bucket}"
-  end  
-  
+
   task :clone do
     source, target = ENV.values_at('SRC', 'DST')
     sh "rm -rf tmp/#{source}"
@@ -53,26 +47,14 @@ namespace :data do
     sh "mongorestore -d #{target} --drop tmp/#{source}"
     sh "rm -rf tmp/#{source}"
   end
-  
-  task :restore do
-    sh "mongorestore -d rabotnegi_dev --drop #{ENV['SRC']}"
-  end  
-
-  # rake data:seed SET=testui
-  # rails runner -e testui test/fixtures/data.rb
-  task :seed => :environment do
-    dataset_name = ENV['SET']
-    file = case dataset_name
-      when 'testui' then "test/fixtures/data.rb"
-    end
-    [Vacancy, User, Gore::EventLog::Item].each(&:delete_all)
-    load(file)
-    puts "Seeded #{Gore.env} - #{{vacancies: Vacancy.count, users: User.count}.inspect}"
-  end  
-
 end
 
 namespace :dev do
+  task :restore do
+    src = ENV['SRC'] || "tmp/db.rabotnegi.dev"
+    sh "mongorestore -d rabotnegi_dev --drop #{src}"
+  end  
+  
   task :rm do
     targets = %w(/public/rabotnegi/assets/* /tmp/cache/*).map { |f| Gore.root.join(f) }
     system "rm -rf #{targets.join(' ')}"

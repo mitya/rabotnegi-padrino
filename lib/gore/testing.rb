@@ -1,9 +1,14 @@
 module Gore::Testing
   module Globals
     def ui_test(name, &block)
-      test_case = Class.new(Gore::CapybaraTest)
-      Object.const_set((name.to_s.tr_s(' :', '_') + 'CapybaraTest').classify, test_case)
-      test_case.class_eval(&block)
+      describe name do
+        include Capybara::DSL
+        include Gore::Testing::CapybaraHelpers
+        
+        after { Capybara.current_driver = Capybara.default_driver }
+
+        class_eval(&block)
+      end
     end  
   end
   
@@ -38,7 +43,7 @@ module Gore::Testing
   
   module RackHelpers
     def gets(*args)
-      get *args
+      get(*args)
       assert_equal 200, last_response.status
     end
   end
@@ -68,6 +73,63 @@ module Gore::Testing
     def assert_emails(count)
       assert_equal count, sent_emails.count
     end
+  end
+  
+  module CapybaraHelpers
+    def assert_has_contents(*strings)
+      strings.each { |string| assert_has_content(string) }
+    end
+
+    def assert_has_no_contents(*strings)
+      strings.each { |string| assert_has_no_content(string) }
+    end
+  
+    def in_content(&block)
+      within '#content', &block
+    end
+
+    def pick(from, text)
+      select text, from: from
+    end
+  
+    def fill(locator, with)
+      fill_in locator, with: with
+    end
+  
+    def assert_title_like(string)
+      assert_match string, find("title").text
+    end
+  
+    def assert_has_class(target, klass)
+      target = find(target) unless target.is?(Capybara::Node::Element)
+      assert_match %r{\b#{klass}\b}, target[:class]
+    end
+  
+    def assert_has_no_class(target, klass)
+      target = find(target) unless target.is?(Capybara::Node::Element)
+      assert_no_match(/\b#{klass}\b/, target[:class])
+    end
+  
+    def visit_link(locator)
+      link = find_link(locator)
+      assert link, "Link [#{locator}] is not found"
+      visit link['href']
+    end
+  
+    def sop
+      save_and_open_page
+    end
+  
+    def use_rack_test
+      Capybara.current_driver = :rack_test
+    end    
+    
+    def method_missing(method, *args, &block)
+      return super unless method.to_s.starts_with?("assert_")
+      predicate = method.to_s.sub(/^assert_/, '') + '?'
+      return super unless page.respond_to?(predicate)
+      assert page.send(predicate, *args, &block), "Failure: page.#{predicate}#{args.inspect}"
+    end     
   end
 end
 

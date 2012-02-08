@@ -29,8 +29,8 @@ group :test do
   gem "factory_girl"
   gem 'turn'
   gem 'webrat'
-  # gem 'capybara'
-  # gem 'capybara-webkit'
+  gem 'capybara'
+  gem 'capybara-webkit'
 end
 
 group :development, :test do
