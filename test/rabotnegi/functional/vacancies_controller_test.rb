@@ -4,9 +4,8 @@ describe "Vacancies controller" do
   test 'GET /vacancies/:id via XHR' do
     @vacancy = make Vacancy, city: "spb", industry: "it", title: "Программист"
 
-    get URI.encode("/vacancies/#{@vacancy.to_param}"), {}, xhr: true
+    gets URI.encode("/vacancies/#{@vacancy.to_param}"), {}, xhr: true
     
-    assert response.ok?
     assert_have_no_selector "meta"
     assert_have_selector ".entry-details"
   end
@@ -35,9 +34,8 @@ describe "Vacancies controller" do
     v3 = make Vacancy, city: "msk", industry: "it"
     v4 = make Vacancy, city: "spb", industry: "opt"
     
-    get "/vacancies/spb/it"
+    gets "/vacancies/spb/it"
 
-    response.must_be :ok?
     response.body.must_include v1.title
     response.body.must_include v2.title
     response.body.wont_include v3.title
@@ -48,41 +46,38 @@ describe "Vacancies controller" do
     v1 = make Vacancy, city: "spb", industry: "it", employer_name: "AAA"
     v2 = make Vacancy, city: "spb", industry: "it", employer_name: "BBB"
   
-    get "/vacancies/spb/it", sort: "employer_name"
+    gets "/vacancies/spb/it", sort: "employer_name"
     response.body.must_match %r{#{v1.title}.*#{v2.title}}
 
-    get "/vacancies/spb/it", sort: "-employer_name"
+    gets "/vacancies/spb/it", sort: "-employer_name"
     response.body.must_match %r{#{v2.title}.*#{v1.title}}
   end
   
   test "new" do
-    skip "needs New Vacancy Form"
-    get :new
-    assert_response :ok
-    assert_template "form"
+    gets "/vacancies/new"
+    assert_contain "Публикация новой вакансии"
   end
   
   test "create valid record" do
-    skip "needs New Vacancy Form"
-    post :create, vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
+    post "/vacancies", vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
   
     new_vacancy = Vacancy.last
-    assert new_vacancy
-    assert_equal "Developer", new_vacancy.title
-    assert_equal "msk", new_vacancy.city
-    assert_equal "it", new_vacancy.industry
-    assert_equal 55_000, new_vacancy.salary.exact
-    assert_equal "0.0.0.0", new_vacancy.poster_ip
+    new_vacancy.wont_be_nil
+    new_vacancy.title.must_equal "Developer"
+    new_vacancy.city.must_equal "msk"
+    new_vacancy.industry.must_equal "it"
+    new_vacancy.salary.exact.must_equal 55_000
+    new_vacancy.poster_ip.must_equal "127.0.0.1"
     
-    assert_redirected_to vacancy_path(new_vacancy)
+    response.must_be :redirect?
+    response.location.must_match app.url(:vacancies_show, id: new_vacancy)
   end
   
   test "create invalid record" do
-    skip "needs New Vacancy Form"
-    post :create, vacancy: { title: nil }
+    post "/vacancies", vacancy: { title: nil }
   
-    assert !Vacancy.last    
-    assert_response 422
-    assert_template "form"
+    response.status.must_equal 422
+    Vacancy.last.must_be_nil
+    assert_contain "Публикация новой вакансии"
   end
 end

@@ -23,10 +23,6 @@ module Gore::ViewHelpers
       ruby
     end
 
-    def block_is_template?(block)
-      false
-    end
-
     # Fast cycling helper
     def xcycle(*values)
       @xcycle_counter ||= -1
@@ -37,6 +33,17 @@ module Gore::ViewHelpers
     def centering_table(&proc)
       "<table class='centered'><tr><td>#{capture(&proc)}</table>".html_safe
     end    
+  
+    def lorem
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+      dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    end
+  
+    def output(block, result)
+      block_is_template?(block) ? concat_content(result) : result
+    end
   
   end
   
@@ -239,10 +246,10 @@ module Gore::ViewHelpers
   
   module Editing
     def submit_section(label)
-      %{<div class='submit'>
-          <input type="submit" class='action-button' value='#{ label }'>
-          <span class='cancel'>или <a href='#{ request.headers['Referer'] }' class='ui'>Отменить</a><span>
-        </div>}
+      element :div, 'submit' do
+        tag(:input, type: 'submit', value: label, :class => 'action-button') +
+        element(:span, (" или " + element(:a, 'Отменить', 'ui', href: request.referer)), 'cancel')
+      end
     end
   
     def errors_for(object, options = {})
@@ -253,7 +260,7 @@ module Gore::ViewHelpers
         translate("errors.#{object.class.model_name.plural}.#{attr}", :default => message)
       end
 
-      render "shared/errors", :header => header_message, :errors => error_messages
+      partial "shared/errors", locals: {header: header_message, errors: error_messages}
     end   
 
     def trb(label, content, options = {})
@@ -276,10 +283,10 @@ module Gore::ViewHelpers
       content.push options[:after] if options[:after]
       content.push tag(:br) + content_tag(:small, options[:comment]) if options[:comment]
 
-      content_tag :tr, row_options do
-        content_tag(:th, label.join(' ').html_safe) +
-        content_tag(:td, content.join(' ').html_safe) + 
-        content_tag(:td, "", :class => "other")
+      element :tr, row_options do
+        element(:th, label.join(' ').html_safe) +
+        element(:td, content.join(' ').html_safe) + 
+        element(:td, "", :class => "other")
       end
     end
   
@@ -307,7 +314,7 @@ module Gore::ViewHelpers
     # end
   
     def wrapper(&block)
-      "<table class='form-layout'>#{capture(&block)}</table>".html_safe
+      output block, element(:table, "form-layout", &block)
     end    
   end
 
@@ -440,37 +447,29 @@ module Gore::ViewHelpers
     end    
   end
 
-  module FormBuilderExtras
-    def ui_text(attr, options = {})      
-      text_field(attr, options.reverse_merge(size: nil))
+  class FormBuilder < Padrino::Helpers::FormBuilder::StandardFormBuilder
+    def text_block(attr, caption, options = {})
+      control_block_for(:text_field, attr, caption, options)
     end
-  
-    def ui_text_area(attr, options = {})
-      text_area(attr, options)
+
+    def text_area_block(attr, caption, options = {})
+      control_block_for(:text_area, attr, caption, options)
     end
-  
-    def ui_combo(attr, collection, options = {})
-      if City === collection.first || Industry === collection.first
-        collection = collection.map { |struct| [struct.name, struct.code] }
-      end
-      
-      html_options = options.slice!(:include_blank, :selected)
-      select(attr, collection, options, html_options)
+
+    def select_block(attr, caption, options = {})
+      control_block_for(:select, attr, caption, options)
     end
     
-    def ui_date_time(attr, options = {})
-      datetime_select(attr, options)
+    def submit_block(caption)
+      template.tr2 template.submit_section(caption)
     end
-  
-    # text(attr)
-    # hidden(attr)
-    # text_area(attr)
-    # password(attr)
-    # check_box(attr, {on,off})
-    # radio_button(attr)
-    # select(attr, collection)
-    # check_boxes(attr, collection)
-    # radio_group(attr, collection)
+    
+    def control_block_for(control_name, attr, caption, options)
+      block_options = options.extract!(:required, :before, :after, :comment)
+      label = label(attr, caption: caption + ':')
+      control = send(control_name, attr, options)
+      template.trb(label, control, block_options)
+    end
   end
 
   class EditViewBuilder

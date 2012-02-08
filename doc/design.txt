@@ -4,7 +4,7 @@ search_vacancies
 
 get_user
   if cookies[:uid]
-    User.find encryptor.decrypt(cookies[:uid])
+    User.find encryptor.decrypt_and_verify(cookies[:uid])
   else
     User.create!
 

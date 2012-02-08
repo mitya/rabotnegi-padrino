@@ -13,7 +13,11 @@
 #   __w(value, expression.to_s)
 # end
 # 
-def __p(label, data)
+def __p(*messages)
+  puts "/// #{messages.inspect}"
+end
+
+def __pl(label, data)
   puts "/// #{label} = #{data.inspect}"
 end
 

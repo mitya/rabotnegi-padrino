@@ -10,6 +10,8 @@ class Rabotnegi < Padrino::Application
   set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
   set :message_encryptor, ActiveSupport::MessageEncryptor.new(uid_secret_token)
 
+  set :default_builder, Gore::ViewHelpers::FormBuilder
+
   set :assets do
     env = Sprockets::Environment.new
     env.append_path 'app/assets/javascripts'
@@ -81,7 +83,6 @@ class Rabotnegi < Padrino::Application
   helpers Gore::ViewHelpers::Layout
   helpers Gore::ViewHelpers::Collections
 
-  
   ##
   # Caching support
   #
@@ -115,6 +116,8 @@ class Rabotnegi < Padrino::Application
   # 
 
   error 500..599 do
+    raise env["sinatra.error"] if Gore.env.development?
+    
     Gore::Err.register route.named || request.path, env["sinatra.error"],
       params: params.except("captures"),
       url: request.url, 
@@ -128,11 +131,39 @@ class Rabotnegi < Padrino::Application
   end
   
   before { settings.set :last_instance, self } if Gore.env.test?
+  # before { `touch #{Padrino.root("app/app.rb")}` } if Gore.env.development?
 
   #
   # Overrides
   #
-     
+  
+  # def block_is_template?(block)
+  #   false
+  # end
+
+  def concat_content(content)
+    content
+  end
+  
+  # def form_tag(url, options={}, &block)
+  #   desired_method = options[:method]
+  #   data_method = options.delete(:method) if options[:method].to_s !~ /get|post/i
+  #   options.reverse_merge!(:method => "post", :action => url)
+  #   options[:enctype] = "multipart/form-data" if options.delete(:multipart)
+  #   options["data-remote"] = "true" if options.delete(:remote)
+  #   options["data-method"] = data_method if data_method
+  #   options["accept-charset"] ||= "UTF-8"
+  #   inner_form_html  = hidden_form_method_field(desired_method)
+  #   inner_form_html += capture_html(&block).to_s
+  #   content_tag(:form, inner_form_html, options)
+  # end  
+  
+  def label_tag(name, *args, &block)
+    options = args.extract_options!
+    options[:caption] ||= args.pop
+    super(name, options, &block)
+  end
+       
   def dump_errors!(boom)
     return unless Gore.env.development?
     return unless Array === boom.backtrace

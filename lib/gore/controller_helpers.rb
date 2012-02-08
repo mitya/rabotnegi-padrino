@@ -50,9 +50,9 @@ module Gore::ControllerHelpers
   module Users
     def current_user
       return @current_user if defined? @current_user
-  
+
       @current_user = if request.cookies['uid'].present?
-        User.find(settings.message_encryptor.decrypt(request.cookies['uid'])) rescue nil
+        User.find(settings.message_encryptor.decrypt_and_verify(request.cookies['uid'])) rescue nil
       else
         User.where(agent: request.user_agent, ip: request.ip).first
       end
@@ -69,7 +69,7 @@ module Gore::ControllerHelpers
   
     def current_user=(user)
       @current_user = user
-      response.set_cookie 'uid', value: settings.message_encryptor.encrypt(user.id), expires: 2.years.from_now
+      response.set_cookie 'uid', value: settings.message_encryptor.encrypt_and_sign(user.id), expires: 2.years.from_now
     end
 
     def current_user!

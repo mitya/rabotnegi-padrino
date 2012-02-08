@@ -1,10 +1,12 @@
 source :rubygems
 
-gem 'padrino', '0.10.5'
+gem 'padrino', '0.10.6.c'
 gem 'rake'
 gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'sass'
 gem 'slim'
+gem 'haml'
+gem 'erubis'
 gem 'coffee-script'
 gem 'sprockets'
 gem 'mongoid'
