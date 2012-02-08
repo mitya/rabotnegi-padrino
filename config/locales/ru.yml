@@ -1,71 +1,71 @@
 ru:
-  active_record:
-    attributes:
-      resume:
-        fname: Имя
-        lname: Фамилия
-        job_title: Должность
-        min_salary: Зарплата
-        job_reqs: О работе
-        about_me: Обо мне
-        contact_info: Контакты
-      vacancy:
-        title: Должность
-        description: Описание
-        external_id: Внешний ID
-        employer_id: ID Работодателя        
-        salary_min: Зарплата от
-        salary_max: Зарплата до
-        employer_name: Работодатель
-        salary: Зарплата
-        poster_ip: IP пользователя
-      employer:
-        name: Название
-        captcha: Картинка
-        password: Пароль
-        login: Логин
-      mongo_log_item:
-        puid: PUID
-        title: Название
-        severity: Важность
-        duration: Время
-        brief: Бриф
-        data: Детали
-      rabota_ru_vacancy_loading:
-        details: Детали
-      common:
-        _id: ID
-        action: Действие
-        browser: Браузер
-        city: Город
-        controller: Контроллер
-        created_at: Создано
-        started_at: Начато
-        processed_at: Обработано
-        failed_at: Провалено
-        loaded_at: Загружено
-        cleaned_at: Очищено
-        id: ID
-        industry: Отрасль
-        ip: IP адрес
-        state: Статус
-        counts: Счетчики
-        password: Пароль
-        updated_at: Обновлено
-        url: URL
-        source: Источник
-        exception: Исключение
-    models:
-      resume: резюме
-      vacancy: вакансия
-      employer: работодатель
-      resumes: Резюме
-      vacancies: Вакансии
-      employers: Работодатели
-      users: Пользователи
-      rabotaru_jobs: Загрузки
-      gore_errs: Исключения
-      gore_event_log_items: События        
+  attributes:
+    resume:
+      fname: Имя
+      lname: Фамилия
+      job_title: Должность
+      min_salary: Зарплата
+      job_reqs: О работе
+      about_me: Обо мне
+      contact_info: Контакты
+    vacancy:
+      title: Должность
+      description: Описание
+      external_id: Внешний ID
+      employer_id: ID Работодателя        
+      salary_min: Зарплата от
+      salary_max: Зарплата до
+      employer_name: Работодатель
+      salary: Зарплата
+      poster_ip: IP пользователя
+    employer:
+      name: Название
+      captcha: Картинка
+      password: Пароль
+      login: Логин
+    mongo_log_item:
+      puid: PUID
+      title: Название
+      severity: Важность
+      duration: Время
+      brief: Бриф
+      data: Детали
+    rabota_ru_vacancy_loading:
+      details: Детали
+    common:
+      action: Действие
+      browser: Браузер
+      city: Город
+      cleaned_at: Очищено
+      controller: Контроллер
+      counts: Счетчики
+      created_at: Создано
+      exception: Исключение
+      failed_at: Провалено
+      id: ID
+      industry: Отрасль
+      ip: IP адрес
+      loaded_at: Загружено
+      password: Пароль
+      processed_at: Обработано
+      source: Источник
+      started_at: Начато
+      state: Статус
+      updated_at: Обновлено
+      url: URL
+      _id: ID
+
+  models:
+    resume: резюме
+    vacancy: вакансия
+    employer: работодатель
+    resumes: Резюме
+    vacancies: Вакансии
+    employers: Работодатели
+    users: Пользователи
+    rabotaru_jobs: Загрузки
+    gore_errs: Исключения
+    gore_event_log_items: События        
 
   errors:
     resumes:
@@ -81,3 +81,6 @@ ru:
       title: "Должность — обязательное поле."
       description: "Описание — обязательное поле."
       captcha: "Буквы с картинки введены не верно"
+    system:
+      header: "Вы что-то неправильно заполнили — надо исправить:"
+      body: "Проблемы возникли со следующими полями:"      
