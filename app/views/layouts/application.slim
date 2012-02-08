@@ -19,9 +19,9 @@ body.public{id=@page_id class=@page_class}
       nav
         ul#tabs{data-selected="##{@current_tab}"}
           li#workers-tab.tab
-            a{href=url(:vacancies, :base)} Поиск вакансий
+            a{href=url(:vacancies_search)} Поиск вакансий
           li#employers-tab.tab
-            a{href=url(:vacancies, :new)} Публикация вакансий
+            a{href=url(:vacancies_new)} Публикация вакансий
           - if current_user!.favorite_vacancies.any?
             li#favorite-vacancies-tab.tab
               a{href=url(:favorite_worker_vacancies)} Сохраненные вакансии
@@ -34,9 +34,8 @@ body.public{id=@page_id class=@page_class}
     #content= yield :layout
     #footer-push    
 
-  #plumbing
-    = javascript_include_tag "vendor.js", "bundle.js"
-    = render "layouts/google_analytics" if Gore.env.production?
-
   footer#footer
     p#footer-content © 2012 Работнеги.ру
+
+  = javascript_include_tag "vendor.js", "bundle.js"
+  = render "layouts/google_analytics" if Gore.env.production?

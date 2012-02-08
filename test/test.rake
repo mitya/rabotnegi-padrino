@@ -20,4 +20,4 @@ Rake::TestTask.new("test") do |test|
 end
 
 task "test:unit" => "test:rabotnegi:unit"
-task "test:func" => "test:rabotnegi:web"
+task "test:func" => "test:rabotnegi:functional"

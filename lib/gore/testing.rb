@@ -37,6 +37,10 @@ module Gore::Testing
   end
   
   module RackHelpers
+    def gets(*args)
+      get *args
+      assert_equal 200, last_response.status
+    end
   end
   
   module Assertions

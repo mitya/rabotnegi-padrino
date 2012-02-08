@@ -5,10 +5,6 @@ require File.expand_path('../../config/boot', __FILE__)
 require "support/mocks"
 require "support/factories"
 
-Webrat.configure do |config|
-  config.mode = :rack
-end
-
 class MiniTest::Spec
   include Mocha::API
   include Rack::Test::Methods
@@ -51,6 +47,10 @@ end
 module Kernel
   include Gore::Testing::Globals
   alias unit_test describe
+end
+
+Webrat.configure do |config|
+  config.mode = :rack
 end
 
 Turn.config do |c|

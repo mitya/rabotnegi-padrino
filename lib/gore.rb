@@ -38,7 +38,7 @@ module Gore
       args.map! { |arg| Array === arg ? arg.join('-') : arg }
       args = args.join(',')
       string = [args, options].reject(&:blank?).join(' ')
-      inspection = "{#{string}}"
+      "{#{string}}"
     end
     
     def inspect_value(value)
@@ -64,6 +64,10 @@ module Gore
       file, line, method = string.match(/(\w+\.rb):(\d+):in `(\w+)'/).try(:captures)
       "#{file}::#{method}::#{line}"
     end    
+    
+    def object_id?(value)
+      value.to_s =~ /^(\d+|[0-9a-f]{24})(-|$)/i
+    end
   end
   
   module Jobs
@@ -166,7 +170,7 @@ module Gore
   end
   
   def self.method_missing(selector, *args, &block)
-    return const_get(selector) if const_defined?(selector)
+    return const_get(selector) if selector.to_s =~ /^[A-Z]/ && const_defined?(selector)
     super
   end
 end

@@ -4,3 +4,11 @@ HTML::WhiteListSanitizer.new.sanitize(%{hello <strong>world</strong> and &quot;A
 
 
 Vacancy.all.pluck(:description).map { |d| d.scan(/<\w+>/) }.flatten.uniq
+
+a = {a: 1, b: 2}
+b = h1.except!(:a)
+b = h1.except!(:c)
+
+
+a = {:a => 1, :b => 2, :c => 3, :d => 4}
+b = a.extract!(:a, :b) # => {:a => 1, :b => 2}

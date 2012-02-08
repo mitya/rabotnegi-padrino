@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe "Controllers" do
   test "default locale" do
-    get "/tests/noop"
+    gets "/tests/noop"
     I18n.locale.must_equal :ru
   end
 
@@ -10,7 +10,7 @@ describe "Controllers" do
     Gore::Err.delete_all
     
     assert_raises ArgumentError do
-      get "/tests/error"
+      gets "/tests/error"
     end
     
     Gore::Err.count.must_eq 1
@@ -25,18 +25,18 @@ describe "Controllers" do
     end
 
     it "find the user when a valid user_id cookie is provided" do
-      set_cookie "uid=#{URI.encode_www_form_component app.message_encryptor.encrypt(@user_1.id)}"
-      get "/tests/noop"
-      app.last_instance.current_user.must_eq @user_1
+      set_cookie "uid=#{URI.encode_www_form_component app.message_encryptor.encrypt_and_sign(@user_1.id)}"
+      gets "/tests/noop"
+      app.last_instance.current_user.must_equal @user_1
     end
 
     it "find the user by the user agent and ip address" do
-      get "/tests/noop", {}, {"REMOTE_ADDR" => "2.2.2.2", "HTTP_USER_AGENT" => "test browser"}
+      gets "/tests/noop", {}, {"REMOTE_ADDR" => "2.2.2.2", "HTTP_USER_AGENT" => "test browser"}
       app.last_instance.current_user.must_eq @user_2
     end
     
     it "create a new one when can't find an existing" do
-      get "/tests/noop", {}, {"REMOTE_ADDR" => "3.3.3.3", "HTTP_USER_AGENT" => "another browser"}
+      gets "/tests/noop", {}, {"REMOTE_ADDR" => "3.3.3.3", "HTTP_USER_AGENT" => "another browser"}
       current_user = app.last_instance.current_user!
 
       current_user.wont_be_nil

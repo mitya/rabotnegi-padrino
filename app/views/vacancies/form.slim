@@ -1,18 +1,17 @@
-- title = @vacancy.new_record?? "Публикация новой вакансии" : "Редактирование #{@vacancy}"
-- url = @vacancy.new_record? ? vacancies_path : vacancy_path(@vacancy)
-
+- title = @vacancy.new? ? "Публикация новой вакансии" : "Редактирование #{@vacancy}"
+- url = @vacancy.new? ? url(:vacancies_create) : url(:vacancies_show, id: @vacancy)
 - page "edit-vacancy", title, path: %w(employers casual-employers vacancies)
 
 h1= title
 
-= form_for @vacancy, html: { id: 'vacancy-edit-form' }, url: url do |f|
+= form_for @vacancy, url, id: 'vacancy-edit-form' do |f|
   = errors_for(@vacancy)
   = wrapper do
-    = f.tr :employer_name, 'Работодатель', f.text_field(:employer_name) unless current_employer
-    = f.tr :title, 'Должность', f.text_field(:title)
-    = f.tr :city, 'Город', f.select(:city, DomainHelper::CityOptions)
-    = f.tr :industry, 'Отрасль', f.grouped_select(:industry, DomainHelper::IndustryOptions)
-    = f.tr :salary_text, 'Зарплата', f.text_field(:salary_text), after: 'рублей', comment: 'Формат: 10000 | от 10000 | до 20000 | от 10000 до 20000.'
-    = f.tr :description, 'Описание', f.text_area(:description)
-    = f.tr :captcha, 'Капча', show_simple_captcha, comment: "Введите 4 латинские буквы которые паказаны на картинке.", :'class' => "captcha" unless captcha_done?
-    = tr2 submit_section(@vacancy.new_record? ? 'Опубликовать' : 'Сохранить')
+    = f.text_block :employer_name, 'Работодатель'
+    = f.text_block :title, 'Должность'
+    = f.select_block :city, 'Город', options: CityOptions
+    = f.select_block :industry, 'Отрасль', grouped_options: IndustryOptions
+    = f.text_block :salary_text, 'Зарплата', after: 'рублей', comment: 'Формат: 10000 | от 10000 | до 20000 | от 10000 до 20000.'
+    = f.text_area_block :description, 'Описание'
+    / = f.captcha_block :captcha, 'Капча', comment: "Введите 4 латинские буквы которые паказаны на картинке.", 'class' => "captcha" unless captcha_done?
+    = f.submit_block @vacancy.new? ? 'Опубликовать' : 'Сохранить'
