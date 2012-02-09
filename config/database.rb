@@ -7,7 +7,7 @@ database_name = case Padrino.env
 end
 
 mongoid_options = {}
-mongoid_options = {logger: Padrino.logger} if Padrino.env == :development && ($*.first !~ /^test/)
+mongoid_options = {logger: Padrino.logger} if Padrino.env == :development && ($*.first !~ /^(test|routes)/)
 Mongoid.database = Mongo::Connection.new('localhost', Mongo::Connection::DEFAULT_PORT, mongoid_options).db(database_name)
 
 # You can also configure Mongoid this way
