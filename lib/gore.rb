@@ -173,6 +173,18 @@ module Gore
     return const_get(selector) if selector.to_s =~ /^[A-Z]/ && const_defined?(selector)
     super
   end
+  
+  class Mash < Hash   
+    def [](key)
+      super(key.to_s) || super(key.to_sym)
+    end
+    
+    def slice(*keys)
+      hash = self.class.new
+      keys.each { |k| hash[String === k ? k.to_sym : k] = self[k] }
+      hash
+    end    
+  end
 end
 
 Log = Gore.logger

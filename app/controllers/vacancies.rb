@@ -35,7 +35,7 @@ Rabotnegi.controller :vacancies do
   get :index, "/vacancies/:city(/:industry)" do
     pass if Gore.object_id?(params[:city])
     halt 404 if !City.get(params[:city]) || params[:industry] && !Industry.get(params[:industry])
-    
+
     @vacancies = Vacancy.search(params.slice(:city, :industry, :q)).without(:description).
       order_by(decode_order_to_mongo(params[:sort].presence || "title")).paginate(params[:page], 50)
 

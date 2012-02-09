@@ -8,9 +8,9 @@ require "capybara"
 require "capybara/dsl"
 
 if Gore.env.testui?
-  puts "Seeding #{Gore.env}..."
   [Vacancy, User, Gore::EventLog::Item].each(&:delete_all)
   load "test/support/data.rb"  
+  puts "Seeded #{Gore.env}"
 end
 
 class MiniTest::Spec

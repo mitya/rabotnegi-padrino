@@ -14,7 +14,7 @@
 # end
 # 
 def __p(*messages)
-  puts "/// #{messages.inspect}"
+  puts "/// #{messages.pluck(:inspect).join(', ')}"
 end
 
 def __pl(label, data)
@@ -37,5 +37,8 @@ end
 # end
 
 def __t(*args)
-  puts "  TRACE - #{caller.first} #{args.inspect}" 
+  source = caller.first
+  source.sub!(Padrino.root, "")
+  source.sub!(%r{`block \(\d+ levels\) in <top \(required\)>'}, "block")
+  puts "  \e[31mTRACE\e[0m - #{source} - #{args.pluck(:inspect).join(', ')}" 
 end      

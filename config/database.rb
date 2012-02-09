@@ -1,17 +1,14 @@
-
-# Connection.new takes host, port
-host = 'localhost'
-port = Mongo::Connection::DEFAULT_PORT
-
 database_name = case Padrino.env
   when :development then 'rabotnegi_dev'
   when :production  then 'rabotnegi_prod'
   when :test        then 'rabotnegi_test'
-  when :testprod    then 'rabotnegi_dev'
   when :testui      then 'rabotnegi_testui'
+  when :testprod    then 'rabotnegi_dev'
 end
 
-Mongoid.database = Mongo::Connection.new(host, port).db(database_name)
+mongoid_options = {}
+mongoid_options = {logger: Padrino.logger} if Padrino.env == :development && ($*.first !~ /^test/)
+Mongoid.database = Mongo::Connection.new('localhost', Mongo::Connection::DEFAULT_PORT, mongoid_options).db(database_name)
 
 # You can also configure Mongoid this way
 # Mongoid.configure do |config|
@@ -23,5 +20,3 @@ Mongoid.database = Mongo::Connection.new(host, port).db(database_name)
 #     Mongo::Connection.new(host, @settings["slave_two"]["port"], :slave_ok => true).db(name)
 #   ]
 # end
-#
-# More installation and setup notes are on http://mongoid.org/docs/
