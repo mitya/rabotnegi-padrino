@@ -15,6 +15,7 @@ class Rabotnegi < Padrino::Application
     env = Sprockets::Environment.new
     env.append_path 'app/assets/javascripts'
     env.append_path 'app/assets/stylesheets'
+    env.append_path 'app/assets/images'
     env.append_path 'public/vendor'
     env
   end
@@ -57,7 +58,9 @@ class Rabotnegi < Padrino::Application
     register Gore::LogFilter
     set :delivery_method, :test
     set :show_exceptions, :after_handler
+    
     config.rabotaru_period = 5
+    
     Slim::Engine.set_default_options pretty: true
     Resque.inline = true    
   end
@@ -118,17 +121,23 @@ class Rabotnegi < Padrino::Application
   before { settings.set :last_instance, self } if Gore.env.test?
   # before { `touch #{Padrino.root("app/app.rb")}` } if Gore.env.development?
 
-  #
+  ##
   # Overrides
   #
   
-  # def block_is_template?(block)
-  #   false
-  # end
+  # Overriden to enable string/symbol access to all (path & query) parameters.
+  def indifferent_hash
+    Gore::Mash.new
+  end  
 
+  # Fix the totally broken view engines.
   def concat_content(content)
     content
   end
+
+  # def block_is_template?(block)
+  #   false
+  # end
   
   # def form_tag(url, options={}, &block)
   #   desired_method = options[:method]

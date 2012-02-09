@@ -6,14 +6,12 @@ PADRINO_ROOT = File.expand_path('../..', __FILE__) unless defined?(PADRINO_ROOT)
 require 'rubygems' unless defined?(Gem)
 require 'bundler/setup'
 
-bundler_group = PADRINO_ENV == "testui" ? "test" : PADRINO_ENV
+bundler_group = PADRINO_ENV
+bundler_group = "test" if bundler_group == "testui"
 Bundler.require(:default, bundler_group)
 
 ##
 # Enable devel logging
-#
-# Padrino::Logger::Config[:development] = { :log_level => :devel, :stream => :stdout }
-# Padrino::Logger.log_static = true
 #
 Padrino::Logger::Config[:testprod] = { :log_level => :info, :stream => :stdout }
 Padrino::Logger::Config[:testui] = { :log_level => :info, :stream => :stdout }
@@ -25,14 +23,13 @@ silence_warnings { Sass::Engine::DEFAULT_OPTIONS = Sass::Engine::DEFAULT_OPTIONS
 #
 Padrino.before_load do
   I18n.locale = 'ru'
-  # I18n.backend.load_translations Padrino.root("config/locales/ru.core.yml")
-  # I18n.backend.load_translations Padrino.root("config/locales/ru.yml")
 end
 
 ##
 # Add your after load hooks here
 #
 Padrino.after_load do
+  Gore::SassFunctions.register
 end
 
 Padrino.load!

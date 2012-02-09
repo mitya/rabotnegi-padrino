@@ -9,7 +9,7 @@ unit_test Vacancy do
     assert @vacancy.salary.negotiable?
   end
   
-  test "salary_text=" do
+  test "#salary_text=" do
     vacancy = Vacancy.new(salary: Salary.make(exact: 1000))
     assert_equal Salary.make(exact: 1000), vacancy.salary
     vacancy.salary_text = "от 5000"
@@ -18,26 +18,14 @@ unit_test Vacancy do
     assert_equal nil, vacancy.salary_max
   end
   
-  test "search" do
-    v_text_in_title = make Vacancy, title: "An AutoCAD engineer"
-    v_text_in_description = make Vacancy, description: "somebody who knows AutoCAD"
-    v_no_match = make Vacancy
-    
-    results = Vacancy.search(q: "autocad")
-    assert results.include?(v_text_in_title)
-    assert results.include?(v_text_in_description)
-    refute results.include?(v_no_match)
-  end
-  
-  test "==" do
+  test "#==" do
     assert Vacancy.new != nil
     assert Vacancy.new != Vacancy.new
     assert Vacancy.new(title: "Boss") != Vacancy.new(title: "Boss")
     assert_equal Vacancy.new(title: "Boss", external_id: 100), Vacancy.new(title: "Developer", external_id: 100)
   end
-
   
-  test "to_param" do
+  test "#to_param" do
     v1 = make(Vacancy, title: "Ruby Разработчик")
     assert_equal "#{v1.id}-ruby-разработчик", v1.to_param
     
@@ -51,7 +39,7 @@ unit_test Vacancy do
     assert_equal "ааааааа-бббббббббб-вввввввввв-ггггггггггг-дддддддд-еееееееее", make(Vacancy, title: "Ааааааа Бббббббббб вввввввввв ггггггггггг дддддддд еееееееее жжжжжжж").slug
   end
 
-  test "self.get" do
+  test "#get" do
     v1 = make Vacancy
 
     assert_equal v1, Vacancy.get(v1.id)
@@ -61,4 +49,18 @@ unit_test Vacancy do
 
     assert_nil Vacancy.get("4daebd518c2e000000000000")
   end  
+
+  test "#search" do
+    v1_msk_retail = make Vacancy, title: "query-1", city: "msk", industry: "retail"
+    v1_spb_it = make Vacancy, description: "query-1", city: "spb", industry: "it"
+    v2 = make Vacancy, description: "query-2"    
+    v3 = make Vacancy, employer_name: "query-3"    
+    
+    Vacancy.search(q: "query-1").must_eq [v1_msk_retail, v1_spb_it]
+    Vacancy.search(q: "query-2").must_eq [v2]
+    Vacancy.search(q: "query-3").must_eq [v3]
+    
+    Vacancy.search(q: "query-1", city: "msk").must_eq [v1_msk_retail]    
+    Vacancy.search(q: "query-1", industry: "it").must_eq [v1_spb_it]
+  end
 end

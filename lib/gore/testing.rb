@@ -107,7 +107,7 @@ module Gore::Testing
   
     def assert_has_no_class(target, klass)
       target = find(target) unless target.is?(Capybara::Node::Element)
-      assert_no_match(/\b#{klass}\b/, target[:class])
+      refute_match(/\b#{klass}\b/, target[:class])
     end
   
     def visit_link(locator)
