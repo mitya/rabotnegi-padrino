@@ -9,6 +9,10 @@ class City < Struct.new(:code, :external_id, :name)
     "City(#{code}/#{external_id} #{name})"
   end
 
+  def key_str
+    @key_str ||= key.to_s
+  end
+
   def log_key
     key
   end
@@ -42,6 +46,11 @@ class City < Struct.new(:code, :external_id, :name)
       city = @@all.find { |city| city.external_id == external_id } || raise(ArgumentError, "Город ##{external_id} не найден")
       city.code
     end    
+
+    def key_matches?(key)
+      key = key.to_s
+      key.blank? || all.any? { |obj| obj.key_str == key }
+    end
 
     def q
       query = Object.new

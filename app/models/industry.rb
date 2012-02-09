@@ -31,7 +31,16 @@ class Industry < Struct.new(:code, :external_id, :name, :group)
       return find_by_external_id(eid) rescue next
     end
   end
-
+  
+  def self.key_matches?(key)
+    key = key.to_s
+    key.blank? || all.any? { |obj| obj.key_str == key }
+  end
+  
+  def key_str
+    @key_str ||= key.to_s
+  end
+  
   def log_key
     key
   end

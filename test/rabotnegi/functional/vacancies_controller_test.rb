@@ -59,7 +59,7 @@ describe "Vacancies controller" do
   end
   
   test "create valid record" do
-    post "/vacancies", vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
+    post "/vacancies/create", vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
   
     new_vacancy = Vacancy.last
     new_vacancy.wont_be_nil
@@ -74,7 +74,7 @@ describe "Vacancies controller" do
   end
   
   test "create invalid record" do
-    post "/vacancies", vacancy: { title: nil }
+    post "/vacancies/create", vacancy: { title: nil }
   
     response.status.must_equal 422
     Vacancy.last.must_be_nil

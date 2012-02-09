@@ -3,7 +3,6 @@ class Rabotnegi < Padrino::Application
   register Padrino::Mailer
   register Padrino::Helpers
 
-  set :xhr do |truth| condition { request.xhr? } end
   set :locale_path, %w(config/locales/ru.core.yml config/locales/ru.yml)
 
   set :uid_secret_token, 'dc00acaaa4039a2b9f9840f226022c62fd4b6eb7fa45ca289eb8727aba365d0f4ded23a3768c6c81ef2593da8fde51f9405aedcb71621a57a2de768042f336e5'
@@ -28,6 +27,13 @@ class Rabotnegi < Padrino::Application
     authentication: :plain,
     enable_starttls_auto: true
   }
+  
+  set :xhr do |truth| condition { request.xhr? } end
+  set :match_id do |truth| condition { Gore.object_id?(params[:id]) } end
+  set :if_params do |*args| 
+    mapping = args
+    condition { mapping.all? { |param, matcher| matcher.key_matches?(params[param]) } } 
+  end
 
   configure do
     Slim::Engine.set_default_options disable_escape: true, disable_capture: false
@@ -119,6 +125,7 @@ class Rabotnegi < Padrino::Application
   end
   
   before { settings.set :last_instance, self } if Gore.env.test?
+  before { logger.info "Start #{request.path}" } if Gore.env.development?
   # before { `touch #{Padrino.root("app/app.rb")}` } if Gore.env.development?
 
   ##

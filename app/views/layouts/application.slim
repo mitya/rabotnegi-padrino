@@ -24,7 +24,7 @@ body.public{id=@page_id class=@page_class}
             a{href=url(:vacancies_new)} Публикация вакансий
           - if current_user!.favorite_vacancies.any?
             li#favorite-vacancies-tab.tab
-              a{href=url(:favorite_worker_vacancies)} Сохраненные вакансии
+              a{href=url(:vacancies_favorite)} Сохраненные вакансии
 
       .clear
 

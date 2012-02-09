@@ -52,7 +52,8 @@ module Gore::ControllerHelpers
       return @current_user if defined? @current_user
 
       @current_user = if request.cookies['uid'].present?
-        User.find(settings.message_encryptor.decrypt_and_verify(request.cookies['uid'])) rescue nil
+        user_id = settings.message_encryptor.decrypt_and_verify(request.cookies['uid'])
+        User.find(user_id) rescue nil
       else
         User.where(agent: request.user_agent, ip: request.ip).first
       end
@@ -62,14 +63,14 @@ module Gore::ControllerHelpers
       @current_user
   
     rescue => e
-      logger.error "!!! Controller.current_user: #{e.class} #{e.message}"
+      logger.error "!!! controller.current_user: #{e.class} #{e.message}"
       response.delete_cookie 'uid'
       nil
     end
   
     def current_user=(user)
       @current_user = user
-      response.set_cookie 'uid', value: settings.message_encryptor.encrypt_and_sign(user.id), expires: 2.years.from_now
+      response.set_cookie 'uid', value: settings.message_encryptor.encrypt_and_sign(user.id), path: request.script_name, expires: 2.years.from_now
     end
 
     def current_user!

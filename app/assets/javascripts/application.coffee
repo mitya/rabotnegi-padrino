@@ -44,13 +44,13 @@ $("body.public").loaded ->
 
   $(".vacancies-list").delegate "tr.entry-header .star-disabled", "click", ->
     tr = q(this).closest("tr")
-    q.post "/worker/vacancies", {id: tr.record_id()}, => 
+    q.post "/vacancies/remember/#{tr.record_id()}", => 
       q(this).removeClass("star-disabled").addClass("star-enabled")
     false
     
   $(".vacancies-list").delegate "tr.entry-header .star-enabled", "click", ->
     tr = q(this).closest("tr")
-    q.post "/worker/vacancies/#{tr.record_id()}", {_method: 'delete'}, => 
+    q.post "/vacancies/forget/#{tr.record_id()}", => 
       q(this).removeClass("star-enabled").addClass("star-disabled")    
     false
   

@@ -1,4 +1,4 @@
-PADRINO_ENV = ENV["X_RACK_ENV"] || ($*.to_s =~ %r{/ui/\*\*} ? "testui" : "test") unless defined?(PADRINO_ENV)
+PADRINO_ENV = ENV["X_RACK_ENV"] || ($*.to_s =~ %r{/ui/} ? "testui" : "test") unless defined?(PADRINO_ENV)
 require File.expand_path('../../config/boot', __FILE__)
 
 require "support/mocks"

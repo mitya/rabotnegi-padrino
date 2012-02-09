@@ -1,4 +1,4 @@
 - page "favorite-vacancies", "Сохраненные вакансии", :path => %w(favorite-vacancies)
 
 h1 Сохраненные вакансии
-= render "vacancies/list", collection: @vacancies, sorting: false
+= partial "vacancies/list", locals: {collection: @vacancies, sorting: false}
