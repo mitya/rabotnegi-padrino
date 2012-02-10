@@ -50,31 +50,31 @@ module Gore::ControllerHelpers
   module Users
     def current_user
       return @current_user if defined? @current_user
-
-      @current_user = if request.cookies['uid'].present?
-        user_id = settings.message_encryptor.decrypt_and_verify(request.cookies['uid'])
-        User.find(user_id) rescue nil
-      else
-        User.where(agent: request.user_agent, ip: request.ip).first
-      end
-  
-      response.delete_cookie 'uid' if @current_user == nil
-  
+      @current_user = find_user_by_cookie || find_user_by_ip || create_new_user
+      store_user_cookie unless request.cookies['uid']
       @current_user
+    end  
   
-    rescue => e
-      logger.error "!!! controller.current_user: #{e.class} #{e.message}"
+    def find_user_by_cookie
+      return nil unless request.cookies['uid']
+      user_id = settings.message_encryptor.decrypt_and_verify(request.cookies['uid'])
+      User.find(user_id)
+    rescue
       response.delete_cookie 'uid'
       nil
     end
-  
-    def current_user=(user)
-      @current_user = user
-      response.set_cookie 'uid', value: settings.message_encryptor.encrypt_and_sign(user.id), path: request.script_name, expires: 2.years.from_now
+    
+    def find_user_by_ip
+      User.where(agent: request.user_agent, ip: request.ip).first
     end
-
-    def current_user!
-      self.current_user ||= bot? ? User.new : User.create!(agent: request.user_agent, ip: request.ip)
+    
+    def create_new_user
+      bot? ? User.new : User.create!(agent: request.user_agent, ip: request.ip)
+    end
+    
+    def store_user_cookie
+      user_token = settings.message_encryptor.encrypt_and_sign(@current_user.id)
+      response.set_cookie 'uid', value: user_token, path: request.script_name, expires: 2.years.from_now            
     end
 
     #
@@ -82,7 +82,6 @@ module Gore::ControllerHelpers
     # 
   
     def admin_required
-      # self.admin = Admin.log_in('root', '0000') and return if Gore.env.test?
       return if Gore.env.development?
       throw :halt, 401, {"WWW-Authenticate" => %(Basic realm="Restricted Area")}, "" unless authorized?
     end
