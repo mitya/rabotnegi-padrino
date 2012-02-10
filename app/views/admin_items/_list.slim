@@ -10,4 +10,4 @@
         td= inspect_field(model, field, compact: true)
       td.actions
         =' link_to "Изменить", url(:admin_items, :edit, collection: collection.key, id: model) unless collection.actions[:update] == false
-        =' link_to "Удалить", url(:admin_items, :destroy, collection: collection.key, id: model), method: :delete unless collection.actions[:delete] == false
+        =' link_to "Удалить", url(:admin_items, :delete, collection: collection.key, id: model), method: :delete unless collection.actions[:delete] == false

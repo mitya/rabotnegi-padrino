@@ -7,32 +7,33 @@ Rabotnegi.controller :admin do
   end
 end
 
-Rabotnegi.controller :admin_items, map: "admin/items/:collection/" do
+Rabotnegi.controller :admin_items, map: "admin/:collection/" do 
   before { admin_required }
   before { @collection = Gore::MongoReflector.metadata_for(params[:collection]) }
   layout "admin"
 
-  get :index, map: '/' + @_map do
+  get :index, "/#{@_map}" do
     @scope = @collection.klass.respond_to?(:query) ? @collection.klass.query(q: params[:q]) : @collection.klass
     @models = @scope.order_by(@collection.list_order).paginate(params[:page], @collection.list_page_size)
     render "admin_items/index"
   end  
   
-  get :show, map: ":id" do
+  get :show, ":id" do
     @model = @collection.klass.get(params[:id])
     render "admin_items/show"
   end
   
-  get :edit, map: ":id/edit" do
+  get :edit, "edit/:id", name: :wah do
     @model = @collection.klass.get(params[:id])
+    render "admin_items/edit"
   end 
   
-  put :update, map: ":id" do
+  post :update, "update/:id" do
     @model = @collection.klass.get(params[:id])
     update_model @model, params[@collection.singular], url(:admin_item, @collection.key, @model)
   end
   
-  delete :destroy, map: ":id" do
+  post :delete, "delete/:id" do
     @model = @collection.klass.get(params[:id])    
     @model.destroy
     flash.notice = "#{@model} была удалена"
