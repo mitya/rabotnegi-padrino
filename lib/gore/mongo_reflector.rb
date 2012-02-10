@@ -25,6 +25,10 @@ class Gore::MongoReflector
       @klass.respond_to?(:query) 
     end
     
+    def to_param
+      key
+    end
+    
     def plural
       @klass.model_name.plural 
     end
@@ -82,6 +86,18 @@ class Gore::MongoReflector
     
     def inspect
       Gore.inspection(self, name, format: format)
+    end
+    
+    def helper
+      case format
+        when 'text' then 'text_field'
+        when 'date_time' then 'text_field'
+        else format
+      end
+    end
+    
+    def helper_args
+      args
     end
   end
   

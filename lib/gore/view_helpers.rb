@@ -124,47 +124,12 @@ module Gore::ViewHelpers
   end
   
   module Admin
-    def edit_view(model, options = {})
-      options[:id] ||= nil
-      options.append_string(:class, "resource")
-      form_for(model, url: options.delete(:url), html: options) do |f|
-        yield EditViewBuilder.new(self, f)
-      end
-    end
-
-    def details_view(options = {}, &block)
-      element :ul, 'resource' do
-        capture(DetailsViewBuilder.new(self), &block)
-      end
-    end
-  
-    def edit_field(label, control, options = {})
-      options.prepend_string(:class, "editor")
-
-      div options do
-        div(label, 'editor-label') + 
-        div(control, 'editor-content') 
-      end    
-    end 
-    
     # <input type="search" id="q"> <input type="submit" value="Поиск">
     def search_tag
       text_field = text_field_tag(:q, value: params[:q], type: "search", id: 'q', :class => "search", autofocus: true)
       text_field + " " + submit_tag("Поиск")
     end
 
-    # #search
-    #   form
-    #     input#q(type="search") 
-    #     input(type="submit" value="Поиск")
-    def search_form(url)
-      element :div, "search" do
-        form_tag url, method: "get" do
-          search_tag
-        end
-      end
-    end
-  
     # Render either a list of items with pager, either "no data" message.
     def listing(collection, &block)
       html = if collection.any?
@@ -309,10 +274,6 @@ module Gore::ViewHelpers
       trb(label, content, options)
     end
     
-    # def section(options = {}, &block)
-    #   content_tag(:tbody, capture(&block), options)
-    # end
-  
     def wrapper(&block)
       output block, element(:table, "form-layout", &block)
     end    
@@ -463,74 +424,14 @@ module Gore::ViewHelpers
     def submit_block(caption)
       template.tr2 template.submit_section(caption)
     end
+
+    private
     
     def control_block_for(control_name, attr, caption, options)
       block_options = options.extract!(:required, :before, :after, :comment)
       label = label(attr, caption: caption + ':')
       control = send(control_name, attr, options)
       template.trb(label, control, block_options)
-    end
-  end
-
-  class EditViewBuilder
-    attr_accessor :template, :form
-    
-    def initialize(template, form_builder)
-      @template = template
-      @form = form_builder
-    end    
-    
-    def method_missing(*args, &block)
-      method = args.shift
-      attribute = args.shift
-      label = args.shift
-      options = args.extract_options!
-      args << options
-      template.edit_field form.label(attribute, label), form.send("ui_#{method}", attribute, *args), :class => "for-#{attribute}"
-    end
-    
-    def buttons(caption = nil, options = {}, &block)
-      options.append_string(:class, "buttons")
-      template.field_set_tag(caption, options, &block)
-    end
-    
-    def commit
-      form.submit("Сохранить", name: nil)
-    end
-    
-    def errors
-      template.errors_for(form.object)
-    end
-    
-    def item(field)
-      case field.format
-      when String
-        send(field.format, field.name, field.title, *field.args)
-      end
-    end
-  end  
-
-  class DetailsViewBuilder
-    def initialize(template)
-      @template = template
-    end
-  
-    def item(label, data = nil, options = {}, &block)
-      content = block_given? ? capture(&block) : data
-      content = inspect_value(content) unless options[:format] == false
-
-      element :li, "item #{options[:klass]}".strip do
-        content = element(:b, label, 'heading') + " " + content.to_s unless options[:header] == false
-        content
-      end
-    end
-    
-    def actions(&block)
-      element(:li, "actions", &block)
-    end
-    
-    def method_missing(selector, *args, &block)
-      @template.send(selector, *args, &block)
     end
   end
 end

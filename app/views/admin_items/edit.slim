@@ -1,12 +1,14 @@
 - page "admin-edit-item", "Редактирование — #{@model}"
 
-= edit_view [:admin, @model] do |v|
-  = v.errors
+= form_for @model, url(:admin_items_update, collection: @collection, id: @model), :class => "resource" do |f|
+  = errors_for @model
 
-  - @klass.edit_fields.each do |field|
-    = v.item field
+  - @collection.edit_fields.each do |field|
+    .editor(class="for-#{field.name}")
+      .editor-label= f.label field.name, caption: field.title
+      .editor-content= f.send field.helper, field.name, *field.helper_args
 
-  = v.buttons do
-    = v.commit
+  fieldset.buttons
+    = submit_tag "Сохранить"
     | или 
-    = link_to "Отменить", :back, :class => "action"
+    = link_to "Отменить", request.referrer, :class => "action"
