@@ -9,8 +9,8 @@ h1= title
   = wrapper do
     = f.text_block :employer_name, 'Работодатель'
     = f.text_block :title, 'Должность'
-    = f.select_block :city, 'Город', options: CityOptions
-    = f.select_block :industry, 'Отрасль', grouped_options: IndustryOptions
+    = f.select_block :city, 'Город', options: city_options
+    = f.select_block :industry, 'Отрасль', grouped_options: industry_options
     = f.text_block :salary_text, 'Зарплата', after: 'рублей', comment: 'Формат: 10000 | от 10000 | до 20000 | от 10000 до 20000.'
     = f.text_area_block :description, 'Описание'
     / = f.captcha_block :captcha, 'Капча', comment: "Введите 4 латинские буквы которые паказаны на картинке.", 'class' => "captcha" unless captcha_done?
