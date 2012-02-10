@@ -6,7 +6,7 @@ Rabotnegi.controller :vacancies do
   end
 
   get :search, "/vacancies" do
-    params.merge! city: current_user!.city, industry: current_user!.industry
+    params.merge! city: current_user.city, industry: current_user.industry
     render "vacancies/index"
   end
 
@@ -19,12 +19,12 @@ Rabotnegi.controller :vacancies do
   get :index, "/vacancies/:city(/:industry)", if_params: {city: City, industry: Industry} do
     @vacancies = Vacancy.search(params.slice(:city, :industry, :q)).without(:description).
       order_by(decode_order_to_mongo(params[:sort].presence || "title")).paginate(params[:page], 50)
-    current_user!.update_if_stored!(city: params[:city], industry: params[:industry])
+    current_user.update_if_stored!(city: params[:city], industry: params[:industry])
     render "vacancies/index"
   end
   
   get :favorite do
-    @vacancies = current_user!.favorite_vacancy_objects
+    @vacancies = current_user.favorite_vacancy_objects
     render "vacancies/favorite"
   end
 
@@ -58,14 +58,14 @@ Rabotnegi.controller :vacancies do
   end
 
   post :remember, with: :id do
-    current_user!.favorite_vacancies << BSON::ObjectId(params[:id])
-    current_user!.save!
+    current_user.favorite_vacancies << BSON::ObjectId(params[:id])
+    current_user.save!
     200
   end
 
   post :forget, with: :id do
-    current_user!.favorite_vacancies.delete BSON::ObjectId(params[:id])
-    current_user!.save!
+    current_user.favorite_vacancies.delete BSON::ObjectId(params[:id])
+    current_user.save!
     200
   end
 end

@@ -44,7 +44,7 @@ describe "Controllers" do
     
     it "create a new one when can't find an existing" do
       gets "/tests/noop", {}, {"REMOTE_ADDR" => "3.3.3.3", "HTTP_USER_AGENT" => "another browser"}
-      current_user = app.last_instance.current_user!
+      current_user = app.last_instance.current_user
 
       current_user.wont_be_nil
       current_user.wont_be :in?, [@user_1, @user_2, @user_3]

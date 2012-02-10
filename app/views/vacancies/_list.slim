@@ -9,7 +9,7 @@ table.vacancies-list.rounded{cellspacing=0}
     - collection.each do |vacancy|
       tr.entry-header{id=web_id(vacancy) class=xcycle('', ' alt')}
         td.pos
-          span{class="star #{current_user!.favorite_vacancies.include?(vacancy.id) ? 'star-enabled' : 'star-disabled'}"}
+          span{class="star #{current_user.favorite_vacancies.include?(vacancy.id) ? 'star-enabled' : 'star-disabled'}"}
           = link_to vacancy.title, url(:vacancies, :show, id: vacancy)
         td.emp== vacancy.employer_name
         td.sal= vacancy.salary
