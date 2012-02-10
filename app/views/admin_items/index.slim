@@ -1,6 +1,8 @@
 - page "admin-data-list", t("models.#{@collection.klass.model_name.plural}", default: @collection.klass.model_name.human.pluralize), klass: "admin-#{@collection.key.dasherize}"
 
-= search_form url(:admin_items, :index, collection: params[:collection]) if @collection.searchable?
+- if @collection.searchable?
+  = form_tag url(:admin_items, :index, collection: params[:collection]), method: "GET", :class => "search" do
+    = search_tag
 
 = partial 'admin_items/list', locals: {models: @models, collection: @collection}
 

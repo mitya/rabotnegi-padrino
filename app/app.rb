@@ -9,6 +9,7 @@ class Rabotnegi < Padrino::Application
   set :message_encryptor, ActiveSupport::MessageEncryptor.new(uid_secret_token)
 
   set :default_builder, Gore::ViewHelpers::FormBuilder
+  set :ui_cache, OpenStruct.new
 
   set :assets do
     env = Sprockets::Environment.new
@@ -161,16 +162,26 @@ class Rabotnegi < Padrino::Application
   
   def label_tag(name, *args, &block)
     options = args.extract_options!
-    options[:caption] ||= args.pop
+    options[:caption] = args.first if args.any?
     super(name, options, &block)
+  end
+  
+  def select_tag(name, options={})
+    options[:options] = send(options[:options]) if options[:options].is_a?(Symbol)
+    options[:grouped_options] = send(options[:grouped_options]) if options[:grouped_options].is_a?(Symbol)   
+    super
+  end
+
+  def capture_html(*args, &block)
+    block_given? && block.call(*args)
   end
        
   def dump_errors!(boom)
     return super unless Gore.env.in?('development', 'testui')
     return super unless Array === boom.backtrace
 
-    boom.backtrace.reject! { |line| line =~ /thin|thor|eventmachine|rack|barista|http_router/ }
-    boom.backtrace.map! { |line| line.gsub(Padrino.root, '/$PADRINO_ROOT') }
+    boom.backtrace.reject! { |line| line =~ /thin|thor|eventmachine|rack|barista|http_router|tilt/ }
+    boom.backtrace.map! { |line| line.gsub(Padrino.root, '') }
     super
   end
   

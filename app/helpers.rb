@@ -16,27 +16,33 @@ Rabotnegi.helpers do
     
     result
   end  
-    
-  IndustryOptions = [
-    ['Популярные', Industry.popular.map { |industry| [industry.name, industry.code.to_s] }],
-    ['Остальные', Industry.other.map { |industry| [industry.name, industry.code.to_s] }]
-  ]  
-  
-  SalaryOptions = [
-  	['до 10 000', -10000],
-  	['до 20 000', -20000],
-  	['до 30 000', -30000],
-  	['до 40 000', -40000],
-  	['до 50 000', -50000],
-  	['от 10 000',  10000],
-  	['от 20 000',  20000],
-  	['от 30 000',  30000],
-  	['от 40 000',  40000],
-  	['от 50 000',  50000]
-  ]
 
-  CityOptions = City.all.map { |city| [city.name, city.code.to_s] }
-  
+  def city_options
+    settings.ui_cache.city_options ||= City.all.map { |city| [city.name, city.code.to_s] }
+  end
+
+  def industry_options
+    settings.ui_cache.industry_options ||= [
+      ['Популярные', Industry.popular.map { |industry| [industry.name, industry.code.to_s] }],
+      ['Остальные', Industry.other.map { |industry| [industry.name, industry.code.to_s] }]
+    ]
+  end
+
+  def salary_options
+    settings.ui_cache.salary_options ||= [
+    	['до 10 000', -10000],
+    	['до 20 000', -20000],
+    	['до 30 000', -30000],
+    	['до 40 000', -40000],
+    	['до 50 000', -50000],
+    	['от 10 000',  10000],
+    	['от 20 000',  20000],
+    	['от 30 000',  30000],
+    	['от 40 000',  40000],
+    	['от 50 000',  50000]
+    ]
+  end
+
   def vacancies_page_title
     if @vacancies
       city = City.get(params[:city])

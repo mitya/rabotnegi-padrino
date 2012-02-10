@@ -4,7 +4,7 @@ Gore::MongoReflector.define_metadata do
     list_order [:updated_at, :desc]
     view :id, :title, :city, :industry, :external_id, :employer_name, :created_at, :updated_at, :loaded_at, :cleaned_at, :salary, :description, :poster_ip
     edit title: 'text',
-      city_name: ['combo', City.all], industry_name: ['combo', Industry.all],
+      city_name: ['select', options: :city_options], industry_name: ['select', grouped_options: :industry_options],
       external_id: 'text',
       employer_id: 'text', employer_name: 'text',
       created_at: 'date_time', updated_at: 'date_time',
