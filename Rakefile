@@ -4,8 +4,7 @@ require 'padrino-core/cli/rake'
 
 PadrinoTasks.init
 
-# require 'pp'
-# require 'resque/tasks'
+require 'resque/tasks'
 require 'rake/sprocketstask'
 
 namespace :data do
@@ -64,7 +63,6 @@ end
 namespace :cron do
   task :ping => :environment  do
     Log.info "Cron ping: event.count=#{Gore::EventLog::Item.count}"
-    Resque.enqueue(MiscWorker)
   end
 end
 

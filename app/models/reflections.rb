@@ -38,7 +38,7 @@ Gore::MongoReflector.define_metadata do
     list [:id, :link], :state, :created_at, :updated_at, :started_at, :loaded_at, :processed_at, :cleaned_at, :failed_at
     list_css_classes { |x| { processed: x.cleaned?, failed: x.failed? } }
     view :id, :state, :created_at, :updated_at, :started_at, :loaded_at, :processed_at, :cleaned_at, :failed_at, 
-      "loadings.count", [:error, 'html_escape'], :run_count, [:cities, 'array_inline'], [:industries, 'array_inline'], [:results, 'hash_of_lines']
+      "loadings.count", [:error, 'h'], :run_count, [:cities, 'array_inline'], [:industries, 'array_inline'], [:results, 'hash_of_lines']
     view_subcollection :loadings, 'rabotaru_loadings'
     actions update: false, delete: false
   end
