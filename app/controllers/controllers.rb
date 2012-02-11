@@ -27,6 +27,9 @@ Rabotnegi.controllers do
     raise ArgumentError, "shit happens"
   end
 
+  get "/dev" do
+    render "dev/dev"
+  end
 
   get '/dev/request' do
     render env.select { |k,v| [String, Numeric, Symbol, TrueClass, FalseClass, NilClass, Array, Hash].any? { |klass| klass === v } }
@@ -39,8 +42,8 @@ Rabotnegi.controllers do
   get "dev/typo" do
     bum_bum_shit
   end
-  
-  get "/dev" do
-    render "dev/dev"
-  end
+
+  get "/dev/lorem" do
+    render "dev/lorem", layout: false
+  end  
 end

@@ -83,7 +83,7 @@ module Gore::ControllerHelpers
   
     def admin_required
       return if Gore.env.development?
-      throw :halt, 401, {"WWW-Authenticate" => %(Basic realm="Restricted Area")}, "" unless authorized?
+      halt 401, {"WWW-Authenticate" => %(Basic realm="Restricted Area")}, "" unless authorized?
     end
 
     def authorized?

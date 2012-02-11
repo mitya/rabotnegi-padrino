@@ -12,12 +12,12 @@ class Rabotnegi < Padrino::Application
   set :ui_cache, OpenStruct.new
 
   set :assets do
-    env = Sprockets::Environment.new
-    env.append_path 'app/assets/javascripts'
-    env.append_path 'app/assets/stylesheets'
-    env.append_path 'app/assets/images'
-    env.append_path 'public/vendor'
-    env
+    @sprockets ||= Sprockets::Environment.new.tap do |env|
+      env.append_path 'app/assets/javascripts'
+      env.append_path 'app/assets/stylesheets'
+      env.append_path 'app/assets/images'
+      env.append_path 'public/vendor'
+    end
   end
 
   set :delivery_method, :smtp => {
