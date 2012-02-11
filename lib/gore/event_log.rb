@@ -80,8 +80,8 @@ class Gore::EventLog
   end
 
   class Item < Gore::ApplicationModel
-    store_in :event_log
-    
+    store_in "sys.events"
+
     field :source
     field :event, type: String
     field :severity, type: Symbol

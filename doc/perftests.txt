@@ -146,7 +146,7 @@ JSON.generate                             1.457854
 ## Thin
   bundle exec thin start -e testprod -d --- bundle exec thin stop
   padrino start -e testprod -d --- padrino stop
-  # /vacancies/msk 30:23
+  # /vacancies/msk 30:23; ab=274:620
   # /vacancies/4f14d7115a12ae06630002da 199:149
   # / 164:x
 
@@ -164,9 +164,6 @@ JSON.generate                             1.457854
   # /vacancies/4f14d7115a12ae06630002da 311 Rails, 423 Padrino
 
   httperf --server 127.0.0.1 --port 3000 --num-conns 400 --rate 60 --uri /vacancies/msk
-  httperf --server 127.0.0.1 --port 3000 --num-conns 2000 --rate 450 --uri /vacancies/4f14d7115a12ae06630002da-travel-support-specialist
+  httperf --server 127.0.0.1 --port 3000 --num-conns 1500 --rate 400 --uri /vacancies/4f14d7115a12ae06630002da-travel-support-specialist
   ab -n 1000 -c 100 http://localhost:3000/vacancies/4f14d7115a12ae06630002da-travel-support-specialist
   ab -n 1000 -c 100 http://localhost:3000/vacancies/msk
-
-
-11
