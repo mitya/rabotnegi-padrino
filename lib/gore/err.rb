@@ -1,4 +1,6 @@
 class Gore::Err < Gore::ApplicationModel
+  store_in "sys.exceptions"
+  
   field :source
   field :host
   field :params, type: Hash

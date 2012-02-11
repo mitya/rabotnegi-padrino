@@ -14,6 +14,16 @@ Rabotnegi.controllers do
   get "/site/env" do
     Gore.env
   end
+  
+  # 
+  # Captcha
+  # 
+  
+  get "/captcha/:id.jpeg" do
+    captcha = Gore::Captcha::Info.find(params[:id]) rescue nil
+    halt 404 unless captcha
+    send_file captcha.image_file, type: 'image/jpeg', disposition: 'inline'
+  end
 
   # 
   # Dev

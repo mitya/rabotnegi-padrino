@@ -18,7 +18,7 @@ describe "Controllers" do
   end
   
   test "sitemap" do
-    get "sitemap.xml"    
+    get "/sitemap.xml"    
     response.must_be :ok?
     response.body.must_match "/vacancies/msk/office"
     response.body.must_match "/vacancies/spb/it"
