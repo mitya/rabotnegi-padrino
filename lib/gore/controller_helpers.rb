@@ -10,6 +10,7 @@ module Gore::ControllerHelpers
 
     def asset_path(kind, source)
       return source if source =~ /^http/
+      return source if source =~ /^\//
       asset = settings.assets.find_asset(source)
       return nil unless asset
       "/rabotnegi/assets/" + asset.digest_path

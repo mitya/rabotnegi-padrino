@@ -3,6 +3,8 @@ class Rabotnegi < Padrino::Application
   register Padrino::Mailer
   register Padrino::Helpers
 
+  include Gore::EventLog::Accessor
+
   set :locale_path, %w(config/locales/ru.core.yml config/locales/ru.yml)
 
   set :uid_secret_token, 'REDACTED'

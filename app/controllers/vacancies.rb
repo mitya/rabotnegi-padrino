@@ -1,5 +1,6 @@
 Rabotnegi.controller :vacancies do
   # caches_page :show, :if => -> c { c.request.xhr? }
+
   get :new do
     @vacancy = Vacancy.new
     render "vacancies/form"
@@ -46,10 +47,9 @@ Rabotnegi.controller :vacancies do
     @vacancy = Vacancy.new(params[:vacancy])
     @vacancy.poster_ip = request.ip
 
-    # validate_captcha! model: @vacancy, template: :form
+    halt 422, render("vacancies/form") unless captcha_valid!(@vacancy)
 
     if @vacancy.save
-      # reset_captcha
       flash[:notice] = 'Вакансия опубликована'
       redirect url(:vacancies_show, id: @vacancy)
     else
