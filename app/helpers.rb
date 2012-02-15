@@ -101,7 +101,7 @@ Rabotnegi.helpers do
     if captcha_valid?
       hidden_field_tag(:captcha_text, value: params[:captcha_text]) + hidden_field_tag(:captcha_id, value: params[:captcha_id])
     else
-      @captcha = Gore::Captcha.generate
+      @captcha = Gore::Captcha.create!
       @captcha_url = url(:captcha, id: @captcha)
       div "captcha" do
         image_tag(@captcha_url, width: 100, height: 28) + br + text_field_tag(:captcha_text) + hidden_field_tag(:captcha_id, value: @captcha.id)

@@ -7,10 +7,6 @@ module Gore
 
     validates_presence_of :text    
     
-    def key
-      id.to_s
-    end
-
     # convert -fill darkblue -edge 10 -background white -size 100x28 -wave 3x69 -gravity 'Center' -pointsize 22 -implode 0.2 label:ABC01 'captcha.jpg' 2>&1
     def image_file
       outfile = Tempfile.new(['gore_captcha', '.jpg'])
@@ -23,10 +19,6 @@ module Gore
     module Services
       extend self
       
-      def generate
-        Captcha.create!
-      end
-
       def valid?(id, text)
         captcha = Captcha.find(id) rescue nil
         captcha && captcha.text == text.to_s.upcase
