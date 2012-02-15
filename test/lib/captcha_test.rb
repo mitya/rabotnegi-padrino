@@ -1,10 +1,10 @@
 require 'test_helper'
 
 describe Gore::Captcha do
-  subject { Gore::Captcha.generate }
+  subject { Gore::Captcha.create! }
     
   it "has a long random generated key" do
-    subject.key.must_match %r<[0-9a-f]{24}>
+    subject.id.to_s.must_match %r<[0-9a-f]{24}>
   end
     
   it "has a random generated text" do
@@ -37,7 +37,7 @@ describe Gore::Captcha do
 end
 
 describe "Capcha Controller" do
-  let(:captcha) { Gore::Captcha.generate }
+  let(:captcha) { Gore::Captcha.create! }
   
   test "GET /captcha/:id.jpeg" do
     get "/captcha/#{captcha.id}.jpeg"
