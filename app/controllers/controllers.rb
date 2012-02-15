@@ -19,14 +19,14 @@ Rabotnegi.controllers do
   # Captcha
   # 
   
-  get "/captcha/:id.jpeg" do
+  get "/captcha/:id.jpeg", name: :captcha do
     captcha = Gore::Captcha::Info.find(params[:id]) rescue nil
     halt 404 unless captcha
     send_file captcha.image_file, type: 'image/jpeg', disposition: 'inline'
   end
 
   # 
-  # Dev
+  # Tests
   # 
 
   get "/tests/noop" do
@@ -36,7 +36,11 @@ Rabotnegi.controllers do
   get "/tests/error" do
     raise ArgumentError, "shit happens"
   end
-
+  
+  # 
+  # Dev
+  # 
+  
   get "/dev" do
     render "dev/dev"
   end

@@ -16,7 +16,7 @@ gem "daemons"
 gem "unicode_utils"
 gem 'resque'
 gem 'rmagick'
-gem "syslog-logger", require: 'syslog_logger'
+gem "syslog-logger"
 gem "sanitize"
 
 # gem "galetahub-simple_captcha", :require => "simple_captcha"

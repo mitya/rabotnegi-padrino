@@ -1,3 +1,6 @@
+#= require common
+#= require_self
+
 $("body.public").loaded ->
   $("#tabs").attr("data-selected").query().addClass("selected") unless $("#tabs").attr("data-selected") == '#'
 

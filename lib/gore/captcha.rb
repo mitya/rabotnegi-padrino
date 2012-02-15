@@ -5,6 +5,11 @@ module Gore
     def generate
       Info.create!
     end
+
+    def valid?(id, text)
+      captcha = Info.find(id) rescue nil
+      captcha && captcha.text == text.to_s.upcase
+    end
           
     def generate_random_text(length = 5)
       Alphabet.sample(length).join
@@ -17,7 +22,7 @@ module Gore
 
       params = ['-fill darkblue', '-edge 10', '-background white']
       params << "-size 100x28"
-      params << "-wave #{amplitude}x#{frequency}"
+      params << "-wave #{amplitude}x#{frequency}"      
       params << "-gravity 'Center'"
       params << "-pointsize 22"
       params << "-implode 0.2"
@@ -28,6 +33,7 @@ module Gore
       output = `#{command}`
 
       raise StandardError, "Error while running #{command}: #{output}" unless $?.exitstatus == 0
+      
     ensure
       file.close
     end  
@@ -58,3 +64,5 @@ module Gore
     
   end
 end
+
+        

@@ -82,39 +82,30 @@ Rabotnegi.helpers do
   end  
   
     
-  # class InvalidCaptcha < StandardError
-  #   attr :template
-  #   def initialize(template)
-  #     @template = template
-  #   end
-  # end
-  # 
-  # rescue_from InvalidCaptcha do |error|
-  #   render error.template, status: 422 if error.template
-  # end
-  # 
-  # def validate_captcha!(options = {})
-  #   if !captcha_done? && !simple_captcha_valid?
-  #     options[:model].errors.add(:captcha, "invalid") if options[:model]
-  #     log.warn 'captcha_wrong', ip_adress: request.remote_ip, 
-  #       actual_captcha: params[:captcha], expected_captcha: SimpleCaptcha::Utils::simple_captcha_value(session[:captcha])
-  #     raise InvalidCaptcha.new(options[:template])
-  #   else
-  #     skip_captcha
-  #   end    
-  # end
-  # 
-  # def skip_captcha
-  #   session["#{controller_name}_#{action_name}_captcha"] = true
-  # end
-  # 
-  # def reset_captcha
-  #   session.delete "#{controller_name}_#{action_name}_captcha"
-  #   session.delete "captcha"
-  # end
-  # 
-  # def captcha_done?
-  #   return true if Gore.env.starts_with?("test")
-  #   session["#{controller_name}_#{action_name}_captcha"]
-  # end
+  def captcha_valid?
+    return @captcha_valid unless @captcha_valid.nil?
+    @captcha_valid = Gore::Captcha.valid?(params[:captcha_id], params[:captcha_text])
+  end
+
+  def captcha_valid!(object = nil)
+    if captcha_valid?
+      true
+    else
+      object.errors.add(:captcha, "invalid") if object
+      log.warn 'captcha_wrong', ip_adress: request.ip, captcha_text: params[:captcha_text]
+      false
+    end
+  end
+  
+  def captcha_section
+    if captcha_valid?
+      hidden_field_tag(:captcha_text, value: params[:captcha_text]) + hidden_field_tag(:captcha_id, value: params[:captcha_id])
+    else
+      @captcha = Gore::Captcha.generate
+      @captcha_url = url(:captcha, id: @captcha)
+      div "captcha" do
+        image_tag(@captcha_url, width: 100, height: 28) + br + text_field_tag(:captcha_text) + hidden_field_tag(:captcha_id, value: @captcha.id)
+      end
+    end
+  end
 end

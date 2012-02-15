@@ -23,6 +23,10 @@ module Gore::ViewHelpers
       ruby
     end
 
+    def br
+      tag(:br)
+    end
+
     # Fast cycling helper
     def xcycle(*values)
       @xcycle_counter ||= -1
@@ -228,7 +232,12 @@ module Gore::ViewHelpers
       partial "shared/errors", locals: {header: header_message, errors: error_messages}
     end   
 
-    def trb(label, content, options = {})
+    def trb(label, content = nil, options = {}, &block)
+      if block_given?
+        options = content || {}
+        content = capture(&block)
+      end
+      
       options.assert_valid_keys(:required, :id, :before, :after, :comment, :class)
       label = [label]
       content = [content]
@@ -423,6 +432,15 @@ module Gore::ViewHelpers
     
     def submit_block(caption)
       template.tr2 template.submit_section(caption)
+    end
+
+    def captcha_block
+      if template.captcha_valid?
+        template.tr2 template.captcha_section
+      else
+        label = template.label_tag("Защитный код", for: "captcha_text")
+        template.trb label, template.captcha_section, comment: "Введите 4 латинские буквы которые паказаны на картинке.", :class => "captcha"        
+      end      
     end
 
     private
