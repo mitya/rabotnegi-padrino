@@ -20,7 +20,7 @@ Rabotnegi.controllers do
   # 
   
   get "/captcha/:id.jpeg", name: :captcha do
-    captcha = Gore::Captcha::Info.find(params[:id]) rescue nil
+    captcha = Gore::Captcha.find(params[:id]) rescue nil
     halt 404 unless captcha
     send_file captcha.image_file, type: 'image/jpeg', disposition: 'inline'
   end
