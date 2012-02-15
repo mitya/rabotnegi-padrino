@@ -27,7 +27,7 @@ describe Gore::Captcha do
   end
   
   test '#valid?' do
-    captcha = Gore::Captcha::Info.create!(text: "RIGHT")
+    captcha = Gore::Captcha.create!(text: "RIGHT")
     assert Gore::Captcha.valid?(captcha.id, "right")
     assert Gore::Captcha.valid?(captcha.id, "RIGHT")
     assert !Gore::Captcha.valid?(captcha.id, "WRONG")
@@ -55,12 +55,12 @@ end
 describe "Captcha helpers" do
   test "GET /page-with-capthca" do
     get "/vacancies/new"
-    captcha = Gore::Captcha::Info.last
+    captcha = Gore::Captcha.last
     assert_have_selector "div.captcha input[type=text][name=captcha_text]"
     assert_have_selector "div.captcha input[type=hidden][name=captcha_id][value='#{captcha.id}']"      
 
     get "/vacancies/new", captcha_id: captcha.id, captcha_text: "WRONG"
-    captcha2 = Gore::Captcha::Info.last
+    captcha2 = Gore::Captcha.last
     assert captcha.id != captcha2.id
     assert_have_selector "div.captcha input[type=text][name=captcha_text]"
     assert_have_selector "div.captcha input[type=hidden][name=captcha_id][value='#{captcha2.id}']"
