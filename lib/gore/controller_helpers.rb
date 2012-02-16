@@ -130,6 +130,7 @@ module Gore::ControllerHelpers
   module Captchas
     def captcha_valid?
       return @captcha_valid unless @captcha_valid.nil?
+      return true if $all_captchas_are_valid
       @captcha_valid = Gore::Captcha.valid?(params[:captcha_id], params[:captcha_text])
     end
 

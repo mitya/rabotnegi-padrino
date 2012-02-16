@@ -38,4 +38,4 @@ body.public{id=@page_id class=@page_class}
     p#footer-content © 2012 Работнеги.ру
 
   = javascript_include_tag "vendor.js", "application.js"
-  = render "layouts/google_analytics" if Gore.env.production?
+  = partial "layouts/google_analytics" if Gore.env.production?

@@ -31,18 +31,7 @@ class Rabotnegi < Padrino::Application
     enable_starttls_auto: true
   }
   
-  set :xhr do |truth| condition { request.xhr? } end
-  set :match_id do |truth| condition { Gore.object_id?(params[:id]) } end
-  set :if_params do |*args| 
-    mapping = args
-    condition { mapping.all? { |param, matcher| matcher.key_matches?(params[param]) } } 
-  end
-
-  configure do
-    Slim::Engine.set_default_options disable_escape: true, disable_capture: false
-    Resque.redis.namespace = "rabotnegi:jobs"
-
-    set :config, OpenStruct.new
+  set :config, OpenStruct.new.tap { |config|
     config.admin_login = 'admin'
     config.admin_password = '0000'
     config.err_max_notifications_per_hour = 2
@@ -53,7 +42,17 @@ class Rabotnegi < Padrino::Application
     config.rabotaru_period = 15
     config.default_queue = :main
     config.google_analytics_id = "UA-1612812-2" 
+  }
+
+  set :xhr do |truth| condition { request.xhr? } end
+  set :match_id do |truth| condition { Gore.object_id?(params[:id]) } end
+  set :if_params do |*args| 
+    mapping = args
+    condition { mapping.all? { |param, matcher| matcher.key_matches?(params[param]) } } 
   end
+
+  Slim::Engine.set_default_options disable_escape: true, disable_capture: false
+  Resque.redis.namespace = "rabotnegi:jobs"
 
   configure :testprod, :testui do    
     enable :logging
@@ -80,6 +79,14 @@ class Rabotnegi < Padrino::Application
     config.rabotaru_dir = Gore.root.join("tmp/test.rabotaru")
     config.original_vacancies_data_dir = Gore.root.join("tmp/test.vacancies_content")
     Resque.inline = true
+  end
+  
+  configure :production do
+    disable :static
+    
+    # syslog_facility = ENV["RAILS_PROC"].presence || "web" 
+    # Padrino.logger = SyslogLogger.new("rab-#{syslog_facility}", Syslog::LOG_USER, Syslog::LOG_PID)
+    # Padrino.log_level = :info    
   end
 
   helpers Gore::ControllerHelpers::Urls

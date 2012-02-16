@@ -13,6 +13,7 @@ Bundler.require(:default, bundler_group)
 ##
 # Enable devel logging
 #
+Padrino::Logger::Config[:production] = { :log_level => :info, :stream => :to_file }
 Padrino::Logger::Config[:testprod] = { :log_level => :info, :stream => :stdout }
 Padrino::Logger::Config[:testui] = { :log_level => :info, :stream => :stdout }
 
