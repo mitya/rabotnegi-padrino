@@ -59,6 +59,7 @@ describe "Vacancies controller" do
   end
   
   test "create valid record" do
+    $all_captchas_are_valid = true
     post "/vacancies/create", vacancy: { title: "Developer", city: "msk", industry: "it", salary_text: "55000" }
   
     new_vacancy = Vacancy.last
@@ -79,5 +80,9 @@ describe "Vacancies controller" do
     response.status.must_equal 422
     Vacancy.last.must_be_nil
     assert_contain "Публикация новой вакансии"
+  end
+  
+  after do
+    $all_captchas_are_valid = false
   end
 end

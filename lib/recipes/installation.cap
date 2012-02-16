@@ -55,11 +55,11 @@ namespace :install do
     config = <<-end.strip_heredoc
       server {
         listen 80;
-        server_name #{domain} admin.#{domain};
+        server_name #{domain};
         root #{current_path}/public;
         passenger_enabled on;
         passenger_min_instances 1;
-        rails_env #{rails_env};
+        rack_env #{rails_env};
 
         log_format asset '$remote_addr [$time_local] "$request" $status $body_bytes_sent';
 
@@ -67,12 +67,12 @@ namespace :install do
         access_log #{current_path}/log/web.log combined;
         
         gzip             on;
-        gzip_types       text/plain text/css text/javascript application/xml application/javascript application/x-javascript;
+        gzip_types       text/plain text/css text/javascript application/xml application/json application/javascript application/x-javascript;
         gzip_min_length  512;
         gzip_disable     "msie6";
         
-        location ~ ^/(assets)/ {
-          gzip_static on;
+        location ~ ^/((rabotnegi/)?assets)/ {
+          # gzip_static on;
           expires 1y;
           add_header Cache-Control public;
           access_log #{current_path}/log/asset.log asset;

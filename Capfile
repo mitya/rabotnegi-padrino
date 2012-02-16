@@ -5,6 +5,10 @@ require 'bundler/capistrano'
 
 Dir['lib/recipes/*.cap'].each { |recipe| load(recipe) }
 
+$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
+require "rvm/capistrano"                  # Load RVM's capistrano plugin.
+set :rvm_ruby_string, 'ruby-1.9.3-p0'        # Or whatever env you want it to run in.
+
 set :repository,  "git@bitbucket.org:dmitryso/boxx.git"
 set :deploy_via, :checkout # remote_cache | checkout | export
 set :scm, :git
@@ -12,6 +16,7 @@ set :user, "apprunner"
 set :password, ENV["ABOX_PWD"]
 set :git_enable_submodules, true
 set :keep_releases, 3
+set :sudo, 'rvmsudo'
 set :use_sudo, false
 set :rails_env, :production
 set :sudo_prompt, "xxxx"
@@ -68,4 +73,13 @@ cron :rake, "0 4,16", "data:dump DB=#{database} DIR=#{backups_path} BUCKET=#{bac
 cron :rake, "*/10", "cron:ping"
 
 task :demo do
+  run "whoami"
+  run "ruby -v"
+  run "echo $PATH"
+  run "echo $USED_CONFIG_FILES"
+
+  sudo "whoami"
+  sudo "ruby -v"
+  sudo "echo $PATH"
+  sudo "echo $USED_CONFIG_FILES"
 end

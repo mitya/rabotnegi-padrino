@@ -29,8 +29,13 @@ sudo /opt/nginx/sbin/nginx -s reload
 /var/log/mongodb/mongodb.log
 /opt/nginx/logs/error.log
 
-## Nginx
-  wget http://nginx.org/download/nginx-1.0.11.tar.gz
+## Reinstalling Passenger and Nginx
+  wget http://nginx.org/download/nginx-1.0.12.tar.gz
+  tar xzf nginx-1.0.12.tar.gz
   sudo passenger-install-nginx-module
-    :: /home/apprunner/nginx-1.0.11
-    :: --with-http_gzip_static_module
+    /home/apprunner/nginx-1.0.12
+    --with-http_gzip_static_module
+
+## Installing RVM
+sudo bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
+sudo usermod -a -G rvm apprunner
