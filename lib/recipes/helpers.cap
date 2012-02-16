@@ -1,3 +1,10 @@
+class String
+  def strip_heredoc
+    indent = scan(/^[ \t]*(?=\S)/).min.try(:size) || 0
+    gsub(/^[ \t]{#{indent}}/, '')
+  end
+end
+
 def run_rake(command)
   sudo_modifier = nil # sudo(:as => options[:sudo]) if options[:sudo]
   run "cd #{current_path} && #{sudo_modifier} bundle exec rake RAILS_ENV=#{rails_env} #{command}"
@@ -65,7 +72,7 @@ def cron(command_type, time, command)
     end    
   }
     
-  time.squish!
+  time.strip!
   time_parts = time.split(' ')
   time_parts << ['*'] * (5 - time_parts.size)
 

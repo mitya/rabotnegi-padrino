@@ -20,18 +20,16 @@ namespace :install do
   end
 
   task :git do
-    git_host = "sokurenko.unfuddle.com"
     git_key_path = "/home/#{user}/.ssh/id_git_#{application}"
     ssh_config_path = "/home/#{user}/.ssh/config"
     
-    top.upload "/users/dima/.ssh/id_unfuddle", git_key_path, :mode => "600"
+    top.upload git_key, git_key_path, :mode => "600"
     run "touch #{ssh_config_path}"
     run "chmod 600 #{ssh_config_path}"
 
     ssh_config = <<-end
       Host #{git_host}
       User git
-      Hostname #{git_host}
       IdentityFile #{git_key_path}
     end
 
