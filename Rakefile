@@ -73,7 +73,9 @@ end
 Rake::SprocketsTask.new do |t|
   t.environment = Rabotnegi.assets
   t.output = "./public/rabotnegi/assets"
-  t.assets = %w( vendor.js application.js application.css )
+  t.assets = %w( vendor.js application.js application.css admin.js admin.css ) + Dir.glob(Padrino.root("app/assets/images/*")).map { |path| path.gsub("#{Padrino.root}/app/assets/images/", '') }
 end
 
-task "assets:precompile" => "assets"
+task "assets:precompile" => "assets" do
+  `cp app/assets/images/* public/rabotnegi/assets`
+end
