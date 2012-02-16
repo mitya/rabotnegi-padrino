@@ -14,7 +14,6 @@ Rabotnegi.controllers do
       settings: {
         static: settings.static,
         raise_errors: settings.raise_errors,
-        delivery_method: settings.delivery_method,
         reload_templates: settings.reload_templates,
         logging: settings.logging,
         log_level: Padrino.logger.level,

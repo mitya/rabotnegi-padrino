@@ -82,6 +82,7 @@ class Rabotnegi < Padrino::Application
   end
   
   configure :production do
+    enable :logging
     disable :static
     
     # syslog_facility = ENV["RAILS_PROC"].presence || "web" 
