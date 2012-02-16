@@ -10,7 +10,7 @@ require "rvm/capistrano"                  # Load RVM's capistrano plugin.
 set :rvm_ruby_string, 'ruby-1.9.3-p0'        # Or whatever env you want it to run in.
 
 set :repository,  "git@bitbucket.org:dmitryso/boxx.git"
-set :deploy_via, :checkout # remote_cache | checkout | export
+set :deploy_via, :remote_cache # remote_cache | checkout | export
 set :scm, :git
 set :user, "apprunner"
 set :password, ENV["ABOX_PWD"]
