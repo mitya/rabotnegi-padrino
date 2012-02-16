@@ -8,7 +8,18 @@ Rabotnegi.controllers do
   end
 
   get "/site/info" do
-    render env: Gore.env, db: Vacancy.db.name, counts: { vacancies: Vacancy.count, events: Gore::EventLog::Item.count, users: User.count }
+    render env: Gore.env, 
+      db: Vacancy.db.name, 
+      counts: { vacancies: Vacancy.count, events: Gore::EventLog::Item.count, users: User.count },
+      settings: {
+        static: settings.static,
+        raise_errors: settings.raise_errors,
+        delivery_method: settings.delivery_method,
+        reload_templates: settings.reload_templates,
+        logging: settings.logging,
+        log_level: Padrino.logger.level,
+        log_path: Padrino.logger.log.respond_to?(:path) && Padrino.logger.log.path 
+      }
   end
 
   get "/site/env" do
