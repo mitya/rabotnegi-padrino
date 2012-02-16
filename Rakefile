@@ -73,5 +73,7 @@ end
 Rake::SprocketsTask.new do |t|
   t.environment = Rabotnegi.assets
   t.output = "./public/rabotnegi/assets"
-  t.assets = %w( vendor.js bundle.js bundle.css )
+  t.assets = %w( vendor.js application.js application.css )
 end
+
+task "assets:precompile" => "assets"

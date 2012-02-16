@@ -1,5 +1,3 @@
-require "active_support/core_ext/string"
-
 load 'deploy' if respond_to?(:namespace)
 load 'deploy/assets'
 
@@ -7,8 +5,8 @@ require 'bundler/capistrano'
 
 Dir['lib/recipes/*.cap'].each { |recipe| load(recipe) }
 
-set :repository,  "git@sokurenko.unfuddle.com:sokurenko/rabotnegi.git"
-set :deploy_via, :remote_cache
+set :repository,  "git@bitbucket.org:dmitryso/boxx.git"
+set :deploy_via, :checkout # remote_cache | checkout | export
 set :scm, :git
 set :user, "apprunner"
 set :password, ENV["ABOX_PWD"]
@@ -17,7 +15,7 @@ set :keep_releases, 3
 set :use_sudo, false
 set :rails_env, :production
 set :sudo_prompt, "xxxx"
-set :bundle_without, [:development, :test, :testui]
+set :bundle_without, [:development, :test]
 set :shared_children, fetch(:shared_children) + %w(data)
 set :public_children, []
 set :project, "rabotnegi"
@@ -25,6 +23,8 @@ set :application, "rabotnegi"
 set :domain, "rabotnegi.ru"
 set :host, "www.rabotnegi.ru"
 set :deploy_to, "/app/#{application}"
+set :git_host, "bitbucket.org"
+set :git_key, "/users/dima/.ssh/id_main"
 
 server host, :web, :app, :db, :primary => true
 

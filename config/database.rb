@@ -8,8 +8,11 @@ end
 
 mongoid_options = {}
 mongoid_options = {logger: Padrino.logger} if Padrino.env == :development && ($*.first !~ /^(test|routes)/)
-Mongoid.database = Mongo::Connection.new('localhost', Mongo::Connection::DEFAULT_PORT, mongoid_options).db(database_name)
-Mongoid::Config.add_language('ru')
+
+quietly do
+  Mongoid.database = Mongo::Connection.new('localhost', Mongo::Connection::DEFAULT_PORT, mongoid_options).db(database_name)
+  Mongoid::Config.add_language('ru')
+end
 
 # You can also configure Mongoid this way
 # Mongoid.configure do |config|

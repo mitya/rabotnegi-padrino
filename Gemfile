@@ -19,7 +19,6 @@ gem 'rmagick'
 gem "syslog-logger"
 gem "sanitize"
 
-# gem "galetahub-simple_captcha", :require => "simple_captcha"
 # gem "therubyracer" # weird bugs otherwise
 
 group :test do
