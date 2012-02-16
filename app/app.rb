@@ -85,6 +85,7 @@ class Rabotnegi < Padrino::Application
   helpers Gore::ControllerHelpers::Urls
   helpers Gore::ControllerHelpers::Identification
   helpers Gore::ControllerHelpers::Users
+  helpers Gore::ControllerHelpers::Captchas
 
   helpers Gore::ViewHelpers::Common
   helpers Gore::ViewHelpers::Inspection
