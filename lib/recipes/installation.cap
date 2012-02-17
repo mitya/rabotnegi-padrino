@@ -228,7 +228,7 @@ namespace :install do
     task :resque do
       number = 1
 
-      env = "RAILS_ENV=#{rails_env} PATH=$PATH:/usr/local/bin:/usr/bin:/bin RAILS_ROOT=#{current_path}"
+      env = "RACK_ENV=#{rails_env} PATH=$PATH:/usr/local/bin:/usr/bin:/bin RAILS_ROOT=#{current_path}"
 
       config = <<-end.strip_heredoc
         check process resque.#{number}
