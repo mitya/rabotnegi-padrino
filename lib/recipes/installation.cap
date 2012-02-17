@@ -2,7 +2,6 @@ namespace :install do
   task :default do
     deploy.setup
     git
-
     deploy.update
     gems
     database
@@ -228,7 +227,7 @@ namespace :install do
     task :resque do
       number = 1
 
-      env = "RACK_ENV=#{rails_env} PATH=$PATH:/usr/local/bin:/usr/bin:/bin RAILS_ROOT=#{current_path}"
+      env = "RACK_ENV=#{rails_env} PATH=/usr/bin:/bin:$PATH RAILS_ROOT=#{current_path} RUBYOPT=-Ku"
 
       config = <<-end.strip_heredoc
         check process resque.#{number}
