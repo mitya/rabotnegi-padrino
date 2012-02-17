@@ -14,6 +14,11 @@ map '/rabotnegi/assets' do
   run Rabotnegi.assets
 end
 
+require 'resque/server'
+map "/admin/resque" do
+  run Resque::Server.new
+end
+
 map '/' do
   run Padrino.application
 end

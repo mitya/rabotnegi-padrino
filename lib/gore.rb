@@ -168,7 +168,7 @@ module Gore
 
   module Debug
     def self.say(message)
-      Padrino.logger.info("Gore::Debug says: #{message}")
+      Padrino.logger.info(message)
     end
   end
   

@@ -62,7 +62,7 @@ end
 
 task "cron:ping" => :environment do
   Padrino.logger.info "Cron ping: event.count=#{Gore::EventLog::Item.count}"
-  Gore.enqueue Gore::Debug, :say, "resque tasks scheduled via cron are still alive (scheduled at #{Time.now})"
+  Gore.enqueue Gore::Debug, :say, "Resque ping (scheduled at #{Time.now})"
 end
 
 task "resque:setup" => :environment do
