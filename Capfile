@@ -67,10 +67,10 @@ after "deploy", "crontab:install"
 after "deploy", "resque:restart"
 
 cron "15,30,45", "vacancies:kill_spam"
-cron "30 5", "rabotaru:start_job"
-cron "0 3", "vacancies:cleanup"
-cron "0 4,16", "data:dump DB=#{database} DIR=#{backups_path} BUCKET=#{backups_bucket}"
-cron "*/10", "cron:ping"
+cron "0 3",      "vacancies:cleanup"
+cron "30 5",     "rabotaru:start_job"
+cron "0 4,16",   "data:dump DB=#{database} DIR=#{backups_path} BUCKET=#{backups_bucket}"
+cron "*/10",     "cron:ping"
 
 task :demo do
 end
