@@ -5,18 +5,14 @@ require 'bundler/capistrano'
 
 Dir['lib/recipes/*.cap'].each { |recipe| load(recipe) }
 
-$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
-require "rvm/capistrano"                  # Load RVM's capistrano plugin.
-set :rvm_ruby_string, 'ruby-1.9.3-p0'        # Or whatever env you want it to run in.
-
 set :repository,  "git@bitbucket.org:dmitryso/boxx.git"
-set :deploy_via, :remote_cache # remote_cache | checkout | export
+set :deploy_via, :remote_cache # remote_cache | checkout
 set :scm, :git
 set :user, "apprunner"
 set :password, ENV["ABOX_PWD"]
 set :git_enable_submodules, true
 set :keep_releases, 3
-set :sudo, 'rvmsudo'
+set :sudo, 'sudo'
 set :use_sudo, false
 set :rails_env, :production
 set :sudo_prompt, "xxxx"
@@ -33,7 +29,7 @@ set :git_key, "/users/dima/.ssh/id_main"
 
 server host, :web, :app, :db, :primary => true
 
-set :default_environment, { RUBYOPT: "-Ku" }
+# set :default_environment, { RUBYOPT: "-Ku" }
 # set :ssh_options, {keys: ["#{ENV['HOME']}/.ssh/id_rsa"]}
 default_run_options[:pty] = true # required for the first time repo access to answer "yes"
 
@@ -70,7 +66,7 @@ cron "15,30,45", "vacancies:kill_spam"
 cron "0 3",      "vacancies:cleanup"
 cron "30 5",     "rabotaru:start_job"
 cron "0 4,16",   "data:dump DB=#{database} DIR=#{backups_path} BUCKET=#{backups_bucket}"
-cron "*/2",     "cron:ping"
+cron "*/5",      "cron:ping"
 
 task :demo do
 end

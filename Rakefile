@@ -61,11 +61,6 @@ namespace :dev do
 end
 
 task "cron:ping" => :environment do
-  Padrino.logger.info "Cron RAILS_ENV = #{`echo $RUBYOPT`}"
-  Padrino.logger.info "Cron loglevel = #{Padrino.logger.level}"
-  Padrino.logger.info "Cron env = #{Padrino.env}"
-  Padrino.logger.info "Cron ruby = #{`which ruby`}"
-  Padrino.logger.info "Cron path = #{ENV['PATH']}"
   Padrino.logger.info "Cron ping: event.count=#{Gore::EventLog::Item.count}"
   Gore.enqueue Gore::Debug, :say, "resque tasks scheduled via cron are still alive (scheduled at #{Time.now})"
 end
