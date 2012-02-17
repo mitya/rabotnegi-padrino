@@ -60,10 +60,9 @@ namespace :dev do
   end  
 end
 
-namespace :cron do
-  task :ping => :environment  do
-    Log.info "Cron ping: event.count=#{Gore::EventLog::Item.count}"
-  end
+task "cron:ping" => :environment do
+  Padrino.logger.info "Cron ping: event.count=#{Gore::EventLog::Item.count}"
+  Gore.enqueue(Gore::Debug, :say, "resque tasks scheduled via cron are still alive (scheduled at #{Time.now})")
 end
 
 task "resque:setup" => :environment do

@@ -8,12 +8,14 @@ namespace :app do
     puts "Loading 100 vacancies into the `#{Gore.env}` database" 
     100.times { Vacancy.create title: "Test", description: "Hello", industry: "it", city: "msk" }
   end
-
-  task(:load => :environment) { Rabotaru.start_job }
 end
 
 namespace :rabotaru do
-  # usage: rake rabotaru:load CITY=spb,msk INDUSTRY=telework
+  task :start_job => :environment do
+     Rabotaru.start_job
+  end
+
+  # Usage: rake rabotaru:load CITY=spb,msk INDUSTRY=telework
   task :load => :environment do
     $log_to_stdout = true
 
@@ -38,6 +40,10 @@ namespace :vacancies do
   task kill_spam: :environment do
     Tasks.kill_spam
   end    
+  
+  task :cleanup => :environment do
+    Vacancy.cleanup
+  end
   
   task sanitize: :environment do
     Vacancy.all.each do |v|

@@ -70,7 +70,7 @@ class Rabotnegi < Padrino::Application
     config.rabotaru_period = 5
     
     Slim::Engine.set_default_options pretty: true
-    Resque.inline = true    
+    # Resque.inline = true    
   end
 
   configure :test do

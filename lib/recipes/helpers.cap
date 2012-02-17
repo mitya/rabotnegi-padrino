@@ -63,7 +63,8 @@ end
 
 $cron_jobs = []
 
-def cron(command_type, time, command)
+def cron(time, command)
+  command_type = :rake  
   command_generators = {
     rake: ->(task) do
       "#{user} cd $RAILS_ROOT && bundle exec rake #{task} >> $RAILS_ROOT/log/cron.out 2>> $RAILS_ROOT/log/cron.err"
