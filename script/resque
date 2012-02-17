@@ -3,15 +3,15 @@
 require 'daemons'
 require 'optparse'
 
-rails_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+rails_root = File.expand_path('../..', __FILE__)
 ENV['RAILS_PROC'] = 'worker'
 
 id = ARGV.shift
-raise("Numeric ID should be given as the first argument") unless id.to_i > 0
+raise "Should be used as: resque ID start|stop|restart|run" unless id.to_i > 0
 
 Daemons.run_proc("resque.#{id}", dir: File.join(rails_root, "tmp/pids"), dir_mode: :normal, log_output: true, log_dir: File.join(rails_root, "log")) do
   Dir.chdir(rails_root)
-  require File.join(rails_root, "config/environment")
+  require File.join(rails_root, "config/boot.rb")
   worker = Resque::Worker.new("*")
   worker.verbose = true
   worker.work(5)

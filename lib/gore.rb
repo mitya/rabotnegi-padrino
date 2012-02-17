@@ -2,7 +2,7 @@ require 'net/http'
 
 module Gore
   def logger
-    @logger ||= Logger.new
+    Padrino.logger
   end
   
   def http
@@ -11,6 +11,14 @@ module Gore
   
   def json
     @json ||= Json.new
+  end
+
+  def env
+    ActiveSupport::StringInquirer.new(Padrino.env.to_s)
+  end
+  
+  def root
+    Pathname(Padrino.root)
   end
 
   module RandomHelpers
@@ -72,16 +80,15 @@ module Gore
   
   module Jobs
     def enqueue(klass, method, *args)
-      # Resque.enqueue_to(:main, ProxyWorker, args)
-      Log.info "Job scheduled #{klass}.#{method}#{args.inspect}"
+      Log.debug "Job scheduled #{klass}.#{method}#{args.inspect}"
       Resque::Job.create('main', 'Gore::Jobs::Worker', klass.to_s, method.to_s, args)
     end
 
     class Worker
       def self.perform(klass, method, args)
-        Log.info "Job started #{klass}.#{method}#{args.inspect}"
+        Log.debug "Job started #{klass}.#{method}#{args.inspect}"
         klass.constantize.send(method, *args)
-        Log.info "Job completed #{klass}.#{method}#{args.inspect}"
+        Log.debug "Job completed #{klass}.#{method}#{args.inspect}"
       end
     end
   end
@@ -127,24 +134,24 @@ module Gore
     end    
   end
 
-  class Logger
-    undef :silence
-    LOG_METHODS = %w(debug info warn error fatal unknown).pluck(:to_sym)
-    ALL_METHODS = LOG_METHODS + %w(silence level level=).pluck(:to_sym)
-    
-    def method_missing(selector, *args, &block)
-      if ALL_METHODS.include?(selector)
-        Kernel.puts(args.first) if LOG_METHODS.include?(selector) && $log_to_stdout
-        Padrino.logger.send(selector, *args, &block)
-      else
-        super
-      end      
-    end
-    
-    def trace(*args)
-      debug(*args)
-    end
-  end
+  # class Logger
+  #   undef :silence
+  #   LOG_METHODS = %w(debug info warn error fatal unknown).pluck(:to_sym)
+  #   ALL_METHODS = LOG_METHODS + %w(silence level level=).pluck(:to_sym)
+  #   
+  #   def method_missing(selector, *args, &block)
+  #     if ALL_METHODS.include?(selector)
+  #       Kernel.puts(args.first) if LOG_METHODS.include?(selector) && $log_to_stdout
+  #       Padrino.logger.send(selector, *args, &block)
+  #     else
+  #       super
+  #     end      
+  #   end
+  #   
+  #   def trace(*args)
+  #     debug(*args)
+  #   end
+  # end
 
   class HttpClient
     def get(url)
@@ -159,22 +166,13 @@ module Gore
     end    
   end
 
-  extend self, Server, Strings, Jobs, RandomHelpers
-  
-  def env
-    ActiveSupport::StringInquirer.new(Padrino.env.to_s)
+  module Debug
+    def self.say(message)
+      Padrino.logger.info("Gore::Debug says: #{message}")
+    end
   end
   
-  def root
-    Pathname(Padrino.root)
-  end
-  
-  def self.method_missing(selector, *args, &block)
-    return const_get(selector) if selector.to_s =~ /^[A-Z]/ && const_defined?(selector)
-    super
-  end
-  
-  class Mash < Hash   
+  class Mash < Hash
     def [](key)
       super(key.to_s) || super(key.to_sym)
     end
@@ -183,7 +181,20 @@ module Gore
       hash = self.class.new
       keys.each { |k| hash[String === k ? k.to_sym : k] = self[k] }
       hash
-    end    
+    end
+  end
+
+  extend self, Server, Strings, Jobs, RandomHelpers
+  
+  def self.method_missing(selector, *args, &block)
+    return const_get(selector) if selector.to_s =~ /^[A-Z]/ && const_defined?(selector)
+    super
+  end
+end
+
+Padrino::Logger::Extensions.module_eval do
+  def trace(message)
+    debug(message)
   end
 end
 

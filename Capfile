@@ -66,20 +66,11 @@ set :admin_email, "dsokurenko@gmail.com"
 after "deploy", "crontab:install"
 after "deploy", "resque:restart"
 
-cron :runner, "15,30,45", "Tasks.kill_spam"
-cron :runner, "30 5", "Rabotaru.start_job"
-cron :runner, "0 3", "Vacancy.cleanup"
-cron :rake, "0 4,16", "data:dump DB=#{database} DIR=#{backups_path} BUCKET=#{backups_bucket}"
-cron :rake, "*/10", "cron:ping"
+cron "15,30,45", "vacancies:kill_spam"
+cron "30 5", "rabotaru:start_job"
+cron "0 3", "vacancies:cleanup"
+cron "0 4,16", "data:dump DB=#{database} DIR=#{backups_path} BUCKET=#{backups_bucket}"
+cron "*/10", "cron:ping"
 
 task :demo do
-  run "whoami"
-  run "ruby -v"
-  run "echo $PATH"
-  run "echo $USED_CONFIG_FILES"
-
-  sudo "whoami"
-  sudo "ruby -v"
-  sudo "echo $PATH"
-  sudo "echo $USED_CONFIG_FILES"
 end
