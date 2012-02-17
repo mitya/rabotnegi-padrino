@@ -39,3 +39,6 @@ sudo /opt/nginx/sbin/nginx -s reload
 ## Installing RVM
 sudo bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
 sudo usermod -a -G rvm apprunner
+
+
+sudo htpasswd -b htpasswd admin 0000

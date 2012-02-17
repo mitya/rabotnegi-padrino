@@ -166,32 +166,21 @@ namespace :install do
   task :redis_web do
     app = "redis_web"
     app_path = "/app/#{app}"
-    config_path = "/opt/nginx/conf/sites/#{app}_resque"
-    port = 7010
-    subdomain = "redis"
+    config_path = "/opt/nginx/conf/sites/#{app}"
   
     config = <<-end
-      upstream #{app} {
-        server 127.0.0.1:#{port};
-      }
-    
       server {
         listen 80;
-        server_name #{subdomain}.admin.#{domain};
-  
-        location / {
-          proxy_set_header  Host             $http_host;
-          proxy_set_header  X-Real-IP        $remote_addr;
-          proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
-          proxy_redirect    off;
-          proxy_pass        http://#{app};
-  
-          auth_basic            "Restricted";
-          auth_basic_user_file  htpasswd;          
-        }
-  
+        server_name redis-admin.#{domain};
+        root #{app_path}/public;
+        passenger_enabled on;
+        rack_env production;
+
         error_log  #{app_path}/log/web.err notice;
         access_log #{app_path}/log/web.log combined;
+
+        auth_basic "Restricted";
+        auth_basic_user_file htpasswd;
       }
     end
   
