@@ -8,7 +8,7 @@ end
 
 def run_rake(command)
   sudo_modifier = nil # sudo(:as => options[:sudo]) if options[:sudo]
-  run "cd #{current_path} && #{sudo_modifier} bundle exec rake RAILS_ENV=#{rails_env} #{command}"
+  run "cd #{current_path} && #{sudo_modifier} bundle exec rake RACK_ENV=#{rails_env} #{command}"
 end
 
 def append_text(text, file)

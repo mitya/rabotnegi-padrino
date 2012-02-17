@@ -61,9 +61,7 @@ namespace :dev do
 end
 
 task "cron:ping" => :environment do
-  Padrino.logger.info "Cron RAILS_ENV = #{`$RAILS_ENV`}"
-  Padrino.logger.info "Cron RAILS_ENV = #{`echo $RAILS_ENV`}"
-  Padrino.logger.info "Cron RAILS_ENV = #{ENV['RAILS_ENV']}"
+  Padrino.logger.info "Cron RAILS_ENV = #{`echo $RUBYOPT`}"
   Padrino.logger.info "Cron loglevel = #{Padrino.logger.level}"
   Padrino.logger.info "Cron env = #{Padrino.env}"
   Padrino.logger.info "Cron ruby = #{`which ruby`}"
