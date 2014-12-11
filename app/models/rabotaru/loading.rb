@@ -7,7 +7,7 @@ module Rabotaru
     field :state, type: Symbol, default: 'pending'
     field :error, type: String
     field :fail_count, type: Integer
-    key :city, :industry
+    # key :city, :industry
 
     embedded_in :job, class_name: 'Rabotaru::Job'
     validates_presence_of :city, :industry

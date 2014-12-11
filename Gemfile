@@ -1,6 +1,5 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'padrino', '0.10.6.c'
 gem 'rake'
 gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'sass'
@@ -10,7 +9,6 @@ gem 'erubis'
 gem 'coffee-script'
 gem 'sprockets'
 gem 'mongoid'
-gem 'bson_ext', require: "mongo"
 gem "daemons"
 
 gem "unicode_utils"
@@ -18,6 +16,8 @@ gem 'resque'
 gem 'rmagick'
 gem "syslog-logger"
 gem "sanitize"
+
+gem 'padrino', '0.12.4'
 
 # gem "therubyracer" # weird bugs otherwise
 
@@ -29,7 +29,7 @@ group :test do
   gem 'turn'
   gem 'webrat'
   gem 'capybara'
-  gem 'capybara-webkit'
+  # gem 'capybara-webkit'
 end
 
 group :development, :test do

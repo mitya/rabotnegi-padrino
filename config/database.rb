@@ -6,13 +6,14 @@ database_name = case Padrino.env
   when :testprod    then 'rabotnegi_dev'
 end
 
-mongoid_options = {}
-mongoid_options = {logger: Padrino.logger} if Padrino.env == :development # && ($*.first !~ /^(test|routes)/)
+# mongoid_options = {}
+# mongoid_options = {logger: Padrino.logger} if Padrino.env == :development # && ($*.first !~ /^(test|routes)/)
 
 old_log_level, Padrino.logger.level = Padrino.logger.level, Padrino::Logger::Levels[:error]
 
-Mongoid.database = Mongo::Connection.new('localhost', Mongo::Connection::DEFAULT_PORT, mongoid_options).db(database_name)
-Mongoid::Config.add_language('ru')
+# Mongoid.database = Mongo::Connection.new('localhost', Mongo::Connection::DEFAULT_PORT, mongoid_options).db(database_name)
+Mongoid.logger = Padrino.logger
+Mongoid.load!("config/mongoid.yml")
 
 Padrino.logger.level = old_log_level
 

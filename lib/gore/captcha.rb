@@ -1,7 +1,7 @@
 module Gore
   class Captcha
     include Mongoid::Document
-    store_in "sys.captchas"
+    store_in collection: "sys.captchas"
     field :text, type: String, default: -> { Captcha.generate_random_text }
     field :created_at, type: DateTime, default: -> { Time.now }
 

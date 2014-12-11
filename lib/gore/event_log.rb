@@ -80,7 +80,7 @@ class Gore::EventLog
   end
 
   class Item < Gore::ApplicationModel
-    store_in "sys.events"
+    store_in collection: "sys.events"
 
     field :source
     field :event, type: String

@@ -12,5 +12,5 @@ ul.resource
       = partial 'admin_items/list', locals: {models: @model.send(list.accessor), collection: list.collection}
 
   li.actions
-    = link_to "Изменить", url(:admin_items_edit, collection: @collection, id: @model)
-    = link_to "Назад к списку", request.referer || url(:admin_items_index, collection: params[:collection])
+    = link_to "Изменить", url(:admin_items, :edit, collection: @collection, id: @model)
+    = link_to "Назад к списку", request.referer || url(:admin_items, :index, collection: params[:collection])

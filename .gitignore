@@ -7,3 +7,4 @@ vendor/gems/*
 .sass-cache/*
 log/*
 public/rabotnegi/assets/*
+public/stylesheets/*

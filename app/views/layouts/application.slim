@@ -6,7 +6,7 @@ head
   - if @meta_properties
     - for name, content in @meta_properties
       meta(name=name content=content)
-  = stylesheet_link_tag "application.css"
+  = stylesheet_link_tag "/stylesheets/application.css"
 
 body.public{id=@page_id class=@page_class}
   #page
@@ -19,12 +19,12 @@ body.public{id=@page_id class=@page_class}
       nav
         ul#tabs{data-selected="##{@current_tab}"}
           li#workers-tab.tab
-            a{href=url(:vacancies_search)} Поиск вакансий
+            a{href=url(:vacancies, :search)} Поиск вакансий
           li#employers-tab.tab
-            a{href=url(:vacancies_new)} Публикация вакансий
+            a{href=url(:vacancies, :new)} Публикация вакансий
           - if current_user.favorite_vacancies.any?
             li#favorite-vacancies-tab.tab
-              a{href=url(:vacancies_favorite)} Сохраненные вакансии
+              a{href=url(:vacancies, :favorite)} Сохраненные вакансии
 
       .clear
 

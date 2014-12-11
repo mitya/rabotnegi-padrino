@@ -71,7 +71,7 @@ describe "Vacancies controller" do
     new_vacancy.poster_ip.must_equal "127.0.0.1"
     
     response.must_be :redirect?
-    response.location.must_match app.url(:vacancies_show, id: new_vacancy)
+    response.location.must_match app.url(:vacancies, :show, id: new_vacancy)
   end
   
   test "create invalid record" do

@@ -1,7 +1,10 @@
 class Rabotnegi < Padrino::Application
+  register SassInitializer
   register Padrino::Rendering
   register Padrino::Mailer
   register Padrino::Helpers
+
+  enable :sessions
 
   include Gore::EventLog::Accessor
 
@@ -188,12 +191,18 @@ class Rabotnegi < Padrino::Application
   end
        
   def dump_errors!(boom)
-    return super unless Gore.env.in?('development', 'testui')
+    return super unless %w(development testui).include?(Gore.env)
     return super unless Array === boom.backtrace
 
     boom.backtrace.reject! { |line| line =~ /thin|thor|eventmachine|rack|barista|http_router|tilt/ }
     boom.backtrace.map! { |line| line.gsub(Padrino.root, '') }
     super
+  end
+
+  assets.context_class.class_eval do
+    def asset_path(path, options = {})
+      "/assets/#{path}"
+    end
   end
   
 end

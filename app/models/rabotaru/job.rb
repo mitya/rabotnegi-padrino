@@ -1,5 +1,6 @@
 module Rabotaru
   class Job < Gore::ApplicationModel
+    field :id, type: String, default: ->{ Time.now.strftime("%Y%m%d-%H%M%S-%6N")  }
     field :state, type: Symbol, default: 'pending'
     field :cities, type: Array
     field :industries, type: Array
@@ -8,13 +9,11 @@ module Rabotaru
     field :results, type: Hash
     embeds_many :loadings, class_name: 'Rabotaru::Loading'
     def_state_predicates 'state', :pending, :started, :failed, :loaded, :processed, :cleaned
-    store_in "rabotaru.jobs"
-    identity type: String
+    store_in collection: "rabotaru.jobs"
     
     attr_accessor :period, :queue, :current
 
     before_create do 
-      self.id = Time.now.strftime("%Y%m%d-%H%M%S-%6N") 
       self.cities ||= City.all.pluck(:key)
       self.industries ||= Industry.all.pluck(:key)
     end

@@ -1,7 +1,10 @@
-require File.dirname(__FILE__) + '/config/boot.rb'
-require 'thor'
+require 'bundler/setup'
 require 'padrino-core/cli/rake'
+require 'thor'
 
+require File.dirname(__FILE__) + '/config/boot.rb'
+
+PadrinoTasks.use(:mongoid)
 PadrinoTasks.init
 
 require 'resque/tasks'

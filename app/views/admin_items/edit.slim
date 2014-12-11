@@ -1,6 +1,6 @@
 - page "admin-edit-item", "Редактирование — #{@model}"
 
-= form_for @model, url(:admin_items_update, collection: @collection, id: @model), :class => "resource" do |f|
+= form_for @model, url(:admin_items, :update, collection: @collection, id: @model), :class => "resource" do |f|
   = errors_for @model
 
   - @collection.edit_fields.each do |field|
