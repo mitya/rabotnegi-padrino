@@ -1,0 +1,7 @@
+development:
+  sessions:
+    default:
+      database: rabotnegi_dev
+      hosts:
+        - localhost:27017
+        

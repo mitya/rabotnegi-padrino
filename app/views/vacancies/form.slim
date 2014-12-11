@@ -1,5 +1,5 @@
 - title = @vacancy.new? ? "Публикация новой вакансии" : "Редактирование #{@vacancy}"
-- url = @vacancy.new? ? url(:vacancies_create) : url(:vacancies_show, id: @vacancy)
+- url = @vacancy.new? ? url(:vacancies, :create) : url(:vacancies, :show, id: @vacancy)
 - page "edit-vacancy", title, path: %w(employers casual-employers vacancies)
 
 h1= title

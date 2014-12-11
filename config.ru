@@ -5,7 +5,7 @@ require File.expand_path("../config/boot.rb", __FILE__)
 Rack::Server.middleware["development"] = [
   [Rack::ContentLength],
   [Rack::Chunked],
-  [Rack::ShowExceptions], 
+  [Rack::ShowExceptions],
   [Rack::Lint]
 ]
 
@@ -19,6 +19,4 @@ map "/admin/resque" do
   run Resque::Server.new
 end
 
-map '/' do
-  run Padrino.application
-end
+run Padrino.application

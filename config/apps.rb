@@ -21,9 +21,13 @@
 #   Padrino.mount("AppName", :app_file => "path/to/file", :app_class => "BlogApp").to('/')
 #
 
+
+
 Padrino.configure_apps do
-  enable :sessions
+  # enable :sessions
   set :session_secret, 'REDACTED'
+  set :protection, :except => :path_traversal
+  set :protect_from_csrf, true
 end
 
-Padrino.mount("Rabotnegi").to('/')
+Padrino.mount('Rabotnegi', :app_file => Padrino.root('app/app.rb')).to('/')

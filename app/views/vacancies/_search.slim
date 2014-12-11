@@ -1,4 +1,4 @@
-= form_tag url(:vacancies_search), id: "vacancies-filter", method: "GET", :class => "search #{@vacancies ? "inline" : "front tableish"}" do
+= form_tag url(:vacancies, :search), id: "vacancies-filter", method: "GET", :class => "search #{@vacancies ? "inline" : "front tableish"}" do
   fieldset
     .field
       = label_tag :city, 'Город:'

@@ -12,10 +12,10 @@ class Vacancy < Gore::ApplicationModel
   field :loaded_at, type: Time
   field :cleaned_at, type: Time
   
-  index :city
-  index :industry
-  index [[:city, 1], [:industry, 1]]
-  index [[:city, 1], [:title, 1]]
+  index city: 1
+  index industry: 1
+  index city: 1, industry: 1
+  index city: 1, title: 1
 
   validates_presence_of :title, :industry, :city
 

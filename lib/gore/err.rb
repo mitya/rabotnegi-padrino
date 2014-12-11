@@ -1,5 +1,5 @@
 class Gore::Err < Gore::ApplicationModel
-  store_in "sys.exceptions"
+  store_in collection: "sys.exceptions"
   
   field :source
   field :host
@@ -18,7 +18,7 @@ class Gore::Err < Gore::ApplicationModel
   field :request_headers, type: Hash
   field :response_headers, type: Hash
 
-  index :created_at
+  index created_at: 1
 
   validates_presence_of :exception_class
   

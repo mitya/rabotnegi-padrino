@@ -17,7 +17,7 @@ Rabotnegi.controller :vacancies do
     render items: @vacancies.map { |v| v.attributes.slice(*%w(title city industry external_id salary_min salary_max employer_name)) }
   end
 
-  get :index, "/vacancies/:city(/:industry)", if_params: {city: City, industry: Industry} do
+  get :index, map: "/vacancies/:city(/:industry)", if_params: {city: City, industry: Industry} do
     @vacancies = Vacancy.search(params.slice(:city, :industry, :q)).without(:description).
       order_by(decode_order_to_mongo(params[:sort].presence || "title")).paginate(params[:page], 50)
     current_user.update_if_stored!(city: params[:city], industry: params[:industry])
@@ -29,16 +29,16 @@ Rabotnegi.controller :vacancies do
     render "vacancies/favorite"
   end
 
-  get :show, "/vacancies/:id", xhr: true do
+  get :show, map: "/vacancies/:id", xhr: true do
     @vacancy = Vacancy.get(params[:id])
     partial "vacancies/details"
   end
   
-  get :show, "/vacancies/:id" do
+  get :show, map: "/vacancies/:id" do
     @vacancy = Vacancy.get(params[:id])
   
     return params[:id] =~ /^\d{6}$/ ? 410 : 404, render("shared/404") unless @vacancy
-    redirect url(:vacancies_show, id: @vacancy) if CGI.unescape(params[:id]) != @vacancy.to_param
+    redirect url(:vacancies, :show, id: @vacancy) if CGI.unescape(params[:id]) != @vacancy.to_param
     
     render "vacancies/show"
   end
@@ -51,7 +51,7 @@ Rabotnegi.controller :vacancies do
 
     if @vacancy.save
       flash[:notice] = 'Вакансия опубликована'
-      redirect url(:vacancies_show, id: @vacancy)
+      redirect url(:vacancies, :show, id: @vacancy)
     else
       return 422, render("vacancies/form")
     end    
